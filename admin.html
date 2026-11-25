@@ -265,7 +265,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 <div id="toasts" aria-live="polite"></div>
 
 <script>
-const DEFAULT_API="https://maricopa-server.onrender.com";
+const DEFAULT_API="https://cereals-back.onrender.com";
 const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 /* Accepts "my-server.onrender.com", "https://my-server.onrender.com/", or a URL with a path; returns the clean origin */
 const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
