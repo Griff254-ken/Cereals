@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="CerealBazaar — organic, stone-ground cereals delivered fresh to your door." />
-  <title>CerealBazaar · organic & crunchy cereals</title>
-  <!-- Font Awesome -->
+  <meta name="description" content="Nafaka Bora — fresh Kenyan cereals: millet, sorghum, maize, and more. Delivered across Nairobi and Kenya." />
+  <title>Nafaka Bora · Fresh Kenyan Cereals</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Fonts: Inter + Fraunces -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -26,6 +24,8 @@
       --accent: #b45f2b;
       --accent-dark: #8f4a20;
       --accent-soft: #f3e7d9;
+      --green: #1e7a4a;
+      --green-soft: #e6f4ec;
       --success: #2e7d5e;
       --danger: #c0392b;
       --border: #efe1d3;
@@ -40,6 +40,7 @@
       --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       --font-display: 'Fraunces', Georgia, serif;
       --transition: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      --touch-target: 44px;
     }
 
     /* ---------- RESET ---------- */
@@ -60,7 +61,7 @@
       background: var(--bg);
       color: var(--ink);
       font-family: var(--font-body);
-      line-height: 1.55;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -92,18 +93,22 @@
 
     /* ---------- ANNOUNCEMENT BAR ---------- */
     .announcement {
-      background: var(--ink);
-      color: #f7f1e9;
+      background: var(--green);
+      color: #f3fbf6;
       text-align: center;
       font-size: 0.85rem;
       font-weight: 500;
-      padding: 0.55rem 1rem;
+      padding: 0.6rem 1rem;
       letter-spacing: 0.01em;
     }
 
     .announcement i {
-      color: #e09d6b;
+      color: #a8e6c5;
       margin-right: 6px;
+    }
+
+    .announcement strong {
+      color: #ffffff;
     }
 
     /* ---------- HEADER ---------- */
@@ -115,8 +120,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.9);
+      padding: 0.9rem 1.5rem;
+      background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
@@ -128,19 +133,20 @@
       align-items: center;
       gap: 10px;
       font-family: var(--font-display);
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--ink);
+      min-height: var(--touch-target);
     }
 
     .logo i {
-      color: var(--accent);
-      font-size: 1.9rem;
+      color: var(--green);
+      font-size: 1.7rem;
     }
 
     .logo span {
-      color: var(--accent);
+      color: var(--green);
     }
 
     .header-actions {
@@ -155,7 +161,7 @@
       align-items: center;
       justify-content: center;
       gap: 9px;
-      padding: 0.7rem 1.35rem;
+      padding: 0.75rem 1.4rem;
       border-radius: var(--radius-pill);
       font-weight: 600;
       font-size: 0.95rem;
@@ -163,6 +169,7 @@
         box-shadow var(--transition), border-color var(--transition);
       white-space: nowrap;
       user-select: none;
+      min-height: var(--touch-target);
     }
 
     .btn:active {
@@ -170,13 +177,13 @@
     }
 
     .btn-primary {
-      background: var(--ink);
+      background: var(--green);
       color: #fff;
       box-shadow: var(--shadow-sm);
     }
 
     .btn-primary:hover {
-      background: #4a3f36;
+      background: #175f3a;
     }
 
     .btn-outline {
@@ -217,9 +224,9 @@
     .hero {
       position: relative;
       overflow: hidden;
-      padding: 4.5rem 2rem 4rem;
+      padding: 3.5rem 1.5rem 3rem;
       text-align: center;
-      background: radial-gradient(circle at 20% 20%, #f9efe2 0%, transparent 55%),
+      background: radial-gradient(circle at 20% 20%, #eaf5ee 0%, transparent 55%),
         radial-gradient(circle at 85% 30%, #f3e3d0 0%, transparent 50%),
         linear-gradient(160deg, #fbf3e9 0%, #f6eadd 100%);
       border-bottom: 1px solid var(--border);
@@ -229,7 +236,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(180, 95, 43, 0.07) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(30, 122, 74, 0.06) 1px, transparent 1px);
       background-size: 26px 26px;
       opacity: 0.6;
       pointer-events: none;
@@ -247,22 +254,22 @@
       gap: 8px;
       padding: 0.45rem 1rem;
       border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.8);
       border: 1px solid var(--border-strong);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.03em;
       text-transform: uppercase;
-      color: var(--accent-dark);
-      margin-bottom: 1.5rem;
+      color: var(--green);
+      margin-bottom: 1.3rem;
       backdrop-filter: blur(6px);
     }
 
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
       font-weight: 800;
-      line-height: 1.05;
+      line-height: 1.08;
       letter-spacing: -0.03em;
       color: var(--ink);
       margin-bottom: 1rem;
@@ -270,7 +277,7 @@
 
     .hero h1 em {
       font-style: normal;
-      color: var(--accent);
+      color: var(--green);
       position: relative;
       white-space: nowrap;
     }
@@ -282,16 +289,16 @@
       right: 0;
       bottom: 0.06em;
       height: 0.18em;
-      background: rgba(224, 157, 107, 0.5);
+      background: rgba(168, 230, 197, 0.6);
       border-radius: 4px;
       z-index: -1;
     }
 
     .hero p {
-      font-size: 1.12rem;
+      font-size: 1.08rem;
       color: var(--ink-soft);
       max-width: 560px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1.8rem;
     }
 
     .hero-cta {
@@ -305,23 +312,23 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2.5rem;
-      margin-top: 3rem;
-      padding-top: 2rem;
+      gap: 2rem;
+      margin-top: 2.4rem;
+      padding-top: 1.8rem;
       border-top: 1px dashed var(--border-strong);
     }
 
     .hero-stat strong {
       display: block;
       font-family: var(--font-display);
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--accent-dark);
+      color: var(--green);
       line-height: 1.2;
     }
 
     .hero-stat span {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--ink-muted);
       font-weight: 500;
       text-transform: uppercase;
@@ -331,8 +338,8 @@
     /* ---------- CATALOG ---------- */
     .catalog {
       max-width: 1280px;
-      margin: 3.5rem auto 4rem;
-      padding: 0 2rem;
+      margin: 3rem auto 4rem;
+      padding: 0 1.5rem;
     }
 
     .catalog-header {
@@ -341,12 +348,12 @@
       align-items: flex-end;
       justify-content: space-between;
       gap: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
     }
 
     .catalog-title h2 {
       font-family: var(--font-display);
-      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--ink);
@@ -356,13 +363,13 @@
     }
 
     .catalog-title h2 i {
-      color: var(--accent);
+      color: var(--green);
       font-size: 0.85em;
     }
 
     .catalog-title p {
       color: var(--ink-soft);
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       margin-top: 0.35rem;
     }
 
@@ -389,8 +396,8 @@
     }
 
     .search-wrap input {
-      width: 230px;
-      padding: 0.65rem 1rem 0.65rem 2.4rem;
+      width: 220px;
+      padding: 0.7rem 1rem 0.7rem 2.4rem;
       border: 1.5px solid var(--border-strong);
       border-radius: var(--radius-pill);
       background: var(--surface);
@@ -398,6 +405,7 @@
       color: var(--ink);
       font-family: inherit;
       transition: border-color var(--transition), box-shadow var(--transition);
+      min-height: var(--touch-target);
     }
 
     .search-wrap input::placeholder {
@@ -406,8 +414,8 @@
 
     .search-wrap input:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(180, 95, 43, 0.12);
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(30, 122, 74, 0.12);
     }
 
     .select-wrap {
@@ -427,7 +435,7 @@
     .select-wrap select {
       appearance: none;
       -webkit-appearance: none;
-      padding: 0.65rem 2.3rem 0.65rem 1.1rem;
+      padding: 0.7rem 2.3rem 0.7rem 1.1rem;
       border: 1.5px solid var(--border-strong);
       border-radius: var(--radius-pill);
       background: var(--surface);
@@ -437,12 +445,13 @@
       color: var(--ink);
       cursor: pointer;
       transition: border-color var(--transition), box-shadow var(--transition);
+      min-height: var(--touch-target);
     }
 
     .select-wrap select:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(180, 95, 43, 0.12);
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(30, 122, 74, 0.12);
     }
 
     /* filter chips */
@@ -450,11 +459,11 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
     }
 
     .chip {
-      padding: 0.5rem 1.1rem;
+      padding: 0.55rem 1.2rem;
       border-radius: var(--radius-pill);
       border: 1.5px solid var(--border-strong);
       background: var(--surface);
@@ -462,16 +471,19 @@
       font-weight: 600;
       color: var(--ink-soft);
       transition: all var(--transition);
+      min-height: var(--touch-target);
+      display: inline-flex;
+      align-items: center;
     }
 
     .chip:hover {
-      border-color: var(--accent);
-      color: var(--accent-dark);
+      border-color: var(--green);
+      color: var(--green);
     }
 
     .chip.active {
-      background: var(--ink);
-      border-color: var(--ink);
+      background: var(--green);
+      border-color: var(--green);
       color: #fff;
     }
 
@@ -479,7 +491,7 @@
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.6rem;
+      gap: 1.4rem;
     }
 
     .product-card {
@@ -489,7 +501,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 1.6rem 1.4rem 1.5rem;
+      padding: 1.5rem 1.3rem 1.4rem;
       box-shadow: var(--shadow-sm);
       transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
       opacity: 0;
@@ -508,18 +520,18 @@
     }
 
     .product-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
       box-shadow: var(--shadow-lg);
       border-color: #dbbca3;
     }
 
     .product-tag {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 0.9rem;
+      right: 0.9rem;
       padding: 0.28rem 0.7rem;
       border-radius: var(--radius-pill);
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -529,33 +541,33 @@
     }
 
     .product-tag.tag-new {
-      background: #e3f2ea;
-      color: var(--success);
-      border-color: rgba(46, 125, 94, 0.25);
+      background: var(--green-soft);
+      color: var(--green);
+      border-color: rgba(30, 122, 74, 0.25);
     }
 
     .product-icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       border-radius: var(--radius-md);
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      font-size: 1.7rem;
-      margin-bottom: 1.1rem;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
       transition: transform var(--transition), background var(--transition);
     }
 
     .product-card:hover .product-icon {
       transform: rotate(-6deg) scale(1.05);
-      background: #ecd9c4;
+      background: #d4ecdf;
     }
 
     .product-card h3 {
       font-family: var(--font-display);
-      font-size: 1.28rem;
+      font-size: 1.22rem;
       font-weight: 700;
       line-height: 1.25;
       letter-spacing: -0.01em;
@@ -564,9 +576,9 @@
     }
 
     .product-desc {
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       color: var(--ink-soft);
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.8rem;
       flex: 1;
     }
 
@@ -574,8 +586,8 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.78rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.76rem;
       color: var(--ink-muted);
     }
 
@@ -588,7 +600,7 @@
     }
 
     .rating i {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
     }
 
     .dot-sep {
@@ -602,24 +614,24 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      gap: 0.8rem;
-      margin-bottom: 1.1rem;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
     }
 
     .price {
       display: flex;
       align-items: baseline;
-      gap: 6px;
+      gap: 5px;
       font-family: var(--font-display);
-      font-size: 1.55rem;
+      font-size: 1.4rem;
       font-weight: 800;
-      color: var(--accent-dark);
+      color: var(--green);
       line-height: 1;
     }
 
     .price small {
       font-family: var(--font-body);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--ink-muted);
     }
@@ -633,16 +645,16 @@
       border-radius: var(--radius-pill);
       overflow: hidden;
       background: var(--surface);
-      height: 38px;
+      height: var(--touch-target);
     }
 
     .qty-stepper button {
-      width: 34px;
+      width: 38px;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--ink-soft);
       transition: background var(--transition), color var(--transition);
@@ -659,9 +671,9 @@
     }
 
     .qty-stepper span {
-      min-width: 26px;
+      min-width: 28px;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--ink);
       user-select: none;
@@ -673,19 +685,20 @@
       align-items: center;
       justify-content: center;
       gap: 9px;
-      padding: 0.82rem 1rem;
+      padding: 0.85rem 1rem;
       border-radius: var(--radius-pill);
-      border: 2px solid var(--ink);
+      border: 2px solid var(--green);
       background: transparent;
-      color: var(--ink);
+      color: var(--green);
       font-weight: 700;
       font-size: 0.92rem;
       transition: all var(--transition);
       margin-top: auto;
+      min-height: var(--touch-target);
     }
 
     .add-to-cart:hover {
-      background: var(--ink);
+      background: var(--green);
       color: #fff;
     }
 
@@ -699,25 +712,25 @@
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 4rem 1rem;
+      padding: 3.5rem 1rem;
       color: var(--ink-muted);
     }
 
     .empty-state i {
-      font-size: 3rem;
+      font-size: 2.8rem;
       color: var(--border-strong);
       margin-bottom: 1rem;
     }
 
     .empty-state h3 {
       font-family: var(--font-display);
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: var(--ink-soft);
       margin-bottom: 0.4rem;
     }
 
     .empty-state p {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     /* ---------- CART SIDEBAR ---------- */
@@ -763,14 +776,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.4rem 1.6rem;
+      padding: 1.2rem 1.4rem;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
 
     .cart-header h3 {
       font-family: var(--font-display);
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -778,15 +791,15 @@
     }
 
     .cart-header h3 i {
-      color: var(--accent);
+      color: var(--green);
     }
 
     .close-cart {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 38px;
-      height: 38px;
+      width: var(--touch-target);
+      height: var(--touch-target);
       border-radius: 50%;
       font-size: 1.4rem;
       color: var(--ink-soft);
@@ -802,7 +815,7 @@
     .cart-items {
       flex: 1;
       overflow-y: auto;
-      padding: 1.2rem 1.6rem;
+      padding: 1rem 1.4rem;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -818,8 +831,8 @@
     .cart-item {
       display: flex;
       align-items: center;
-      gap: 0.9rem;
-      padding: 0.95rem 0;
+      gap: 0.8rem;
+      padding: 0.9rem 0;
       border-bottom: 1px solid var(--border);
       animation: fadeIn 0.25s ease;
     }
@@ -843,13 +856,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       flex-shrink: 0;
       border-radius: var(--radius-sm);
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      font-size: 1.25rem;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 1.2rem;
     }
 
     .cart-item-details {
@@ -858,7 +871,7 @@
     }
 
     .cart-item-details h4 {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       line-height: 1.3;
       color: var(--ink);
@@ -868,8 +881,8 @@
     }
 
     .cart-item-details .item-price {
-      font-size: 0.8rem;
-      color: var(--accent-dark);
+      font-size: 0.78rem;
+      color: var(--green);
       font-weight: 600;
       margin-top: 2px;
     }
@@ -882,7 +895,7 @@
     }
 
     .cart-item-right .line-total {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--ink);
     }
@@ -894,16 +907,16 @@
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-pill);
       overflow: hidden;
-      height: 30px;
+      height: 32px;
     }
 
     .cart-item-qty button {
-      width: 28px;
+      width: 30px;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--ink-soft);
       transition: background var(--transition);
@@ -915,9 +928,9 @@
     }
 
     .cart-item-qty span {
-      min-width: 22px;
+      min-width: 24px;
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
     }
 
@@ -933,14 +946,14 @@
     }
 
     .cart-empty i {
-      font-size: 3.2rem;
+      font-size: 3rem;
       color: var(--border-strong);
       margin-bottom: 1rem;
     }
 
     .cart-empty h4 {
       font-family: var(--font-display);
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       color: var(--ink-soft);
       margin-bottom: 0.4rem;
     }
@@ -951,7 +964,7 @@
     }
 
     .cart-footer {
-      padding: 1.4rem 1.6rem 1.6rem;
+      padding: 1.2rem 1.4rem 1.4rem;
       border-top: 1px solid var(--border);
       background: #fdfaf7;
       flex-shrink: 0;
@@ -960,9 +973,9 @@
     .cart-summary-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--ink-soft);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
     .cart-summary-row.discount {
@@ -974,17 +987,17 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      margin: 0.8rem 0 1.2rem;
-      padding-top: 0.9rem;
+      margin: 0.7rem 0 1rem;
+      padding-top: 0.8rem;
       border-top: 1px dashed var(--border-strong);
     }
 
     .cart-total span:last-child {
       font-family: var(--font-display);
-      font-size: 1.6rem;
-      color: var(--accent-dark);
+      font-size: 1.5rem;
+      color: var(--green);
     }
 
     .checkout-btn {
@@ -995,16 +1008,17 @@
       gap: 10px;
       padding: 1rem;
       border-radius: var(--radius-pill);
-      background: var(--ink);
+      background: var(--green);
       color: #fff;
       font-weight: 700;
       font-size: 1rem;
       transition: background var(--transition), transform var(--transition);
       box-shadow: var(--shadow-md);
+      min-height: var(--touch-target);
     }
 
     .checkout-btn:hover {
-      background: #4a3f36;
+      background: #175f3a;
     }
 
     .checkout-btn:active {
@@ -1018,21 +1032,67 @@
       box-shadow: none;
     }
 
+    /* payment methods */
+    .payment-methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+      justify-content: center;
+    }
+
+    .payment-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius-pill);
+      background: var(--bg-soft);
+      border: 1px solid var(--border-strong);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .payment-badge i {
+      color: var(--green);
+      font-size: 0.75rem;
+    }
+
+    /* delivery note */
+    .delivery-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 0.9rem;
+      background: var(--green-soft);
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      color: var(--green);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .delivery-note i {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
     /* ---------- TOAST ---------- */
     .toast {
       position: fixed;
-      bottom: 28px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(24px);
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0.85rem 1.5rem;
+      padding: 0.85rem 1.4rem;
       border-radius: var(--radius-pill);
       background: var(--ink);
       color: #fff;
       font-weight: 500;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       box-shadow: 0 16px 40px rgba(45, 42, 36, 0.25);
       opacity: 0;
       visibility: hidden;
@@ -1048,7 +1108,7 @@
     }
 
     .toast i {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       flex-shrink: 0;
     }
 
@@ -1064,7 +1124,7 @@
     .footer {
       background: var(--bg-soft);
       border-top: 1px solid var(--border);
-      padding: 3rem 2rem 2rem;
+      padding: 2.5rem 1.5rem 1.5rem;
       margin-top: 2rem;
     }
 
@@ -1072,27 +1132,27 @@
       max-width: 1280px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.8rem;
     }
 
     .footer-brand .logo {
-      font-size: 1.4rem;
-      margin-bottom: 0.6rem;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
     }
 
     .footer-brand p {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--ink-soft);
       max-width: 280px;
     }
 
     .footer-col h4 {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--ink);
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.8rem;
       font-weight: 700;
     }
 
@@ -1104,44 +1164,54 @@
     }
 
     .footer-col a {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--ink-soft);
       transition: color var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 32px;
     }
 
     .footer-col a:hover {
-      color: var(--accent);
+      color: var(--green);
+    }
+
+    .footer-col a i {
+      color: var(--green);
+      width: 18px;
+      text-align: center;
     }
 
     .footer-bottom {
       max-width: 1280px;
-      margin: 2.5rem auto 0;
-      padding-top: 1.5rem;
+      margin: 2rem auto 0;
+      padding-top: 1.3rem;
       border-top: 1px solid var(--border-strong);
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 0.8rem;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--ink-muted);
     }
 
     .footer-bottom i {
-      color: var(--accent);
+      color: var(--green);
     }
 
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 760px) {
       .header {
-        padding: 0.9rem 1.1rem;
+        padding: 0.8rem 1rem;
       }
 
       .logo {
-        font-size: 1.35rem;
+        font-size: 1.3rem;
       }
 
       .logo i {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
       }
 
       .btn .btn-label {
@@ -1153,16 +1223,16 @@
       }
 
       .hero {
-        padding: 3rem 1.2rem 2.8rem;
+        padding: 2.6rem 1rem 2.4rem;
       }
 
       .hero-stats {
-        gap: 1.5rem;
+        gap: 1.2rem;
       }
 
       .catalog {
-        padding: 0 1.2rem;
-        margin: 2.5rem auto 3rem;
+        padding: 0 1rem;
+        margin: 2.2rem auto 2.8rem;
       }
 
       .catalog-controls {
@@ -1178,8 +1248,8 @@
       }
 
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.1rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
       }
 
       .cart-panel {
@@ -1187,7 +1257,7 @@
       }
 
       .footer {
-        padding: 2.5rem 1.2rem 1.5rem;
+        padding: 2rem 1rem 1.2rem;
       }
     }
 
@@ -1197,7 +1267,18 @@
       }
 
       .hero h1 {
-        font-size: 2.1rem;
+        font-size: 2rem;
+      }
+
+      .price-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+
+      .qty-stepper {
+        width: 100%;
+        justify-content: space-between;
       }
     }
 
@@ -1217,14 +1298,14 @@
 <body>
   <!-- Announcement -->
   <div class="announcement">
-    <i class="fas fa-truck-fast"></i> Free shipping on orders over $35 · Use code <strong>CRUNCH10</strong> for 10% off
+    <i class="fas fa-truck-fast"></i> Free delivery within Nairobi on orders over <strong>KSh 2,500</strong> · Pay with M-Pesa
   </div>
 
   <!-- Header -->
   <header class="header">
-    <a href="#" class="logo" aria-label="CerealBazaar home">
+    <a href="#" class="logo" aria-label="Nafaka Bora home">
       <i class="fas fa-seedling"></i>
-      Cereal<span>Bazaar</span>
+      Nafaka<span>Bora</span>
     </a>
     <div class="header-actions">
       <button class="btn btn-primary cart-btn" id="cartButton" aria-label="Open shopping cart">
@@ -1238,11 +1319,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content">
-      <span class="hero-badge"><i class="fas fa-leaf"></i> 100% organic · small batch</span>
-      <h1>Start your day <em>crunchy</em> &amp; delicious.</h1>
+      <span class="hero-badge"><i class="fas fa-leaf"></i> Fresh from Kenyan farms</span>
+      <h1>Pure Kenyan cereals, <em>delivered fresh</em>.</h1>
       <p>
-        Stone-ground, oven-toasted cereals made with real ingredients. No artificial
-        anything — just honest grain goodness delivered to your door.
+        Millet, sorghum, maize, and more — sourced directly from local farmers.
+        Clean, sorted, and packed with care. Delivered across Nairobi and Kenya.
       </p>
       <div class="hero-cta">
         <a href="#catalog" class="btn btn-primary">
@@ -1254,16 +1335,16 @@
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <strong>12k+</strong>
-          <span>Happy mornings</span>
+          <strong>5,000+</strong>
+          <span>Happy customers</span>
         </div>
         <div class="hero-stat">
-          <strong>4.9★</strong>
-          <span>Average rating</span>
+          <strong>4.8★</strong>
+          <span>Customer rating</span>
         </div>
         <div class="hero-stat">
-          <strong>100%</strong>
-          <span>Organic grains</span>
+          <strong>47</strong>
+          <span>Counties served</span>
         </div>
       </div>
     </div>
@@ -1273,8 +1354,8 @@
   <main class="catalog" id="catalog">
     <div class="catalog-header">
       <div class="catalog-title">
-        <h2><i class="fas fa-star"></i> Our bestsellers</h2>
-        <p>Handpicked favourites, freshly packed</p>
+        <h2><i class="fas fa-star"></i> Our cereals</h2>
+        <p>Fresh, clean, and locally sourced</p>
       </div>
       <div class="catalog-controls">
         <div class="search-wrap">
@@ -1303,10 +1384,10 @@
     <!-- Filter chips -->
     <div class="filter-chips" id="filterChips">
       <button class="chip active" data-filter="all">All</button>
-      <button class="chip" data-filter="granola">Granola</button>
-      <button class="chip" data-filter="muesli">Muesli</button>
-      <button class="chip" data-filter="oats">Oats &amp; Bran</button>
-      <button class="chip" data-filter="chocolate">Chocolate</button>
+      <button class="chip" data-filter="millet">Millet</button>
+      <button class="chip" data-filter="sorghum">Sorghum</button>
+      <button class="chip" data-filter="maize">Maize</button>
+      <button class="chip" data-filter="mixed">Mixed</button>
     </div>
 
     <div class="products-grid" id="productsGrid">
@@ -1318,39 +1399,40 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="logo"><i class="fas fa-seedling"></i> Cereal<span>Bazaar</span></div>
-        <p>Organic, stone-ground cereals made in small batches. Good mornings start here.</p>
+        <div class="logo"><i class="fas fa-seedling"></i> Nafaka<span>Bora</span></div>
+        <p>Fresh Kenyan cereals sourced directly from local farmers. Clean, sorted, and packed with care.</p>
       </div>
       <div class="footer-col">
         <h4>Shop</h4>
         <ul>
           <li><a href="#catalog">All cereals</a></li>
-          <li><a href="#catalog">Granola</a></li>
-          <li><a href="#catalog">Muesli</a></li>
-          <li><a href="#catalog">Gift boxes</a></li>
+          <li><a href="#catalog">Millet</a></li>
+          <li><a href="#catalog">Sorghum</a></li>
+          <li><a href="#catalog">Maize</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
           <li><a href="#">Our story</a></li>
-          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Farmer partnerships</a></li>
           <li><a href="#">Wholesale</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#">Contact us</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Follow</h4>
+        <h4>Get in touch</h4>
         <ul>
-          <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
-          <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
-          <li><a href="#"><i class="fab fa-tiktok"></i> TikTok</a></li>
+          <li><a href="tel:+254712345678"><i class="fas fa-phone"></i> +254 712 345 678</a></li>
+          <li><a href="https://wa.me/254712345678"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+          <li><a href="mailto:hello@nafakabora.co.ke"><i class="fas fa-envelope"></i> hello@nafakabora.co.ke</a></li>
+          <li><a href="#"><i class="fas fa-location-dot"></i> Nairobi, Kenya</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 CerealBazaar — freshness in every spoon</span>
-      <span>Made with <i class="fas fa-heart"></i> and whole grains</span>
+      <span>© 2025 Nafaka Bora — fresh Kenyan cereals</span>
+      <span>Made with <i class="fas fa-heart"></i> in Kenya</span>
     </div>
   </footer>
 
@@ -1380,120 +1462,128 @@
       'use strict';
 
       /* ============================================================
-         DATA
+         DATA — Kenyan cereals with KSh pricing
       ============================================================ */
       const PRODUCTS = [
         {
           id: 1,
-          name: 'Honey Almond Crunch',
-          description: 'Toasted almonds, raw honey, and golden oats.',
-          price: 8.9,
-          category: 'granola',
+          name: 'Finger Millet (Wimbi)',
+          description: 'Clean, sorted finger millet. Rich in calcium and iron.',
+          price: 180,
+          unit: 'per kg',
+          category: 'millet',
           rating: 4.9,
-          reviews: 214,
+          reviews: 312,
           icon: 'fa-wheat-awn',
           tag: 'Bestseller',
           tagClass: '',
         },
         {
           id: 2,
-          name: 'Dark Chocolate Granola',
-          description: '70% dark chocolate, quinoa, and coconut flakes.',
-          price: 9.5,
-          category: 'chocolate',
+          name: 'Pearl Millet (Mwere)',
+          description: 'Premium pearl millet, perfect for porridge and ugali.',
+          price: 160,
+          unit: 'per kg',
+          category: 'millet',
           rating: 4.8,
-          reviews: 186,
-          icon: 'fa-cubes',
-          tag: 'Rich',
-          tagClass: '',
-        },
-        {
-          id: 3,
-          name: 'Berry Bliss Muesli',
-          description: 'Dried berries, flax seeds, and ancient grains.',
-          price: 7.8,
-          category: 'muesli',
-          rating: 4.7,
-          reviews: 152,
+          reviews: 208,
           icon: 'fa-seedling',
           tag: '',
           tagClass: '',
         },
         {
-          id: 4,
-          name: 'Cinnamon Pecan Clusters',
-          description: 'Pecans, Ceylon cinnamon, and pure maple syrup.',
-          price: 10.2,
-          category: 'granola',
-          rating: 4.9,
-          reviews: 98,
+          id: 3,
+          name: 'Red Sorghum (Mtama)',
+          description: 'Traditional red sorghum, great for porridge and drinks.',
+          price: 150,
+          unit: 'per kg',
+          category: 'sorghum',
+          rating: 4.7,
+          reviews: 176,
           icon: 'fa-tree',
-          tag: 'New',
-          tagClass: 'tag-new',
+          tag: '',
+          tagClass: '',
         },
         {
-          id: 5,
-          name: 'Classic Oat Bran',
-          description: 'High-fiber whole grain oats, slow-toasted.',
-          price: 6.4,
-          category: 'oats',
+          id: 4,
+          name: 'White Sorghum',
+          description: 'Clean white sorghum, ideal for flour and animal feed.',
+          price: 140,
+          unit: 'per kg',
+          category: 'sorghum',
           rating: 4.6,
-          reviews: 240,
+          reviews: 94,
           icon: 'fa-leaf',
           tag: '',
           tagClass: '',
         },
         {
-          id: 6,
-          name: 'Vanilla Chia Crunch',
-          description: 'Chia seeds, vanilla bean, and buckwheat groats.',
-          price: 9.9,
-          category: 'granola',
+          id: 5,
+          name: 'Dry Maize (Mahindi)',
+          description: 'Grade 1 dry maize, well-dried and sorted. Perfect for posho.',
+          price: 120,
+          unit: 'per kg',
+          category: 'maize',
           rating: 4.8,
-          reviews: 121,
-          icon: 'fa-star',
-          tag: 'Fan fave',
+          reviews: 420,
+          icon: 'fa-cubes',
+          tag: 'Top seller',
+          tagClass: 'tag-new',
+        },
+        {
+          id: 6,
+          name: 'Maize Flour (Posho)',
+          description: 'Fine sifted maize flour, ready for ugali. 2kg pack.',
+          price: 220,
+          unit: 'per 2kg',
+          category: 'maize',
+          rating: 4.9,
+          reviews: 388,
+          icon: 'fa-bowl-rice',
+          tag: 'Fan favourite',
           tagClass: '',
         },
         {
           id: 7,
-          name: 'Apple Cinnamon Oats',
-          description: 'Dried apple, warm cinnamon, and steel-cut oats.',
-          price: 7.2,
-          category: 'oats',
-          rating: 4.5,
-          reviews: 88,
-          icon: 'fa-apple-whole',
-          tag: '',
-          tagClass: '',
+          name: 'Mixed Cereal Blend',
+          description: 'Millet, sorghum, and maize blended for a nutritious porridge.',
+          price: 200,
+          unit: 'per kg',
+          category: 'mixed',
+          rating: 4.8,
+          reviews: 156,
+          icon: 'fa-blender',
+          tag: 'New',
+          tagClass: 'tag-new',
         },
         {
           id: 8,
-          name: 'Tropical Mango Muesli',
-          description: 'Mango, papaya, coconut, and rolled oats.',
-          price: 8.4,
-          category: 'muesli',
+          name: 'Millet & Sorghum Flour',
+          description: 'Stone-ground blend of millet and sorghum. Great for uji.',
+          price: 210,
+          unit: 'per kg',
+          category: 'mixed',
           rating: 4.7,
-          reviews: 64,
-          icon: 'fa-sun',
-          tag: 'New',
-          tagClass: 'tag-new',
+          reviews: 132,
+          icon: 'fa-jar',
+          tag: '',
+          tagClass: '',
         },
       ];
 
       /* ============================================================
          STATE
       ============================================================ */
-      const STORAGE_KEY = 'cereal_bazaar_cart_v1';
-      const DISCOUNT_THRESHOLD = 35;
-      const DISCOUNT_RATE = 0.1;
+      const STORAGE_KEY = 'nafaka_bora_cart_v1';
+      const FREE_DELIVERY_THRESHOLD = 2500; // KSh
+      const DISCOUNT_RATE = 0.05; // 5% off orders over threshold
 
       let cart = []; // [{ id, quantity }]
       let filter = 'all';
       let searchTerm = '';
       let sortBy = 'featured';
       let toastTimer = null;
-      let qtyMap = {}; // local quantity selected per card before adding
+      let qtyMap = {};
 
       /* ============================================================
          DOM REFS
@@ -1518,7 +1608,7 @@
          UTILITIES
       ============================================================ */
       function formatPrice(value) {
-        return '$' + value.toFixed(2);
+        return 'KSh ' + value.toLocaleString('en-KE', { maximumFractionDigits: 0 });
       }
 
       function getProduct(id) {
@@ -1535,12 +1625,16 @@
             subtotal += product.price * item.quantity;
           }
         });
-        const discount = subtotal >= DISCOUNT_THRESHOLD ? subtotal * DISCOUNT_RATE : 0;
+        const qualifiesForDiscount = subtotal >= FREE_DELIVERY_THRESHOLD;
+        const discount = qualifiesForDiscount ? subtotal * DISCOUNT_RATE : 0;
+        const delivery = qualifiesForDiscount ? 0 : subtotal > 0 ? 150 : 0;
         return {
           totalItems,
           subtotal,
           discount,
-          total: subtotal - discount,
+          delivery,
+          total: subtotal - discount + delivery,
+          qualifiesForDiscount,
         };
       }
 
@@ -1548,7 +1642,7 @@
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
         } catch (e) {
-          /* storage may be unavailable */
+          /* storage unavailable */
         }
       }
 
@@ -1595,21 +1689,19 @@
         }
         toastTimer = setTimeout(() => {
           toastEl.classList.remove('show');
-        }, 2400);
+        }, 2600);
       }
 
       /* ============================================================
-         PRODUCT RENDERING (with filter / search / sort)
+         PRODUCT RENDERING
       ============================================================ */
       function getVisibleProducts() {
         let list = [...PRODUCTS];
 
-        // filter
         if (filter !== 'all') {
           list = list.filter((p) => p.category === filter);
         }
 
-        // search
         if (searchTerm.trim()) {
           const q = searchTerm.trim().toLowerCase();
           list = list.filter(
@@ -1620,7 +1712,6 @@
           );
         }
 
-        // sort
         switch (sortBy) {
           case 'price-asc':
             list.sort((a, b) => a.price - b.price);
@@ -1635,7 +1726,6 @@
             list.sort((a, b) => b.rating - a.rating);
             break;
           default:
-            // featured: keep default order but push rated high first slightly
             list.sort((a, b) => b.rating - a.rating);
         }
         return list;
@@ -1685,7 +1775,7 @@
                 <div class="price-row">
                   <div class="price">
                     ${formatPrice(p.price)}
-                    <small>USD</small>
+                    <small>${escapeHtml(p.unit)}</small>
                   </div>
                   <div class="qty-stepper" data-stepper-id="${p.id}">
                     <button
@@ -1711,7 +1801,7 @@
           })
           .join('');
 
-        // attach listeners
+        // stepper listeners
         productsGrid.querySelectorAll('.stepper-minus').forEach((btn) => {
           btn.addEventListener('click', () => {
             const id = Number(btn.dataset.id);
@@ -1766,14 +1856,13 @@
           cart.push({ id: productId, quantity });
         }
 
-        // reset local qty for that card
         qtyMap[productId] = 1;
 
         saveCart();
         updateCartUI();
         renderProducts();
         bumpCartCount();
-        showToast(`${product.name} × ${quantity} added to cart`, 'success');
+        showToast(`${product.name} × ${quantity} added`, 'success');
       }
 
       function removeFromCart(productId) {
@@ -1809,25 +1898,23 @@
          CART UI
       ============================================================ */
       function updateCartUI() {
-        const { totalItems, subtotal, discount, total } = getCartTotals();
+        const { totalItems, subtotal, discount, delivery, total, qualifiesForDiscount } =
+          getCartTotals();
 
-        // badge
         cartCountSpan.textContent = totalItems;
-        cartCountSpan.style.display = totalItems > 0 ? 'inline-flex' : 'inline-flex';
 
-        // panel
         if (cart.length === 0) {
           cartItemsContainer.innerHTML = `
             <div class="cart-empty">
               <i class="fas fa-basket-shopping"></i>
               <h4>Your cart is empty</h4>
-              <p>Add some crunchy goodness to get started.</p>
+              <p>Add some fresh Kenyan cereals to get started.</p>
             </div>
           `;
           cartFooter.innerHTML = `
             <div class="cart-total">
               <span>Total</span>
-              <span>$0.00</span>
+              <span>KSh 0</span>
             </div>
             <button class="checkout-btn" id="checkoutBtn" disabled>
               <i class="fas fa-lock"></i> Checkout
@@ -1836,7 +1923,6 @@
           return;
         }
 
-        // items
         cartItemsContainer.innerHTML = cart
           .map((item) => {
             const p = getProduct(item.id);
@@ -1849,7 +1935,7 @@
                 </div>
                 <div class="cart-item-details">
                   <h4>${escapeHtml(p.name)}</h4>
-                  <div class="item-price">${formatPrice(p.price)} each</div>
+                  <div class="item-price">${formatPrice(p.price)} ${escapeHtml(p.unit)}</div>
                 </div>
                 <div class="cart-item-right">
                   <span class="line-total">${formatPrice(lineTotal)}</span>
@@ -1872,31 +1958,44 @@
           })
           .join('');
 
-        // footer / summary
         const discountRow =
           discount > 0
             ? `<div class="cart-summary-row discount">
-                 <span>Discount (10%)</span>
+                 <span>Bulk discount (5%)</span>
                  <span>−${formatPrice(discount)}</span>
                </div>`
             : '';
 
-        const freeShipNote =
-          subtotal < DISCOUNT_THRESHOLD
-            ? `<div class="cart-summary-row" style="font-size:0.8rem;">
-                 Add ${formatPrice(DISCOUNT_THRESHOLD - subtotal)} more for 10% off &amp; free shipping
+        const deliveryRow =
+          delivery > 0
+            ? `<div class="cart-summary-row">
+                 <span>Delivery (Nairobi)</span>
+                 <span>${formatPrice(delivery)}</span>
                </div>`
-            : `<div class="cart-summary-row" style="font-size:0.8rem;color:var(--success);font-weight:600;">
-                 <span><i class="fas fa-truck-fast"></i> Free shipping unlocked</span>
+            : `<div class="cart-summary-row" style="color:var(--success);font-weight:600;">
+                 <span>Delivery</span>
+                 <span>Free</span>
+               </div>`;
+
+        const freeDeliveryNote =
+          !qualifiesForDiscount && subtotal > 0
+            ? `<div class="delivery-note">
+                 <i class="fas fa-truck-fast"></i>
+                 <span>Add ${formatPrice(FREE_DELIVERY_THRESHOLD - subtotal)} more for <strong>free delivery</strong> &amp; 5% off</span>
+               </div>`
+            : `<div class="delivery-note">
+                 <i class="fas fa-circle-check"></i>
+                 <span>You qualify for <strong>free delivery</strong> &amp; 5% off!</span>
                </div>`;
 
         cartFooter.innerHTML = `
-          ${freeShipNote}
+          ${freeDeliveryNote}
           <div class="cart-summary-row">
             <span>Subtotal</span>
             <span>${formatPrice(subtotal)}</span>
           </div>
           ${discountRow}
+          ${deliveryRow}
           <div class="cart-total">
             <span>Total</span>
             <span>${formatPrice(total)}</span>
@@ -1904,9 +2003,13 @@
           <button class="checkout-btn" id="checkoutBtn">
             <i class="fas fa-lock"></i> Checkout · ${formatPrice(total)}
           </button>
+          <div class="payment-methods">
+            <span class="payment-badge"><i class="fas fa-mobile-screen"></i> M-Pesa</span>
+            <span class="payment-badge"><i class="fas fa-money-bill"></i> Cash on delivery</span>
+            <span class="payment-badge"><i class="fas fa-building-columns"></i> Bank transfer</span>
+          </div>
         `;
 
-        // attach item qty listeners
         cartItemsContainer.querySelectorAll('.qty-dec').forEach((btn) => {
           btn.addEventListener('click', () => {
             changeCartQuantity(Number(btn.dataset.id), -1);
@@ -1918,11 +2021,8 @@
           });
         });
 
-        // checkout listener
         const checkoutBtn = document.getElementById('checkoutBtn');
-        if (checkoutBtn) {
-          checkoutBtn.addEventListener('click', handleCheckout);
-        }
+        if (checkoutBtn) checkoutBtn.addEventListener('click', handleCheckout);
       }
 
       /* ============================================================
@@ -1930,18 +2030,20 @@
       ============================================================ */
       function handleCheckout() {
         if (cart.length === 0) {
-          showToast('Your cart is empty — add some cereal first!', 'error');
+          showToast('Your cart is empty — add some cereals first!', 'error');
           return;
         }
         const { totalItems, total } = getCartTotals();
-        showToast(`✅ Order placed! ${totalItems} items · ${formatPrice(total)}`, 'success');
+        showToast(
+          `✅ Order placed! ${totalItems} items · ${formatPrice(total)}. We'll call you to confirm.`,
+          'success'
+        );
         cart = [];
         qtyMap = {};
         saveCart();
         updateCartUI();
         renderProducts();
         closeCart();
-        // scroll to top for a fresh start
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
@@ -1953,7 +2055,6 @@
         cartPanel.classList.add('active');
         cartPanel.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        // focus close button for accessibility
         setTimeout(() => closeCartBtn.focus(), 100);
       }
 
@@ -1966,10 +2067,9 @@
       }
 
       /* ============================================================
-         FILTER / SEARCH / SORT LISTENERS
+         CONTROLS
       ============================================================ */
       function setupControls() {
-        // search with debounce
         let searchTimer = null;
         searchInput.addEventListener('input', (e) => {
           clearTimeout(searchTimer);
@@ -1979,13 +2079,11 @@
           }, 180);
         });
 
-        // sort
         sortSelect.addEventListener('change', (e) => {
           sortBy = e.target.value;
           renderProducts();
         });
 
-        // filter chips
         filterChips.addEventListener('click', (e) => {
           const chip = e.target.closest('.chip');
           if (!chip) return;
@@ -1995,7 +2093,6 @@
           renderProducts();
         });
 
-        // hero CTA scroll
         document.querySelectorAll('a[href="#catalog"]').forEach((a) => {
           a.addEventListener('click', (e) => {
             e.preventDefault();
@@ -2010,29 +2107,23 @@
       function init() {
         cart = loadCart();
         qtyMap = {};
-
-        // seed qtyMap with 1 for each product
         PRODUCTS.forEach((p) => (qtyMap[p.id] = 1));
 
         renderProducts();
         updateCartUI();
         setupControls();
 
-        // cart open buttons
         cartButton.addEventListener('click', openCart);
         if (heroCartBtn) heroCartBtn.addEventListener('click', openCart);
         closeCartBtn.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
 
-        // keyboard
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && cartPanel.classList.contains('active')) {
             closeCart();
           }
         });
 
-        // click on empty state / grid delegation for add-to-cart if re-rendered
-        // (already handled per-render, but this catches any missed)
         productsGrid.addEventListener('click', (e) => {
           const btn = e.target.closest('.add-to-cart');
           if (btn) {
@@ -2043,14 +2134,10 @@
           }
         });
 
-        // checkout button inside footer (initial empty state)
         const initialCheckout = document.getElementById('checkoutBtn');
         if (initialCheckout) initialCheckout.addEventListener('click', handleCheckout);
       }
 
-      /* ============================================================
-         BOOT
-      ============================================================ */
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
       } else {
