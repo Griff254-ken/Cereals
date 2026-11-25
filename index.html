@@ -392,7 +392,7 @@ footer b{color:#fff}
      POST /api/intasend/stkpush       -> trigger M-Pesa STK push via IntaSend
      GET  /api/orders/:id/status      -> { paymentStatus, adminConfirmed, mpesaReceipt }
    ===================================================================== */
-const DEFAULT_API = "https://maricopa-server.onrender.com";
+const DEFAULT_API = "https://cereals-back.onrender.com";
 const normApi = v => { v = String(v || "").trim(); if (!v) return ""; if (!/^https?:\/\//i.test(v)) v = "https://" + v; try { return new URL(v).origin; } catch(e) { return ""; } };
 const lsGet = k => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch(e) {} };
