@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nafaka Bora — fresh Kenyan cereals: millet, sorghum, maize, and more. Delivered across Nairobi and Kenya." />
+  <meta name="description" content="Nafaka Bora — fresh Kenyan cereals: millet, sorghum, maize, and more. Pay via M-Pesa, track your delivery." />
+  <meta name="theme-color" content="#1e7a4a" />
   <title>Nafaka Bora · Fresh Kenyan Cereals</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,9 +26,12 @@
       --accent-dark: #8f4a20;
       --accent-soft: #f3e7d9;
       --green: #1e7a4a;
+      --green-dark: #155a36;
       --green-soft: #e6f4ec;
       --success: #2e7d5e;
       --danger: #c0392b;
+      --warning: #d68910;
+      --info: #2c6e9c;
       --border: #efe1d3;
       --border-strong: #e0d0bf;
       --shadow-sm: 0 4px 14px rgba(45, 42, 36, 0.06);
@@ -64,6 +68,7 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      min-height: 100vh;
     }
 
     img,
@@ -89,6 +94,23 @@
       outline: 3px solid var(--accent);
       outline-offset: 3px;
       border-radius: 4px;
+    }
+
+    /* ---------- UTILITY ---------- */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     /* ---------- ANNOUNCEMENT BAR ---------- */
@@ -152,7 +174,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     /* ---------- BUTTONS ---------- */
@@ -183,7 +205,7 @@
     }
 
     .btn-primary:hover {
-      background: #175f3a;
+      background: var(--green-dark);
     }
 
     .btn-outline {
@@ -195,6 +217,33 @@
     .btn-outline:hover {
       background: var(--ink);
       color: #fff;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1.5px solid var(--border-strong);
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-soft);
+      color: var(--ink);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      min-height: 38px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .cart-btn {
@@ -373,7 +422,6 @@
       margin-top: 0.35rem;
     }
 
-    /* controls */
     .catalog-controls {
       display: flex;
       flex-wrap: wrap;
@@ -454,7 +502,6 @@
       box-shadow: 0 0 0 4px rgba(30, 122, 74, 0.12);
     }
 
-    /* filter chips */
     .filter-chips {
       display: flex;
       flex-wrap: wrap;
@@ -487,7 +534,7 @@
       color: #fff;
     }
 
-    /* products grid */
+    /* ---------- PRODUCTS GRID ---------- */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -636,7 +683,6 @@
       color: var(--ink-muted);
     }
 
-    /* quantity stepper on card */
     .qty-stepper {
       display: inline-flex;
       align-items: center;
@@ -708,7 +754,7 @@
       color: #fff;
     }
 
-    /* empty state */
+    /* empty / loading states */
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
@@ -731,6 +777,23 @@
 
     .empty-state p {
       font-size: 0.92rem;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #efe9e2 25%, #f7f2ec 50%, #efe9e2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: var(--radius-md);
+      height: 320px;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     /* ---------- CART SIDEBAR ---------- */
@@ -758,7 +821,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       height: 100%;
       height: 100dvh;
       background: var(--surface);
@@ -1018,7 +1081,7 @@
     }
 
     .checkout-btn:hover {
-      background: #175f3a;
+      background: var(--green-dark);
     }
 
     .checkout-btn:active {
@@ -1032,7 +1095,6 @@
       box-shadow: none;
     }
 
-    /* payment methods */
     .payment-methods {
       display: flex;
       flex-wrap: wrap;
@@ -1059,7 +1121,6 @@
       font-size: 0.75rem;
     }
 
-    /* delivery note */
     .delivery-note {
       display: flex;
       align-items: center;
@@ -1076,6 +1137,440 @@
     .delivery-note i {
       font-size: 0.9rem;
       flex-shrink: 0;
+    }
+
+    /* ---------- MODALS ---------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 42, 36, 0.45);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition), visibility var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(16px) scale(0.98);
+      transition: transform var(--transition);
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.3rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+    }
+
+    .modal-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-header h3 i {
+      color: var(--green);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      display: flex;
+      gap: 0.7rem;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- FORMS ---------- */
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label .req {
+      color: var(--danger);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--ink);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      min-height: var(--touch-target);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(30, 122, 74, 0.12);
+    }
+
+    .form-control::placeholder {
+      color: var(--ink-muted);
+    }
+
+    .form-hint {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      margin-top: 0.3rem;
+    }
+
+    .form-error {
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .form-error.visible {
+      display: block;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* radio cards */
+    .radio-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+
+    .radio-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.9rem 1rem;
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+      min-height: var(--touch-target);
+    }
+
+    .radio-card:hover {
+      border-color: var(--green);
+    }
+
+    .radio-card.selected {
+      border-color: var(--green);
+      background: var(--green-soft);
+      box-shadow: 0 0 0 3px rgba(30, 122, 74, 0.12);
+    }
+
+    .radio-card input {
+      accent-color: var(--green);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .radio-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .radio-card-text strong {
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+
+    .radio-card-text span {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+    }
+
+    .radio-card i {
+      color: var(--green);
+      font-size: 1.1rem;
+    }
+
+    /* ---------- ORDER TRACKING ---------- */
+    .tracking-container {
+      max-width: 720px;
+      margin: 2rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .tracking-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .tracking-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tracking-card h2 i {
+      color: var(--green);
+    }
+
+    .tracking-card .order-ref {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 1.5rem;
+    }
+
+    .tracking-card .order-ref strong {
+      color: var(--ink);
+      font-family: monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-badge.pending {
+      background: #fef4e6;
+      color: var(--warning);
+    }
+
+    .status-badge.paid {
+      background: #e6f0f8;
+      color: var(--info);
+    }
+
+    .status-badge.processing {
+      background: #f0ecfa;
+      color: #6b4fbb;
+    }
+
+    .status-badge.shipped {
+      background: #e6f4ec;
+      color: var(--success);
+    }
+
+    .status-badge.delivered {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .status-badge.cancelled {
+      background: #fbe9e7;
+      color: var(--danger);
+    }
+
+    .tracking-timeline {
+      margin: 1.8rem 0 0.5rem;
+      position: relative;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 1rem;
+      position: relative;
+      padding-bottom: 1.8rem;
+    }
+
+    .timeline-step:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-step::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 32px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-strong);
+    }
+
+    .timeline-step:last-child::before {
+      display: none;
+    }
+
+    .timeline-step.completed::before {
+      background: var(--green);
+    }
+
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--bg-soft);
+      border: 2px solid var(--border-strong);
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      z-index: 1;
+      transition: all var(--transition);
+    }
+
+    .timeline-step.completed .timeline-dot {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .timeline-step.active .timeline-dot {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 0 5px rgba(30, 122, 74, 0.15);
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .timeline-content h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+
+    .timeline-content time {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      margin-top: 0.25rem;
+    }
+
+    .tracking-items {
+      border-top: 1px solid var(--border);
+      margin-top: 1.2rem;
+      padding-top: 1.2rem;
+    }
+
+    .tracking-items h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-soft);
+      margin-bottom: 0.8rem;
+    }
+
+    .tracking-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.55rem 0;
+      font-size: 0.9rem;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .tracking-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .tracking-item-row .item-name {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .tracking-item-row .item-qty {
+      color: var(--ink-muted);
+      font-size: 0.82rem;
+    }
+
+    .tracking-item-row .item-total {
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .tracking-summary {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 1rem;
+      margin-top: 1rem;
+      border-top: 2px solid var(--border);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .tracking-summary span:last-child {
+      color: var(--green);
+      font-family: var(--font-display);
+      font-size: 1.3rem;
     }
 
     /* ---------- TOAST ---------- */
@@ -1097,7 +1592,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s;
-      z-index: 500;
+      z-index: 600;
       max-width: min(90vw, 460px);
     }
 
@@ -1118,6 +1613,10 @@
 
     .toast.error i {
       color: #ffb3a7;
+    }
+
+    .toast.info i {
+      color: #9ec9e8;
     }
 
     /* ---------- FOOTER ---------- */
@@ -1259,6 +1758,14 @@
       .footer {
         padding: 2rem 1rem 1.2rem;
       }
+
+      .tracking-container {
+        padding: 0 1rem;
+      }
+
+      .tracking-card {
+        padding: 1.3rem;
+      }
     }
 
     @media (max-width: 420px) {
@@ -1279,6 +1786,10 @@
       .qty-stepper {
         width: 100%;
         justify-content: space-between;
+      }
+
+      .radio-cards {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1308,6 +1819,10 @@
       Nafaka<span>Bora</span>
     </a>
     <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="trackOrderBtn" aria-label="Track my order">
+        <i class="fas fa-location-dot"></i>
+        <span class="btn-label">Track order</span>
+      </button>
       <button class="btn btn-primary cart-btn" id="cartButton" aria-label="Open shopping cart">
         <i class="fas fa-shopping-basket"></i>
         <span class="btn-label">Cart</span>
@@ -1329,8 +1844,8 @@
         <a href="#catalog" class="btn btn-primary">
           <i class="fas fa-bowl-food"></i> Shop cereals
         </a>
-        <button class="btn btn-outline" id="heroCartBtn">
-          <i class="fas fa-basket-shopping"></i> View cart
+        <button class="btn btn-outline" id="heroTrackBtn">
+          <i class="fas fa-location-dot"></i> Track my order
         </button>
       </div>
       <div class="hero-stats">
@@ -1381,7 +1896,6 @@
       </div>
     </div>
 
-    <!-- Filter chips -->
     <div class="filter-chips" id="filterChips">
       <button class="chip active" data-filter="all">All</button>
       <button class="chip" data-filter="millet">Millet</button>
@@ -1451,6 +1965,211 @@
     </div>
   </aside>
 
+  <!-- ======================= CHECKOUT MODAL ======================= -->
+  <div class="modal-overlay" id="checkoutModalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+      <div class="modal-header">
+        <h3 id="checkoutTitle"><i class="fas fa-lock"></i> Checkout</h3>
+        <button class="close-cart" id="closeCheckoutBtn" aria-label="Close checkout">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="checkoutForm" novalidate>
+          <div class="form-group">
+            <label for="customerName">Full name <span class="req">*</span></label>
+            <input type="text" id="customerName" class="form-control" placeholder="e.g. Wanjiku Kamau" required autocomplete="name" />
+            <div class="form-error" id="nameError">Please enter your full name</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customerPhone">M-Pesa phone <span class="req">*</span></label>
+              <input type="tel" id="customerPhone" class="form-control" placeholder="0712 345 678" required autocomplete="tel" inputmode="tel" />
+              <div class="form-hint">You'll receive an STK push to pay</div>
+              <div class="form-error" id="phoneError">Enter a valid Kenyan phone number</div>
+            </div>
+            <div class="form-group">
+              <label for="customerEmail">Email (optional)</label>
+              <input type="email" id="customerEmail" class="form-control" placeholder="you@example.com" autocomplete="email" />
+              <div class="form-hint">For your receipt</div>
+              <div class="form-error" id="emailError">Enter a valid email</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="deliveryAddress">Delivery address <span class="req">*</span></label>
+            <input type="text" id="deliveryAddress" class="form-control" placeholder="Estate / street / building" required autocomplete="street-address" />
+            <div class="form-error" id="addressError">Please enter your delivery address</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="deliveryCity">Town / City <span class="req">*</span></label>
+              <input type="text" id="deliveryCity" class="form-control" placeholder="e.g. Nairobi" required autocomplete="address-level2" />
+              <div class="form-error" id="cityError">Please enter your town or city</div>
+            </div>
+            <div class="form-group">
+              <label for="deliveryNotes">Notes (optional)</label>
+              <input type="text" id="deliveryNotes" class="form-control" placeholder="Landmark, gate code…" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Payment method <span class="req">*</span></label>
+            <div class="radio-cards" id="paymentMethods">
+              <label class="radio-card selected" data-method="mpesa">
+                <input type="radio" name="paymentMethod" value="mpesa" checked />
+                <i class="fas fa-mobile-screen"></i>
+                <div class="radio-card-text">
+                  <strong>M-Pesa</strong>
+                  <span>Instant STK push</span>
+                </div>
+              </label>
+              <label class="radio-card" data-method="card">
+                <input type="radio" name="paymentMethod" value="card" />
+                <i class="fas fa-credit-card"></i>
+                <div class="radio-card-text">
+                  <strong>Card</strong>
+                  <span>Visa / Mastercard</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="delivery-note" id="checkoutSummaryNote" style="margin-top: 0.4rem;">
+            <i class="fas fa-circle-info"></i>
+            <span id="checkoutSummaryText">You'll pay KSh 0 via M-Pesa STK push.</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="cancelCheckoutBtn">Cancel</button>
+        <button class="btn btn-primary" id="payNowBtn">
+          <i class="fas fa-lock"></i> Pay with M-Pesa
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= PAYMENT WAITING MODAL ======================= -->
+  <div class="modal-overlay" id="paymentWaitingOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="waitingTitle">
+      <div class="modal-header">
+        <h3 id="waitingTitle"><i class="fas fa-mobile-screen"></i> Waiting for payment</h3>
+        <button class="close-cart" id="closeWaitingBtn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div style="font-size: 3.5rem; color: var(--green); margin-bottom: 1rem;">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <h4 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem;">Check your phone</h4>
+        <p style="color: var(--ink-soft); margin-bottom: 1rem;">
+          We've sent an M-Pesa payment request to <strong id="waitingPhone">your phone</strong>.
+          Enter your PIN to complete the payment.
+        </p>
+        <div style="background: var(--bg-soft); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem;">Amount to pay</div>
+          <div style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--green);" id="waitingAmount">KSh 0</div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 0;">
+          <i class="fas fa-circle-info"></i> This page will update automatically once payment is confirmed.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn btn-ghost btn-sm" id="simulatePaymentBtn">
+          <i class="fas fa-flask"></i> Simulate payment (dev)
+        </button>
+        <button class="btn btn-ghost btn-sm" id="cancelPaymentBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= ORDER CONFIRMATION MODAL ======================= -->
+  <div class="modal-overlay" id="confirmationOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-header">
+        <h3 id="confirmTitle"><i class="fas fa-circle-check"></i> Order confirmed</h3>
+        <button class="close-cart" id="closeConfirmationBtn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div style="font-size: 3.5rem; color: var(--success); margin-bottom: 1rem;">
+          <i class="fas fa-circle-check"></i>
+        </div>
+        <h4 style="font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 0.5rem;">Thank you!</h4>
+        <p style="color: var(--ink-soft); margin-bottom: 1.2rem;">
+          Your payment has been confirmed and your order is being prepared.
+          We'll send you a receipt and delivery updates.
+        </p>
+        <div style="background: var(--green-soft); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.2rem; text-align: left;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+            <span style="color: var(--ink-soft);">Order reference</span>
+            <strong id="confirmOrderRef" style="font-family: monospace; letter-spacing: 0.02em;">—</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+            <span style="color: var(--ink-soft);">Total paid</span>
+            <strong id="confirmAmount" style="color: var(--green);">KSh 0</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--ink-muted);">
+          <i class="fas fa-envelope"></i> A receipt has been sent to your phone/email.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn btn-primary" id="trackAfterConfirmBtn">
+          <i class="fas fa-location-dot"></i> Track my order
+        </button>
+        <button class="btn btn-ghost" id="continueShoppingBtn">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= TRACK ORDER MODAL ======================= -->
+  <div class="modal-overlay" id="trackModalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="trackTitle">
+      <div class="modal-header">
+        <h3 id="trackTitle"><i class="fas fa-location-dot"></i> Track your order</h3>
+        <button class="close-cart" id="closeTrackBtn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="trackOrderRef">Order reference</label>
+          <input type="text" id="trackOrderRef" class="form-control" placeholder="e.g. NB-2025-00123" />
+          <div class="form-hint">Enter the reference from your receipt</div>
+        </div>
+        <div class="form-error" id="trackError">Order not found. Please check the reference and try again.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="cancelTrackBtn">Cancel</button>
+        <button class="btn btn-primary" id="searchOrderBtn">
+          <i class="fas fa-magnifying-glass"></i> Track
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= TRACKING RESULT VIEW ======================= -->
+  <section class="tracking-container hidden" id="trackingView">
+    <div class="tracking-card">
+      <h2><i class="fas fa-truck-fast"></i> Order tracking</h2>
+      <p class="order-ref">Order <strong id="trackingOrderRef">—</strong> · <span id="trackingStatusBadge" class="status-badge pending">Pending</span></p>
+
+      <div class="tracking-timeline" id="trackingTimeline">
+        <!-- Injected by JS -->
+      </div>
+
+      <div class="tracking-items">
+        <h4>Items in this order</h4>
+        <div id="trackingItemsList"></div>
+        <div class="tracking-summary">
+          <span>Total paid</span>
+          <span id="trackingTotal">KSh 0</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="backFromTrackingBtn">
+      <i class="fas fa-arrow-left"></i> Back to shop
+    </button>
+  </section>
+
   <!-- Toast -->
   <div class="toast" id="toastMessage" role="status" aria-live="polite">
     <i class="fas fa-circle-check"></i>
@@ -1462,136 +2181,195 @@
       'use strict';
 
       /* ============================================================
-         DATA — Kenyan cereals with KSh pricing
+         CONFIGURATION — ready for backend connection
       ============================================================ */
-      const PRODUCTS = [
-        {
-          id: 1,
-          name: 'Finger Millet (Wimbi)',
-          description: 'Clean, sorted finger millet. Rich in calcium and iron.',
-          price: 180,
-          unit: 'per kg',
-          category: 'millet',
-          rating: 4.9,
-          reviews: 312,
-          icon: 'fa-wheat-awn',
-          tag: 'Bestseller',
-          tagClass: '',
+      const CONFIG = {
+        API_BASE_URL: '/api', // change to your backend, e.g. 'https://api.nafakabora.co.ke'
+        INTASEND_PUBLISHABLE_KEY: 'YOUR_INTASEND_PUBLISHABLE_KEY', // from IntaSend dashboard
+        CURRENCY: 'KES',
+        FREE_DELIVERY_THRESHOLD: 2500,
+        DISCOUNT_RATE: 0.05,
+        DELIVERY_FEE: 150,
+        POLL_INTERVAL_MS: 3000,
+        POLL_MAX_ATTEMPTS: 40, // ~2 minutes
+      };
+
+      /* ============================================================
+         API LAYER — swap these with real fetch calls to your backend
+      ============================================================ */
+      const api = {
+        async getProducts() {
+          try {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/products`, {
+              headers: { Accept: 'application/json' },
+            });
+            if (!res.ok) throw new Error('Failed to load products');
+            return await res.json();
+          } catch (err) {
+            console.warn('Product API unavailable — using fallback data.', err);
+            return FALLBACK_PRODUCTS;
+          }
         },
-        {
-          id: 2,
-          name: 'Pearl Millet (Mwere)',
-          description: 'Premium pearl millet, perfect for porridge and ugali.',
-          price: 160,
-          unit: 'per kg',
-          category: 'millet',
-          rating: 4.8,
-          reviews: 208,
-          icon: 'fa-seedling',
-          tag: '',
-          tagClass: '',
+
+        async createOrder(payload) {
+          try {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/orders`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) throw new Error('Failed to create order');
+            return await res.json();
+          } catch (err) {
+            console.warn('Order API unavailable — using local simulation.', err);
+            return localSimulation.createOrder(payload);
+          }
         },
-        {
-          id: 3,
-          name: 'Red Sorghum (Mtama)',
-          description: 'Traditional red sorghum, great for porridge and drinks.',
-          price: 150,
-          unit: 'per kg',
-          category: 'sorghum',
-          rating: 4.7,
-          reviews: 176,
-          icon: 'fa-tree',
-          tag: '',
-          tagClass: '',
+
+        async initiatePayment(orderId, method) {
+          try {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/payments/initiate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({ orderId, method }),
+            });
+            if (!res.ok) throw new Error('Failed to initiate payment');
+            return await res.json();
+          } catch (err) {
+            console.warn('Payment API unavailable — using local simulation.', err);
+            return localSimulation.initiatePayment(orderId, method);
+          }
         },
-        {
-          id: 4,
-          name: 'White Sorghum',
-          description: 'Clean white sorghum, ideal for flour and animal feed.',
-          price: 140,
-          unit: 'per kg',
-          category: 'sorghum',
-          rating: 4.6,
-          reviews: 94,
-          icon: 'fa-leaf',
-          tag: '',
-          tagClass: '',
+
+        async checkPaymentStatus(orderId) {
+          try {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/payments/status/${orderId}`, {
+              headers: { Accept: 'application/json' },
+            });
+            if (!res.ok) throw new Error('Failed to check payment status');
+            return await res.json();
+          } catch (err) {
+            return localSimulation.checkPaymentStatus(orderId);
+          }
         },
-        {
-          id: 5,
-          name: 'Dry Maize (Mahindi)',
-          description: 'Grade 1 dry maize, well-dried and sorted. Perfect for posho.',
-          price: 120,
-          unit: 'per kg',
-          category: 'maize',
-          rating: 4.8,
-          reviews: 420,
-          icon: 'fa-cubes',
-          tag: 'Top seller',
-          tagClass: 'tag-new',
+
+        async getOrder(orderRef) {
+          try {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/orders/${encodeURIComponent(orderRef)}`, {
+              headers: { Accept: 'application/json' },
+            });
+            if (!res.ok) throw new Error('Order not found');
+            return await res.json();
+          } catch (err) {
+            return localSimulation.getOrder(orderRef);
+          }
         },
-        {
-          id: 6,
-          name: 'Maize Flour (Posho)',
-          description: 'Fine sifted maize flour, ready for ugali. 2kg pack.',
-          price: 220,
-          unit: 'per 2kg',
-          category: 'maize',
-          rating: 4.9,
-          reviews: 388,
-          icon: 'fa-bowl-rice',
-          tag: 'Fan favourite',
-          tagClass: '',
+      };
+
+      /* ============================================================
+         LOCAL SIMULATION (used until backend is connected)
+      ============================================================ */
+      const localSimulation = {
+        _orders: {},
+        _paymentStates: {},
+
+        createOrder(payload) {
+          const orderId = 'NB-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000);
+          const order = {
+            orderId,
+            ...payload,
+            status: 'pending_payment',
+            createdAt: new Date().toISOString(),
+            timeline: [{ step: 'pending', label: 'Order placed', timestamp: new Date().toISOString() }],
+          };
+          this._orders[orderId] = order;
+          this._paymentStates[orderId] = 'pending';
+          return order;
         },
-        {
-          id: 7,
-          name: 'Mixed Cereal Blend',
-          description: 'Millet, sorghum, and maize blended for a nutritious porridge.',
-          price: 200,
-          unit: 'per kg',
-          category: 'mixed',
-          rating: 4.8,
-          reviews: 156,
-          icon: 'fa-blender',
-          tag: 'New',
-          tagClass: 'tag-new',
+
+        initiatePayment(orderId, method) {
+          this._paymentStates[orderId] = 'processing';
+          return {
+            orderId,
+            status: 'processing',
+            method,
+            message: 'STK push sent. Enter M-Pesa PIN on your phone.',
+            checkoutUrl: null,
+          };
         },
-        {
-          id: 8,
-          name: 'Millet & Sorghum Flour',
-          description: 'Stone-ground blend of millet and sorghum. Great for uji.',
-          price: 210,
-          unit: 'per kg',
-          category: 'mixed',
-          rating: 4.7,
-          reviews: 132,
-          icon: 'fa-jar',
-          tag: '',
-          tagClass: '',
+
+        checkPaymentStatus(orderId) {
+          const state = this._paymentStates[orderId] || 'pending';
+          return { orderId, status: state };
         },
+
+        getOrder(orderRef) {
+          const order = this._orders[orderRef];
+          if (!order) return null;
+          return order;
+        },
+
+        // dev helper
+        simulatePaymentSuccess(orderId) {
+          this._paymentStates[orderId] = 'paid';
+          const order = this._orders[orderId];
+          if (order) {
+            order.status = 'paid';
+            order.timeline = [
+              { step: 'pending', label: 'Order placed', timestamp: order.createdAt },
+              { step: 'paid', label: 'Payment confirmed', timestamp: new Date().toISOString() },
+              { step: 'processing', label: 'Preparing your order', timestamp: null },
+              { step: 'shipped', label: 'Out for delivery', timestamp: null },
+              { step: 'delivered', label: 'Delivered', timestamp: null },
+            ];
+          }
+          return { orderId, status: 'paid' };
+        },
+      };
+
+      /* ============================================================
+         FALLBACK PRODUCT DATA
+      ============================================================ */
+      const FALLBACK_PRODUCTS = [
+        { id: 1, name: 'Finger Millet (Wimbi)', description: 'Clean, sorted finger millet. Rich in calcium and iron.', price: 180, unit: 'per kg', category: 'millet', rating: 4.9, reviews: 312, icon: 'fa-wheat-awn', tag: 'Bestseller', tagClass: '', image: null },
+        { id: 2, name: 'Pearl Millet (Mwere)', description: 'Premium pearl millet, perfect for porridge and ugali.', price: 160, unit: 'per kg', category: 'millet', rating: 4.8, reviews: 208, icon: 'fa-seedling', tag: '', tagClass: '', image: null },
+        { id: 3, name: 'Red Sorghum (Mtama)', description: 'Traditional red sorghum, great for porridge and drinks.', price: 150, unit: 'per kg', category: 'sorghum', rating: 4.7, reviews: 176, icon: 'fa-tree', tag: '', tagClass: '', image: null },
+        { id: 4, name: 'White Sorghum', description: 'Clean white sorghum, ideal for flour and animal feed.', price: 140, unit: 'per kg', category: 'sorghum', rating: 4.6, reviews: 94, icon: 'fa-leaf', tag: '', tagClass: '', image: null },
+        { id: 5, name: 'Dry Maize (Mahindi)', description: 'Grade 1 dry maize, well-dried and sorted. Perfect for posho.', price: 120, unit: 'per kg', category: 'maize', rating: 4.8, reviews: 420, icon: 'fa-cubes', tag: 'Top seller', tagClass: 'tag-new', image: null },
+        { id: 6, name: 'Maize Flour (Posho)', description: 'Fine sifted maize flour, ready for ugali. 2kg pack.', price: 220, unit: 'per 2kg', category: 'maize', rating: 4.9, reviews: 388, icon: 'fa-bowl-rice', tag: 'Fan favourite', tagClass: '', image: null },
+        { id: 7, name: 'Mixed Cereal Blend', description: 'Millet, sorghum, and maize blended for a nutritious porridge.', price: 200, unit: 'per kg', category: 'mixed', rating: 4.8, reviews: 156, icon: 'fa-blender', tag: 'New', tagClass: 'tag-new', image: null },
+        { id: 8, name: 'Millet & Sorghum Flour', description: 'Stone-ground blend of millet and sorghum. Great for uji.', price: 210, unit: 'per kg', category: 'mixed', rating: 4.7, reviews: 132, icon: 'fa-jar', tag: '', tagClass: '', image: null },
       ];
 
       /* ============================================================
          STATE
       ============================================================ */
       const STORAGE_KEY = 'nafaka_bora_cart_v1';
-      const FREE_DELIVERY_THRESHOLD = 2500; // KSh
-      const DISCOUNT_RATE = 0.05; // 5% off orders over threshold
+      const CUSTOMER_KEY = 'nafaka_bora_customer_v1';
+      const TRACK_KEY = 'nafaka_bora_tracking_v1';
 
-      let cart = []; // [{ id, quantity }]
+      let products = [];
+      let cart = [];
       let filter = 'all';
       let searchTerm = '';
       let sortBy = 'featured';
       let toastTimer = null;
       let qtyMap = {};
 
+      let currentOrder = null;
+      let paymentPollTimer = null;
+      let paymentPollAttempts = 0;
+
       /* ============================================================
          DOM REFS
       ============================================================ */
       const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => document.querySelectorAll(sel);
+
       const productsGrid = $('#productsGrid');
       const cartButton = $('#cartButton');
-      const heroCartBtn = $('#heroCartBtn');
+      const heroTrackBtn = $('#heroTrackBtn');
+      const trackOrderBtn = $('#trackOrderBtn');
       const cartOverlay = $('#cartOverlay');
       const cartPanel = $('#cartPanel');
       const closeCartBtn = $('#closeCartBtn');
@@ -1604,15 +2382,57 @@
       const toastEl = $('#toastMessage');
       const toastText = $('#toastText');
 
+      // checkout
+      const checkoutModalOverlay = $('#checkoutModalOverlay');
+      const closeCheckoutBtn = $('#closeCheckoutBtn');
+      const cancelCheckoutBtn = $('#cancelCheckoutBtn');
+      const checkoutForm = $('#checkoutForm');
+      const payNowBtn = $('#payNowBtn');
+      const checkoutSummaryText = $('#checkoutSummaryText');
+      const paymentMethods = $('#paymentMethods');
+
+      // payment waiting
+      const paymentWaitingOverlay = $('#paymentWaitingOverlay');
+      const closeWaitingBtn = $('#closeWaitingBtn');
+      const cancelPaymentBtn = $('#cancelPaymentBtn');
+      const simulatePaymentBtn = $('#simulatePaymentBtn');
+      const waitingPhone = $('#waitingPhone');
+      const waitingAmount = $('#waitingAmount');
+
+      // confirmation
+      const confirmationOverlay = $('#confirmationOverlay');
+      const closeConfirmationBtn = $('#closeConfirmationBtn');
+      const confirmOrderRef = $('#confirmOrderRef');
+      const confirmAmount = $('#confirmAmount');
+      const trackAfterConfirmBtn = $('#trackAfterConfirmBtn');
+      const continueShoppingBtn = $('#continueShoppingBtn');
+
+      // track
+      const trackModalOverlay = $('#trackModalOverlay');
+      const closeTrackBtn = $('#closeTrackBtn');
+      const cancelTrackBtn = $('#cancelTrackBtn');
+      const trackOrderRef = $('#trackOrderRef');
+      const searchOrderBtn = $('#searchOrderBtn');
+      const trackError = $('#trackError');
+
+      // tracking result
+      const trackingView = $('#trackingView');
+      const trackingOrderRef = $('#trackingOrderRef');
+      const trackingStatusBadge = $('#trackingStatusBadge');
+      const trackingTimeline = $('#trackingTimeline');
+      const trackingItemsList = $('#trackingItemsList');
+      const trackingTotal = $('#trackingTotal');
+      const backFromTrackingBtn = $('#backFromTrackingBtn');
+
       /* ============================================================
          UTILITIES
       ============================================================ */
       function formatPrice(value) {
-        return 'KSh ' + value.toLocaleString('en-KE', { maximumFractionDigits: 0 });
+        return 'KSh ' + Number(value).toLocaleString('en-KE', { maximumFractionDigits: 0 });
       }
 
       function getProduct(id) {
-        return PRODUCTS.find((p) => p.id === id);
+        return products.find((p) => p.id === id);
       }
 
       function getCartTotals() {
@@ -1625,25 +2445,23 @@
             subtotal += product.price * item.quantity;
           }
         });
-        const qualifiesForDiscount = subtotal >= FREE_DELIVERY_THRESHOLD;
-        const discount = qualifiesForDiscount ? subtotal * DISCOUNT_RATE : 0;
-        const delivery = qualifiesForDiscount ? 0 : subtotal > 0 ? 150 : 0;
+        const qualifies = subtotal >= CONFIG.FREE_DELIVERY_THRESHOLD;
+        const discount = qualifies ? subtotal * CONFIG.DISCOUNT_RATE : 0;
+        const delivery = qualifies ? 0 : subtotal > 0 ? CONFIG.DELIVERY_FEE : 0;
         return {
           totalItems,
           subtotal,
           discount,
           delivery,
           total: subtotal - discount + delivery,
-          qualifiesForDiscount,
+          qualifies,
         };
       }
 
       function saveCart() {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-        } catch (e) {
-          /* storage unavailable */
-        }
+        } catch (e) {}
       }
 
       function loadCart() {
@@ -1657,16 +2475,43 @@
               item &&
               typeof item.id === 'number' &&
               typeof item.quantity === 'number' &&
-              item.quantity > 0 &&
-              getProduct(item.id)
+              item.quantity > 0
           );
         } catch (e) {
           return [];
         }
       }
 
+      function loadCustomer() {
+        try {
+          return JSON.parse(localStorage.getItem(CUSTOMER_KEY) || '{}');
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function saveCustomer(data) {
+        try {
+          localStorage.setItem(CUSTOMER_KEY, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function saveLastOrder(data) {
+        try {
+          localStorage.setItem(TRACK_KEY, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function loadLastOrder() {
+        try {
+          return JSON.parse(localStorage.getItem(TRACK_KEY) || 'null');
+        } catch (e) {
+          return null;
+        }
+      }
+
       function escapeHtml(str) {
-        return String(str)
+        return String(str ?? '')
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
@@ -1674,34 +2519,52 @@
           .replace(/'/g, '&#039;');
       }
 
-      /* ============================================================
-         TOAST
-      ============================================================ */
       function showToast(message, type = 'success') {
         if (toastTimer) clearTimeout(toastTimer);
         toastText.textContent = message;
-        toastEl.classList.remove('success', 'error');
+        toastEl.classList.remove('success', 'error', 'info');
         toastEl.classList.add(type, 'show');
         const icon = toastEl.querySelector('i');
         if (icon) {
           icon.className =
-            type === 'error' ? 'fas fa-circle-exclamation' : 'fas fa-circle-check';
+            type === 'error'
+              ? 'fas fa-circle-exclamation'
+              : type === 'info'
+              ? 'fas fa-circle-info'
+              : 'fas fa-circle-check';
         }
-        toastTimer = setTimeout(() => {
-          toastEl.classList.remove('show');
-        }, 2600);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+      }
+
+      function normalizePhone(phone) {
+        const digits = String(phone).replace(/\D/g, '');
+        if (digits.startsWith('254') && digits.length === 12) return digits;
+        if (digits.startsWith('0') && digits.length === 10) return '254' + digits.slice(1);
+        if (digits.length === 9) return '254' + digits;
+        return digits;
+      }
+
+      function isValidKenyanPhone(phone) {
+        const n = normalizePhone(phone);
+        return /^254[17]\d{8}$/.test(n);
+      }
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
       }
 
       /* ============================================================
          PRODUCT RENDERING
       ============================================================ */
+      function renderSkeletons() {
+        productsGrid.innerHTML = Array.from({ length: 6 })
+          .map(() => '<div class="skeleton"></div>')
+          .join('');
+      }
+
       function getVisibleProducts() {
-        let list = [...PRODUCTS];
-
-        if (filter !== 'all') {
-          list = list.filter((p) => p.category === filter);
-        }
-
+        let list = [...products];
+        if (filter !== 'all') list = list.filter((p) => p.category === filter);
         if (searchTerm.trim()) {
           const q = searchTerm.trim().toLowerCase();
           list = list.filter(
@@ -1711,7 +2574,6 @@
               p.category.toLowerCase().includes(q)
           );
         }
-
         switch (sortBy) {
           case 'price-asc':
             list.sort((a, b) => a.price - b.price);
@@ -1752,44 +2614,27 @@
             const tagHtml = p.tag
               ? `<span class="product-tag ${p.tagClass || ''}">${escapeHtml(p.tag)}</span>`
               : '';
+            const imageHtml = p.image
+              ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" style="width:100%;height:120px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:1rem;" />`
+              : `<div class="product-icon"><i class="fas ${p.icon || 'fa-box'}"></i></div>`;
 
             return `
-              <article
-                class="product-card"
-                data-product-id="${p.id}"
-                style="animation-delay:${Math.min(index * 40, 300)}ms"
-              >
+              <article class="product-card" data-product-id="${p.id}" style="animation-delay:${Math.min(index * 40, 300)}ms">
                 ${tagHtml}
-                <div class="product-icon">
-                  <i class="fas ${p.icon}"></i>
-                </div>
+                ${imageHtml}
                 <h3>${escapeHtml(p.name)}</h3>
                 <p class="product-desc">${escapeHtml(p.description)}</p>
                 <div class="product-meta">
-                  <span class="rating">
-                    <i class="fas fa-star"></i> ${p.rating.toFixed(1)}
-                  </span>
+                  <span class="rating"><i class="fas fa-star"></i> ${(p.rating || 0).toFixed(1)}</span>
                   <span class="dot-sep"></span>
-                  <span>${p.reviews} reviews</span>
+                  <span>${p.reviews || 0} reviews</span>
                 </div>
                 <div class="price-row">
-                  <div class="price">
-                    ${formatPrice(p.price)}
-                    <small>${escapeHtml(p.unit)}</small>
-                  </div>
+                  <div class="price">${formatPrice(p.price)} <small>${escapeHtml(p.unit || 'per kg')}</small></div>
                   <div class="qty-stepper" data-stepper-id="${p.id}">
-                    <button
-                      class="stepper-minus"
-                      data-id="${p.id}"
-                      aria-label="Decrease quantity for ${escapeHtml(p.name)}"
-                      ${localQty <= 1 ? 'disabled' : ''}
-                    >−</button>
+                    <button class="stepper-minus" data-id="${p.id}" aria-label="Decrease quantity" ${localQty <= 1 ? 'disabled' : ''}>−</button>
                     <span aria-live="polite">${localQty}</span>
-                    <button
-                      class="stepper-plus"
-                      data-id="${p.id}"
-                      aria-label="Increase quantity for ${escapeHtml(p.name)}"
-                    >+</button>
+                    <button class="stepper-plus" data-id="${p.id}" aria-label="Increase quantity">+</button>
                   </div>
                 </div>
                 <button class="add-to-cart ${inCart ? 'added' : ''}" data-id="${p.id}">
@@ -1801,40 +2646,33 @@
           })
           .join('');
 
-        // stepper listeners
-        productsGrid.querySelectorAll('.stepper-minus').forEach((btn) => {
+        productsGrid.querySelectorAll('.stepper-minus').forEach((btn) =>
           btn.addEventListener('click', () => {
             const id = Number(btn.dataset.id);
-            const current = qtyMap[id] || 1;
-            if (current > 1) {
-              qtyMap[id] = current - 1;
+            const cur = qtyMap[id] || 1;
+            if (cur > 1) {
+              qtyMap[id] = cur - 1;
               updateStepperUI(id);
             }
-          });
-        });
-
-        productsGrid.querySelectorAll('.stepper-plus').forEach((btn) => {
+          })
+        );
+        productsGrid.querySelectorAll('.stepper-plus').forEach((btn) =>
           btn.addEventListener('click', () => {
             const id = Number(btn.dataset.id);
-            const current = qtyMap[id] || 1;
-            qtyMap[id] = Math.min(current + 1, 99);
+            qtyMap[id] = Math.min((qtyMap[id] || 1) + 1, 99);
             updateStepperUI(id);
-          });
-        });
-
-        productsGrid.querySelectorAll('.add-to-cart').forEach((btn) => {
+          })
+        );
+        productsGrid.querySelectorAll('.add-to-cart').forEach((btn) =>
           btn.addEventListener('click', () => {
             const id = Number(btn.dataset.id);
-            const qty = qtyMap[id] || 1;
-            addToCart(id, qty);
-          });
-        });
+            addToCart(id, qtyMap[id] || 1);
+          })
+        );
       }
 
       function updateStepperUI(productId) {
-        const stepper = productsGrid.querySelector(
-          `.qty-stepper[data-stepper-id="${productId}"]`
-        );
+        const stepper = productsGrid.querySelector(`.qty-stepper[data-stepper-id="${productId}"]`);
         if (!stepper) return;
         const qty = qtyMap[productId] || 1;
         stepper.querySelector('span').textContent = qty;
@@ -1843,21 +2681,15 @@
       }
 
       /* ============================================================
-         CART LOGIC
+         CART
       ============================================================ */
       function addToCart(productId, quantity = 1) {
         const product = getProduct(productId);
         if (!product) return;
-
         const existing = cart.find((item) => item.id === productId);
-        if (existing) {
-          existing.quantity += quantity;
-        } else {
-          cart.push({ id: productId, quantity });
-        }
-
+        if (existing) existing.quantity += quantity;
+        else cart.push({ id: productId, quantity });
         qtyMap[productId] = 1;
-
         saveCart();
         updateCartUI();
         renderProducts();
@@ -1866,24 +2698,18 @@
       }
 
       function removeFromCart(productId) {
-        const product = getProduct(productId);
-        cart = cart.filter((item) => item.id !== productId);
+        cart = cart.filter((i) => i.id !== productId);
         saveCart();
         updateCartUI();
         renderProducts();
-        if (product) showToast(`${product.name} removed`, 'error');
       }
 
       function changeCartQuantity(productId, delta) {
         const item = cart.find((i) => i.id === productId);
         if (!item) return;
-
-        const newQty = item.quantity + delta;
-        if (newQty <= 0) {
-          removeFromCart(productId);
-          return;
-        }
-        item.quantity = Math.min(newQty, 99);
+        const next = item.quantity + delta;
+        if (next <= 0) return removeFromCart(productId);
+        item.quantity = Math.min(next, 99);
         saveCart();
         updateCartUI();
         renderProducts();
@@ -1894,13 +2720,8 @@
         setTimeout(() => cartCountSpan.classList.remove('bump'), 260);
       }
 
-      /* ============================================================
-         CART UI
-      ============================================================ */
       function updateCartUI() {
-        const { totalItems, subtotal, discount, delivery, total, qualifiesForDiscount } =
-          getCartTotals();
-
+        const { totalItems, subtotal, discount, delivery, total, qualifies } = getCartTotals();
         cartCountSpan.textContent = totalItems;
 
         if (cart.length === 0) {
@@ -1912,13 +2733,8 @@
             </div>
           `;
           cartFooter.innerHTML = `
-            <div class="cart-total">
-              <span>Total</span>
-              <span>KSh 0</span>
-            </div>
-            <button class="checkout-btn" id="checkoutBtn" disabled>
-              <i class="fas fa-lock"></i> Checkout
-            </button>
+            <div class="cart-total"><span>Total</span><span>KSh 0</span></div>
+            <button class="checkout-btn" id="checkoutBtn" disabled><i class="fas fa-lock"></i> Checkout</button>
           `;
           return;
         }
@@ -1927,30 +2743,20 @@
           .map((item) => {
             const p = getProduct(item.id);
             if (!p) return '';
-            const lineTotal = p.price * item.quantity;
+            const line = p.price * item.quantity;
             return `
               <div class="cart-item" data-cart-id="${p.id}">
-                <div class="cart-item-icon">
-                  <i class="fas ${p.icon}"></i>
-                </div>
+                <div class="cart-item-icon"><i class="fas ${p.icon || 'fa-box'}"></i></div>
                 <div class="cart-item-details">
                   <h4>${escapeHtml(p.name)}</h4>
-                  <div class="item-price">${formatPrice(p.price)} ${escapeHtml(p.unit)}</div>
+                  <div class="item-price">${formatPrice(p.price)} ${escapeHtml(p.unit || '')}</div>
                 </div>
                 <div class="cart-item-right">
-                  <span class="line-total">${formatPrice(lineTotal)}</span>
+                  <span class="line-total">${formatPrice(line)}</span>
                   <div class="cart-item-qty">
-                    <button
-                      class="qty-dec"
-                      data-id="${p.id}"
-                      aria-label="Decrease quantity of ${escapeHtml(p.name)}"
-                    >−</button>
+                    <button class="qty-dec" data-id="${p.id}" aria-label="Decrease">−</button>
                     <span>${item.quantity}</span>
-                    <button
-                      class="qty-inc"
-                      data-id="${p.id}"
-                      aria-label="Increase quantity of ${escapeHtml(p.name)}"
-                    >+</button>
+                    <button class="qty-inc" data-id="${p.id}" aria-label="Increase">+</button>
                   </div>
                 </div>
               </div>
@@ -1958,93 +2764,38 @@
           })
           .join('');
 
-        const discountRow =
-          discount > 0
-            ? `<div class="cart-summary-row discount">
-                 <span>Bulk discount (5%)</span>
-                 <span>−${formatPrice(discount)}</span>
-               </div>`
-            : '';
-
-        const deliveryRow =
-          delivery > 0
-            ? `<div class="cart-summary-row">
-                 <span>Delivery (Nairobi)</span>
-                 <span>${formatPrice(delivery)}</span>
-               </div>`
-            : `<div class="cart-summary-row" style="color:var(--success);font-weight:600;">
-                 <span>Delivery</span>
-                 <span>Free</span>
-               </div>`;
-
-        const freeDeliveryNote =
-          !qualifiesForDiscount && subtotal > 0
-            ? `<div class="delivery-note">
-                 <i class="fas fa-truck-fast"></i>
-                 <span>Add ${formatPrice(FREE_DELIVERY_THRESHOLD - subtotal)} more for <strong>free delivery</strong> &amp; 5% off</span>
-               </div>`
-            : `<div class="delivery-note">
-                 <i class="fas fa-circle-check"></i>
-                 <span>You qualify for <strong>free delivery</strong> &amp; 5% off!</span>
-               </div>`;
+        const discountRow = discount > 0
+          ? `<div class="cart-summary-row discount"><span>Bulk discount (5%)</span><span>−${formatPrice(discount)}</span></div>`
+          : '';
+        const deliveryRow = delivery > 0
+          ? `<div class="cart-summary-row"><span>Delivery (Nairobi)</span><span>${formatPrice(delivery)}</span></div>`
+          : `<div class="cart-summary-row" style="color:var(--success);font-weight:600;"><span>Delivery</span><span>Free</span></div>`;
+        const note = qualifies
+          ? `<div class="delivery-note"><i class="fas fa-circle-check"></i><span>You qualify for <strong>free delivery</strong> &amp; 5% off!</span></div>`
+          : `<div class="delivery-note"><i class="fas fa-truck-fast"></i><span>Add ${formatPrice(CONFIG.FREE_DELIVERY_THRESHOLD - subtotal)} more for <strong>free delivery</strong> &amp; 5% off</span></div>`;
 
         cartFooter.innerHTML = `
-          ${freeDeliveryNote}
-          <div class="cart-summary-row">
-            <span>Subtotal</span>
-            <span>${formatPrice(subtotal)}</span>
-          </div>
+          ${note}
+          <div class="cart-summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
           ${discountRow}
           ${deliveryRow}
-          <div class="cart-total">
-            <span>Total</span>
-            <span>${formatPrice(total)}</span>
-          </div>
-          <button class="checkout-btn" id="checkoutBtn">
-            <i class="fas fa-lock"></i> Checkout · ${formatPrice(total)}
-          </button>
+          <div class="cart-total"><span>Total</span><span>${formatPrice(total)}</span></div>
+          <button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout · ${formatPrice(total)}</button>
           <div class="payment-methods">
             <span class="payment-badge"><i class="fas fa-mobile-screen"></i> M-Pesa</span>
+            <span class="payment-badge"><i class="fas fa-credit-card"></i> Card</span>
             <span class="payment-badge"><i class="fas fa-money-bill"></i> Cash on delivery</span>
-            <span class="payment-badge"><i class="fas fa-building-columns"></i> Bank transfer</span>
           </div>
         `;
 
-        cartItemsContainer.querySelectorAll('.qty-dec').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            changeCartQuantity(Number(btn.dataset.id), -1);
-          });
-        });
-        cartItemsContainer.querySelectorAll('.qty-inc').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            changeCartQuantity(Number(btn.dataset.id), 1);
-          });
-        });
-
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        if (checkoutBtn) checkoutBtn.addEventListener('click', handleCheckout);
-      }
-
-      /* ============================================================
-         CHECKOUT
-      ============================================================ */
-      function handleCheckout() {
-        if (cart.length === 0) {
-          showToast('Your cart is empty — add some cereals first!', 'error');
-          return;
-        }
-        const { totalItems, total } = getCartTotals();
-        showToast(
-          `✅ Order placed! ${totalItems} items · ${formatPrice(total)}. We'll call you to confirm.`,
-          'success'
+        cartItemsContainer.querySelectorAll('.qty-dec').forEach((b) =>
+          b.addEventListener('click', () => changeCartQuantity(Number(b.dataset.id), -1))
         );
-        cart = [];
-        qtyMap = {};
-        saveCart();
-        updateCartUI();
-        renderProducts();
-        closeCart();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        cartItemsContainer.querySelectorAll('.qty-inc').forEach((b) =>
+          b.addEventListener('click', () => changeCartQuantity(Number(b.dataset.id), 1))
+        );
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) checkoutBtn.addEventListener('click', openCheckoutModal);
       }
 
       /* ============================================================
@@ -2063,13 +2814,422 @@
         cartPanel.classList.remove('active');
         cartPanel.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        cartButton.focus();
       }
 
       /* ============================================================
-         CONTROLS
+         CHECKOUT
       ============================================================ */
-      function setupControls() {
+      function openCheckoutModal() {
+        if (cart.length === 0) {
+          showToast('Your cart is empty — add some cereals first!', 'error');
+          return;
+        }
+        closeCart();
+        // prefill
+        const saved = loadCustomer();
+        if (saved.name) $('#customerName').value = saved.name;
+        if (saved.phone) $('#customerPhone').value = saved.phone;
+        if (saved.email) $('#customerEmail').value = saved.email;
+        if (saved.address) $('#deliveryAddress').value = saved.address;
+        if (saved.city) $('#deliveryCity').value = saved.city;
+
+        updateCheckoutSummary();
+        checkoutModalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeCheckoutModal() {
+        checkoutModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function updateCheckoutSummary() {
+        const { total } = getCartTotals();
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'mpesa';
+        const label = method === 'mpesa' ? 'M-Pesa STK push' : 'card payment';
+        checkoutSummaryText.textContent = `You'll pay ${formatPrice(total)} via ${label}.`;
+        payNowBtn.innerHTML = method === 'mpesa'
+          ? `<i class="fas fa-mobile-screen"></i> Pay with M-Pesa`
+          : `<i class="fas fa-credit-card"></i> Pay with card`;
+      }
+
+      function validateCheckoutForm() {
+        let ok = true;
+
+        const name = $('#customerName').value.trim();
+        const phone = $('#customerPhone').value.trim();
+        const email = $('#customerEmail').value.trim();
+        const address = $('#deliveryAddress').value.trim();
+        const city = $('#deliveryCity').value.trim();
+
+        setError('nameError', !name, ok = ok && !!name);
+        const phoneOk = isValidKenyanPhone(phone);
+        setError('phoneError', !phoneOk, ok = ok && phoneOk);
+        const emailOk = email === '' || isValidEmail(email);
+        setError('emailError', !emailOk, ok = ok && emailOk);
+        setError('addressError', !address, ok = ok && !!address);
+        setError('cityError', !city, ok = ok && !!city);
+
+        return ok;
+      }
+
+      function setError(id, show, condition) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('visible', !!show);
+      }
+
+      async function handlePayNow() {
+        if (!validateCheckoutForm()) {
+          showToast('Please check the form fields.', 'error');
+          return;
+        }
+
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'mpesa';
+        const { total, subtotal, discount, delivery } = getCartTotals();
+
+        const customer = {
+          name: $('#customerName').value.trim(),
+          phone: normalizePhone($('#customerPhone').value.trim()),
+          email: $('#customerEmail').value.trim(),
+          address: $('#deliveryAddress').value.trim(),
+          city: $('#deliveryCity').value.trim(),
+          notes: $('#deliveryNotes').value.trim(),
+        };
+        saveCustomer(customer);
+
+        const orderPayload = {
+          customer,
+          items: cart.map((i) => {
+            const p = getProduct(i.id);
+            return {
+              productId: p.id,
+              name: p.name,
+              price: p.price,
+              quantity: i.quantity,
+              unit: p.unit,
+              lineTotal: p.price * i.quantity,
+            };
+          }),
+          subtotal,
+          discount,
+          delivery,
+          total,
+          currency: CONFIG.CURRENCY,
+          paymentMethod: method,
+        };
+
+        payNowBtn.disabled = true;
+        payNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating order…';
+
+        try {
+          const order = await api.createOrder(orderPayload);
+          currentOrder = order;
+
+          const payment = await api.initiatePayment(order.orderId, method);
+          currentOrder.payment = payment;
+
+          closeCheckoutModal();
+          openPaymentWaiting(order, payment);
+        } catch (err) {
+          console.error(err);
+          showToast('Could not start payment. Please try again.', 'error');
+        } finally {
+          payNowBtn.disabled = false;
+          updateCheckoutSummary();
+        }
+      }
+
+      /* ============================================================
+         PAYMENT WAITING
+      ============================================================ */
+      function openPaymentWaiting(order, payment) {
+        waitingPhone.textContent = order.customer.phone;
+        waitingAmount.textContent = formatPrice(order.total);
+        paymentWaitingOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        paymentPollAttempts = 0;
+        startPaymentPolling(order.orderId);
+      }
+
+      function closePaymentWaiting() {
+        paymentWaitingOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        stopPaymentPolling();
+      }
+
+      function startPaymentPolling(orderId) {
+        stopPaymentPolling();
+        paymentPollTimer = setInterval(async () => {
+          paymentPollAttempts++;
+          const res = await api.checkPaymentStatus(orderId);
+          if (res && (res.status === 'paid' || res.status === 'successful' || res.status === 'completed')) {
+            stopPaymentPolling();
+            handlePaymentSuccess(orderId);
+          } else if (paymentPollAttempts >= CONFIG.POLL_MAX_ATTEMPTS) {
+            stopPaymentPolling();
+            showToast('Payment not confirmed yet. Check your phone or try again.', 'info');
+          }
+        }, CONFIG.POLL_INTERVAL_MS);
+      }
+
+      function stopPaymentPolling() {
+        if (paymentPollTimer) {
+          clearInterval(paymentPollTimer);
+          paymentPollTimer = null;
+        }
+      }
+
+      function handlePaymentSuccess(orderId) {
+        // finalize local order status
+        const order = currentOrder;
+        if (!order) return;
+
+        order.status = 'paid';
+        order.timeline = [
+          { step: 'pending', label: 'Order placed', timestamp: order.createdAt },
+          { step: 'paid', label: 'Payment confirmed', timestamp: new Date().toISOString() },
+          { step: 'processing', label: 'Preparing your order', timestamp: null },
+          { step: 'shipped', label: 'Out for delivery', timestamp: null },
+          { step: 'delivered', label: 'Delivered', timestamp: null },
+        ];
+        saveLastOrder(order);
+
+        // clear cart
+        cart = [];
+        qtyMap = {};
+        saveCart();
+        updateCartUI();
+        renderProducts();
+
+        closePaymentWaiting();
+        openConfirmation(order);
+      }
+
+      /* ============================================================
+         CONFIRMATION
+      ============================================================ */
+      function openConfirmation(order) {
+        confirmOrderRef.textContent = order.orderId;
+        confirmAmount.textContent = formatPrice(order.total);
+        confirmationOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeConfirmation() {
+        confirmationOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      /* ============================================================
+         TRACKING
+      ============================================================ */
+      const TRACKING_STEPS = [
+        { key: 'pending', label: 'Order placed', icon: 'fa-receipt', desc: 'We received your order.' },
+        { key: 'paid', label: 'Payment confirmed', icon: 'fa-circle-check', desc: 'Payment received successfully.' },
+        { key: 'processing', label: 'Preparing your order', icon: 'fa-boxes-stacked', desc: 'Your cereals are being packed.' },
+        { key: 'shipped', label: 'Out for delivery', icon: 'fa-truck-fast', desc: 'Your order is on the way.' },
+        { key: 'delivered', label: 'Delivered', icon: 'fa-house-circle-check', desc: 'Enjoy your cereals!' },
+      ];
+
+      const STATUS_BADGE_MAP = {
+        pending: 'pending',
+        pending_payment: 'pending',
+        paid: 'paid',
+        processing: 'processing',
+        shipped: 'shipped',
+        delivered: 'delivered',
+        cancelled: 'cancelled',
+      };
+
+      const STATUS_LABEL_MAP = {
+        pending: 'Pending',
+        pending_payment: 'Pending payment',
+        paid: 'Paid',
+        processing: 'Processing',
+        shipped: 'Out for delivery',
+        delivered: 'Delivered',
+        cancelled: 'Cancelled',
+      };
+
+      function openTrackModal(prefillRef) {
+        trackError.classList.remove('visible');
+        const last = loadLastOrder();
+        trackOrderRef.value = prefillRef || (last && last.orderId) || '';
+        trackModalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => trackOrderRef.focus(), 100);
+      }
+
+      function closeTrackModal() {
+        trackModalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      async function searchOrder() {
+        const ref = trackOrderRef.value.trim().toUpperCase();
+        if (!ref) {
+          trackError.classList.add('visible');
+          return;
+        }
+        searchOrderBtn.disabled = true;
+        searchOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching…';
+
+        try {
+          const order = await api.getOrder(ref);
+          if (!order) {
+            trackError.classList.add('visible');
+            return;
+          }
+          closeTrackModal();
+          showTrackingView(order);
+        } catch (err) {
+          trackError.classList.add('visible');
+        } finally {
+          searchOrderBtn.disabled = false;
+          searchOrderBtn.innerHTML = '<i class="fas fa-magnifying-glass"></i> Track';
+        }
+      }
+
+      function showTrackingView(order) {
+        // hide main shop, show tracking view
+        document.querySelector('.hero').classList.add('hidden');
+        document.querySelector('.catalog').classList.add('hidden');
+        trackingView.classList.remove('hidden');
+
+        trackingOrderRef.textContent = order.orderId;
+        const statusKey = order.status || 'pending';
+        const badgeClass = STATUS_BADGE_MAP[statusKey] || 'pending';
+        const badgeLabel = STATUS_LABEL_MAP[statusKey] || statusKey;
+        trackingStatusBadge.className = 'status-badge ' + badgeClass;
+        trackingStatusBadge.textContent = badgeLabel;
+
+        // determine current step index
+        const timeline = order.timeline || [];
+        const completedKeys = new Set(
+          timeline.filter((t) => t.timestamp).map((t) => t.step)
+        );
+        // find furthest step reached
+        let furthestIdx = 0;
+        TRACKING_STEPS.forEach((s, i) => {
+          if (completedKeys.has(s.key) || statusKey === s.key) furthestIdx = Math.max(furthestIdx, i);
+        });
+
+        trackingTimeline.innerHTML = TRACKING_STEPS.map((step, i) => {
+          const isCompleted = completedKeys.has(step.key);
+          const isActive = i === furthestIdx && statusKey !== 'delivered';
+          const stateClass = isCompleted ? 'completed' : isActive ? 'active' : '';
+          const timestampEntry = timeline.find((t) => t.step === step.key && t.timestamp);
+          const timeHtml = timestampEntry
+            ? `<time>${new Date(timestampEntry.timestamp).toLocaleString('en-KE', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}</time>`
+            : '';
+          const desc = step.desc;
+          return `
+            <div class="timeline-step ${stateClass}">
+              <div class="timeline-dot"><i class="fas ${step.icon}"></i></div>
+              <div class="timeline-content">
+                <h4>${step.label}</h4>
+                <p>${desc}</p>
+                ${timeHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const items = order.items || [];
+        trackingItemsList.innerHTML = items
+          .map(
+            (it) => `
+              <div class="tracking-item-row">
+                <div>
+                  <div class="item-name">${escapeHtml(it.name)}</div>
+                  <div class="item-qty">${it.quantity} × ${formatPrice(it.price)}</div>
+                </div>
+                <div class="item-total">${formatPrice(it.lineTotal || it.price * it.quantity)}</div>
+              </div>
+            `
+          )
+          .join('');
+
+        trackingTotal.textContent = formatPrice(order.total || 0);
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function backToShop() {
+        trackingView.classList.add('hidden');
+        document.querySelector('.hero').classList.remove('hidden');
+        document.querySelector('.catalog').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      /* ============================================================
+         EVENT WIRING
+      ============================================================ */
+      function wireEvents() {
+        // cart
+        cartButton.addEventListener('click', openCart);
+        closeCartBtn.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // checkout
+        closeCheckoutBtn.addEventListener('click', closeCheckoutModal);
+        cancelCheckoutBtn.addEventListener('click', closeCheckoutModal);
+        payNowBtn.addEventListener('click', handlePayNow);
+
+        paymentMethods.addEventListener('change', () => {
+          paymentMethods.querySelectorAll('.radio-card').forEach((c) => {
+            c.classList.toggle('selected', c.querySelector('input').checked);
+          });
+          updateCheckoutSummary();
+        });
+
+        // payment waiting
+        closeWaitingBtn.addEventListener('click', () => {
+          stopPaymentPolling();
+          closePaymentWaiting();
+          showToast('Payment cancelled. Your cart is still saved.', 'info');
+        });
+        cancelPaymentBtn.addEventListener('click', () => {
+          stopPaymentPolling();
+          closePaymentWaiting();
+          showToast('Payment cancelled. Your cart is still saved.', 'info');
+        });
+        simulatePaymentBtn.addEventListener('click', () => {
+          if (!currentOrder) return;
+          localSimulation.simulatePaymentSuccess(currentOrder.orderId);
+          handlePaymentSuccess(currentOrder.orderId);
+        });
+
+        // confirmation
+        closeConfirmationBtn.addEventListener('click', closeConfirmation);
+        continueShoppingBtn.addEventListener('click', () => {
+          closeConfirmation();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        trackAfterConfirmBtn.addEventListener('click', () => {
+          const order = currentOrder;
+          closeConfirmation();
+          if (order) showTrackingView(order);
+        });
+
+        // tracking modal
+        trackOrderBtn.addEventListener('click', () => openTrackModal());
+        heroTrackBtn.addEventListener('click', () => openTrackModal());
+        closeTrackBtn.addEventListener('click', closeTrackModal);
+        cancelTrackBtn.addEventListener('click', closeTrackModal);
+        searchOrderBtn.addEventListener('click', searchOrder);
+        trackOrderRef.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') searchOrder();
+        });
+
+        backFromTrackingBtn.addEventListener('click', backToShop);
+
+        // search / sort / filter
         let searchTimer = null;
         searchInput.addEventListener('input', (e) => {
           clearTimeout(searchTimer);
@@ -2078,12 +3238,10 @@
             renderProducts();
           }, 180);
         });
-
         sortSelect.addEventListener('change', (e) => {
           sortBy = e.target.value;
           renderProducts();
         });
-
         filterChips.addEventListener('click', (e) => {
           const chip = e.target.closest('.chip');
           if (!chip) return;
@@ -2093,9 +3251,24 @@
           renderProducts();
         });
 
+        // escape closes modals
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          if (checkoutModalOverlay.classList.contains('active')) closeCheckoutModal();
+          if (paymentWaitingOverlay.classList.contains('active')) {
+            stopPaymentPolling();
+            closePaymentWaiting();
+          }
+          if (confirmationOverlay.classList.contains('active')) closeConfirmation();
+          if (trackModalOverlay.classList.contains('active')) closeTrackModal();
+          if (cartPanel.classList.contains('active')) closeCart();
+        });
+
+        // nav anchors
         document.querySelectorAll('a[href="#catalog"]').forEach((a) => {
           a.addEventListener('click', (e) => {
             e.preventDefault();
+            backToShop();
             document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
           });
         });
@@ -2104,38 +3277,28 @@
       /* ============================================================
          INIT
       ============================================================ */
-      function init() {
-        cart = loadCart();
+      async function init() {
+        wireEvents();
+
+        renderSkeletons();
+        try {
+          products = await api.getProducts();
+        } catch (e) {
+          products = FALLBACK_PRODUCTS;
+        }
+        if (!Array.isArray(products) || products.length === 0) {
+          products = FALLBACK_PRODUCTS;
+        }
+
+        cart = loadCart().filter((i) => getProduct(i.id));
         qtyMap = {};
-        PRODUCTS.forEach((p) => (qtyMap[p.id] = 1));
+        products.forEach((p) => (qtyMap[p.id] = 1));
 
         renderProducts();
         updateCartUI();
-        setupControls();
 
-        cartButton.addEventListener('click', openCart);
-        if (heroCartBtn) heroCartBtn.addEventListener('click', openCart);
-        closeCartBtn.addEventListener('click', closeCart);
-        cartOverlay.addEventListener('click', closeCart);
-
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && cartPanel.classList.contains('active')) {
-            closeCart();
-          }
-        });
-
-        productsGrid.addEventListener('click', (e) => {
-          const btn = e.target.closest('.add-to-cart');
-          if (btn) {
-            const id = Number(btn.dataset.id);
-            if (!btn.classList.contains('added')) {
-              addToCart(id, qtyMap[id] || 1);
-            }
-          }
-        });
-
-        const initialCheckout = document.getElementById('checkoutBtn');
-        if (initialCheckout) initialCheckout.addEventListener('click', handleCheckout);
+        // restore last tracking if present? keep hidden by default — only via modal
+        // preload customer for convenience (already handled in openCheckoutModal)
       }
 
       if (document.readyState === 'loading') {
