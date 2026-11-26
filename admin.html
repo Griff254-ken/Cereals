@@ -14,10 +14,7 @@
   --acc:#e8a317;--acc2:#a86e00;--dark:#1f3320;--dark2:#2c4a2d;--ok:#2f8f4e;--bad:#c8452f;--info:#2b6cb0;
   --r:16px;--sh:0 1px 2px rgba(54,44,20,.05),0 8px 24px rgba(54,44,20,.07);
   --fs:clamp(14px,.35vw + 13px,17px);
-  /* ---- COMPANY IMAGE (logo / farm photo) ----
-     Paste your own image: url("logo.png"), an https link, or a data: URI.
-     It shows in the login card and the logo tile. If empty, the 🌾 fallback shows. */
-  --brand-image:none;
+ 
 }
 @media(prefers-color-scheme:dark){:root{--bg:#10140d;--card:#192015;--ink:#f3f0e6;--mute:#a4a692;--line:#2b3425;--soft:rgba(255,255,255,.06);--acc2:#f3b942;--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3)}}
 *,*::before,*::after{box-sizing:border-box;margin:0}[hidden]{display:none!important}
@@ -44,8 +41,8 @@ input,select,textarea{font:inherit;font-size:max(16px,1em)}
 .lc{background:var(--card);border-radius:26px;padding:clamp(20px,5vw,36px);width:100%;max-width:430px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:up .5s cubic-bezier(.2,.8,.2,1)}
 @keyframes up{from{opacity:0;transform:translateY(14px)}}
 .lc .logo{justify-content:center;color:var(--ink)}.lc .logo small{color:var(--mute)}
-.brand-hero{display:block;width:100%;height:clamp(80px,18vw,120px);border-radius:16px;margin:16px 0 6px;background:linear-gradient(135deg,var(--dark),var(--dark2)) ,var(--brand-image);background:var(--dark) var(--brand-image) center/cover no-repeat;box-shadow:0 6px 22px rgba(0,0,0,.18);position:relative;display:grid;place-items:center;font-size:2.6rem}
-.brand-hero::before{content:"🌾🌽🍚";letter-spacing:6px;opacity:.9}
+.brand-hero{width:100%;height:clamp(80px,18vw,120px);border-radius:16px;margin:16px 0 6px;background:var(--dark) var(--brand-image) center/cover no-repeat;box-shadow:0 6px 22px rgba(0,0,0,.18);position:relative;display:grid;place-items:center;font-size:2.6rem}
+.brand-hero::before{content:"🌾🌽🍚";letter-spacing:6px;opacity:.9;position:relative;z-index:1}
 .brand-hero::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.3))}
 .lc h1{text-align:center;font-size:1.4em;margin:14px 0 2px}.sub{text-align:center;color:var(--mute);font-size:.9em;margin-bottom:14px}
 .srv,.bs{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.8em;color:var(--mute)}.srv{margin-bottom:10px;align-items:flex-start;line-height:1.4}.srv .d{flex:none;margin-top:5px}
@@ -87,13 +84,15 @@ main{padding:clamp(16px,3vw,32px) 0 60px;min-width:0}.sec{display:none}.sec.on{d
 .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--acc))}
 .stat b{font-size:clamp(1.6rem,3vw,2.2rem);display:block;line-height:1.2;color:var(--c,var(--ink))}.stat span{font-size:.84em;color:var(--mute)}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px;overflow:hidden;box-shadow:var(--sh)}.pb{padding:18px 20px}.pt{padding:16px 20px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--soft),transparent)}.pt h2{font-size:1.08em}.pt p{font-size:.85em;color:var(--mute)}
+.panel.warn{border-color:var(--bad)}.panel.warn .pt{background:rgba(200,69,47,.08)}
+.more{padding:12px 20px;border-top:1px solid var(--line);font-size:.85em;color:var(--mute)}
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:600px}
 th{background:var(--bg);color:var(--mute);font-size:.76em;font-weight:700;padding:11px 14px;text-align:left;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle}
 tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 .act{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.empty{text-align:center;color:var(--mute);padding:40px 12px;font-size:1.05em}
 .th{display:flex;align-items:center;gap:10px;min-width:0}.th span{width:46px;height:46px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem;overflow:hidden;flex:none}.th img{width:100%;height:100%;object-fit:cover}
 .pill{display:inline-block;font-size:.76em;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(111,114,95,.16);color:var(--mute);white-space:nowrap}
-.pill.paid,.pill.ok{background:rgba(47,143,78,.16);color:var(--ok)}.pill.pending,.pill.wait{background:rgba(232,163,23,.2);color:var(--acc2)}.pill.failed,.pill.out{background:rgba(200,69,47,.16);color:var(--bad)}
+.pill.paid,.pill.ok{background:rgba(47,143,78,.16);color:var(--ok)}.pill.pending,.pill.wait{background:rgba(232,163,23,.2);color:var(--acc2)}.pill.failed,.pill.out,.pill.review{background:rgba(200,69,47,.16);color:var(--bad)}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.chip{background:var(--card);border:1px solid var(--line);padding:8px 15px;min-height:40px;border-radius:999px;font-weight:600;font-size:.86em}.chip.on{background:var(--dark);color:#fff;border-color:var(--dark)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
 
@@ -109,6 +108,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 .og input,.r3 input{padding:10px 12px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}.og .x{border-radius:10px;width:auto;padding:0 12px;height:44px;color:var(--bad)}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.meta>div{min-width:0;overflow-wrap:anywhere}.meta small{color:var(--mute);display:block;font-size:.78em}.meta b{font-weight:600}
 .tot{display:flex;justify-content:space-between;font-weight:800;font-size:1.1em;padding-top:12px}
+.note{margin-bottom:12px;font-weight:700}.note.bad{color:var(--bad)}.note.ok{color:var(--ok)}
 
 /* ---- Toasts: floating glass cards, top-centre (matches storefront) ---- */
 #toasts{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(440px,calc(100vw - 24px));pointer-events:none}
@@ -183,7 +183,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
     <button data-a="nav" data-s="products">🌾 <span>Products</span></button>
     <button data-a="nav" data-s="settings">⚙️ <span>Settings</span></button>
   </nav>
-  <div class="sidefoot">Orders refresh automatically every 30 seconds.</div>
+  <div class="sidefoot">Orders refresh automatically every 15 seconds.</div>
 </aside>
 <div class="shell">
 <header class="top"><div class="topin">
@@ -201,7 +201,9 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
     <div class="stat" style="--c:var(--ok)"><b id="st2">–</b><span>Released orders</span></div>
     <div class="stat" style="--c:var(--info)"><b id="st3">–</b><span>Products listed</span></div>
     <div class="stat" style="--c:var(--bad)"><b id="st4">–</b><span>Out of stock</span></div>
+    <div class="stat" style="--c:var(--bad)"><b id="st5">–</b><span>Payments needing review</span></div>
   </div>
+  <div class="panel warn" id="revPanel" hidden><div class="pt"><h2>⚠️ Payments needing review</h2><p>Something about these payments doesn't add up (for example an underpayment, or money received after the order was cancelled). Check each one in the IntaSend dashboard.</p></div><div id="rev"></div></div>
   <div class="panel"><div class="pt"><h2>Orders to approve</h2><p>Customers have paid via IntaSend. Confirm to release their goods. New payments appear here automatically.</p></div><div id="dash"></div></div>
 </section>
 
@@ -209,7 +211,9 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
   <div class="ph"><div><h1>Orders</h1><p>Check payments and release goods. Delete clears the row permanently from your list — the IntaSend dashboard keeps the transaction.</p></div><button class="btn ghost sm" data-a="refresh">↻ Refresh</button></div>
   <div class="chips" id="chips">
     <button class="chip on" data-a="filter" data-f="all">All</button><button class="chip" data-a="filter" data-f="paid">Awaiting approval</button>
+    <button class="chip" data-a="filter" data-f="released">Released</button>
     <button class="chip" data-a="filter" data-f="pending">Unpaid</button><button class="chip" data-a="filter" data-f="cancelled">Cancelled</button>
+    <button class="chip" data-a="filter" data-f="review">Needs review</button>
   </div>
   <div class="panel" id="ord"></div>
 </section>
@@ -225,7 +229,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
     <div class="f"><label for="api">Address of your backend</label><input id="api" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://your-server.onrender.com"><small>The storefront and this page must use the same server. It is saved in this browser.</small></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn acc" data-a="saveApi">Save and test</button></div>
   </div></div>
-  <div class="panel"><div class="pt"><h2>Session</h2></div><div class="pb"><p class="mute" style="margin-bottom:12px">Signed in as <b id="who" style="color:var(--ink)"></b>. Orders refresh every 30 seconds.</p><button class="btn bad" data-a="out">Sign out</button></div></div>
+  <div class="panel"><div class="pt"><h2>Session</h2></div><div class="pb"><p class="mute" style="margin-bottom:12px">Signed in as <b id="who" style="color:var(--ink)"></b>. Orders refresh every 15 seconds.</p><button class="btn bad" data-a="out">Sign out</button></div></div>
 </section>
 
 </div></main></div></div></div>
@@ -266,11 +270,13 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 
 <script>
 const DEFAULT_API="https://cereals-back.onrender.com";
+const TITLE="Admin · Golden Harvest Cereals";
+const REFRESH_MS=15000;
 const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 /* Accepts "my-server.onrender.com", "https://my-server.onrender.com/", or a URL with a path; returns the clean origin */
 const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
 const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:70000};
-let auth="",me="",products=[],orders=[],ofilter="all",editing=null,img="",groups=[],specs=[],timer=null,lastAw=0;
+let auth="",me="",products=[],orders=[],ofilter="all",editing=null,img="",groups=[],specs=[],timer=null,lastAw=0,loading=false;
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -288,10 +294,11 @@ function toast(type,title,msg,ms=type==="error"?7000:4000){
   d.onmouseenter=()=>clearTimeout(t);d.onmouseleave=()=>{t=setTimeout(kill,1500)};
   /* swipe up (or sideways) to dismiss on touch screens */
   d.addEventListener("touchstart",e=>{sy=[e.touches[0].clientX,e.touches[0].clientY];clearTimeout(t)},{passive:true});
-  d.addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-sy[0],dy=e.changedTouches[0].clientY-sy[1];if(Math.abs(dx)>60||dy<-30)kill();else t=setTimeout(kill,1500)});
+  d.addEventListener("touchend",e=>{if(!sy)return;const dx=e.changedTouches[0].clientX-sy[0],dy=e.changedTouches[0].clientY-sy[1];if(Math.abs(dx)>60||dy<-30)kill();else t=setTimeout(kill,1500)});
   b.appendChild(d);
 }
-function status(ok,t){const e=$("#bs");e.className="bs "+(ok?"ok":"bad");$("#bst").textContent=t||(ok?"Connected":"Disconnected")}
+/* (named setStatus, not "status", so it never clashes with the browser's built-in window.status) */
+function setStatus(ok,t){const e=$("#bs");e.className="bs "+(ok?"ok":"bad");$("#bst").textContent=t||(ok?"Connected":"Disconnected")}
 
 /* ---------- connection diagnosis ---------- */
 async function diagnose(){
@@ -302,7 +309,7 @@ async function diagnose(){
     const h=await r.json().catch(()=>({}));
     if(h.originAllowed===false)return{kind:"cors",msg:`The server is running but blocks this website. In Render, set ALLOWED_ORIGINS to include ${h.yourOrigin||location.origin} (or leave it empty), then redeploy.`};
     if(h.db===false)return{kind:"db",msg:"The server is running but is not connected to MongoDB. Check MONGODB_URI and Atlas Network Access in the Render logs."};
-    if(h.intasend===false)return{kind:"down",msg:"The server is running but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY / INTASEND_SECRET_KEY on Render."};
+    if(h.intasend===false)return{kind:"down",msg:"The server is running but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY, INTASEND_SECRET_KEY, INTASEND_WEBHOOK_CHALLENGE and PUBLIC_URL on Render."};
     return{kind:"ok",msg:"Server ready",h};
   }catch(e){
     try{
@@ -315,27 +322,29 @@ async function diagnose(){
 }
 
 async function api(p,o={},n=0){
-  if(!CFG.API){status(false,"No server");throw new Error("Server address not set. Open Settings to add it.")}
+  if(!CFG.API){setStatus(false,"No server");throw new Error("Server address not set. Open Settings to add it.")}
+  const isGet=(o.method||"GET").toUpperCase()==="GET";
   const c=new AbortController(),t=setTimeout(()=>c.abort(),CFG.TIMEOUT);
   try{
     const r=await fetch(CFG.API+p,{...o,signal:c.signal,headers:{"Content-Type":"application/json",...(auth?{Authorization:auth}:{})}});
-    if([502,503,504].includes(r.status)&&n<3){status(false,"Waking up…");await sleep(4000);return api(p,o,n+1)}
+    /* only retry safe (GET) requests while the server wakes up: never re-send a confirm/cancel/delete */
+    if(isGet&&[502,503,504].includes(r.status)&&n<3){setStatus(false,"Waking up…");await sleep(4000);return api(p,o,n+1)}
     let d=null;try{d=await r.json()}catch{}
     if(!r.ok&&!d&&r.status>=500)throw Object.assign(new Error("The server had a problem ("+r.status+"). Check the Logs tab on Render."),{http:1});
-    status(true);
+    setStatus(true);
     if(r.status===401)throw Object.assign(new Error("Wrong username or password."),{auth:1});
     if(!r.ok)throw Object.assign(new Error(d?.error||d?.message||"Request failed ("+r.status+")"),{http:1});
     return d;
   }catch(e){
     if(e.auth||e.http)throw e;
     if(e.name==="AbortError"||e instanceof TypeError){
-      status(false,"Checking…");
+      setStatus(false,"Checking…");
       const g=await diagnose();
-      if(g.kind==="down"&&n<1){status(false,"Waking up…");await sleep(5000);return api(p,o,n+1)}
-      status(false,g.kind==="cors"?"Blocked":"Offline");
+      if(g.kind==="down"&&isGet&&n<1){setStatus(false,"Waking up…");await sleep(5000);return api(p,o,n+1)}
+      setStatus(false,g.kind==="cors"?"Blocked":"Offline");
       throw new Error(g.msg);
     }
-    status(false,"Error");throw e;
+    setStatus(false,"Error");throw e;
   }finally{clearTimeout(t)}
 }
 
@@ -373,33 +382,42 @@ async function login(){
   toast("success","Signed in","Welcome, "+u+".");
   await loadAll();
   if(!products.length)toast("info","Let's get started","Open Products and choose “+ Add product” to add your first cereal.",9000);
-  clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&auth)loadAll(true)},30000);
+  clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&auth)loadAll(true)},REFRESH_MS);
 }
 function logout(msg){
-  auth="";me="";clearInterval(timer);products=[];orders=[];
+  auth="";me="";clearInterval(timer);products=[];orders=[];lastAw=0;
+  document.title=TITLE;
   $("#app").hidden=true;$("#login").hidden=false;$$(".ov").forEach(o=>o.classList.remove("open"));
   const e=$("#le");e.style.color="";e.textContent=msg||"";$("#lp").focus();
 }
+/* refresh straight away when the admin comes back to this tab */
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&auth)loadAll(true)});
 
 /* ---------- data ---------- */
 async function loadAll(quiet){
+  if(loading)return false;
+  loading=true;
   try{
     const [p,o]=await Promise.all([api("/api/admin/products"),api("/api/admin/orders?status=all")]);
     products=p.products||[];orders=o.orders||[];
     const aw=orders.filter(awaiting).length;
-    if(quiet&&aw>lastAw)toast("info","New payment","An IntaSend payment is waiting for your approval.");
-    lastAw=aw;render();return true;
+    if(quiet&&aw>lastAw)toast("info","New payment",(aw-lastAw>1?(aw-lastAw)+" payments are":"A payment is")+" waiting for your approval.");
+    lastAw=aw;render();
+    /* keep an open order window in step with fresh data */
+    if($("#om").classList.contains("open")&&$("#om").dataset.id)openOrder($("#om").dataset.id,true);
+    return true;
   }catch(e){
     if(e.auth)logout("Your session ended. Please sign in again.");
     else if(!quiet)toast("error","Couldn't refresh",e.message);
     return false;
-  }
+  }finally{loading=false}
 }
 const awaiting=o=>o.paymentStatus==="paid"&&!o.adminConfirmed;
-const FIL={all:()=>true,paid:awaiting,pending:o=>o.paymentStatus==="pending"||o.paymentStatus==="failed",cancelled:o=>o.paymentStatus==="cancelled"};
-const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${r.join("")}</tbody></table></div>`;
-const cust=o=>`${esc(o.customer.name)}<br><small class="mute">+${esc(o.customer.phone)}</small>`;
+const canCancel=o=>!o.adminConfirmed&&o.paymentStatus!=="cancelled";
 const canDelete=o=>!o.adminConfirmed;
+const FIL={all:()=>true,paid:awaiting,released:o=>o.adminConfirmed,pending:o=>o.paymentStatus==="pending"||o.paymentStatus==="failed",cancelled:o=>o.paymentStatus==="cancelled",review:o=>o.needsReview};
+const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${r.join("")}</tbody></table></div>`;
+const cust=o=>`${esc(o.customer?.name)}<br><small class="mute">+${esc(o.customer?.phone)}</small>`;
 /* display only: copies column headings onto cells so tables can become cards on phones */
 function labelize(root){
   root.querySelectorAll("table").forEach(t=>{
@@ -409,18 +427,26 @@ function labelize(root){
 }
 
 function render(){
-  const aw=orders.filter(awaiting);
+  const aw=orders.filter(awaiting),rv=orders.filter(o=>o.needsReview);
   $("#st1").textContent=aw.length;$("#st2").textContent=orders.filter(o=>o.adminConfirmed).length;
-  $("#st3").textContent=products.length;$("#st4").textContent=products.filter(p=>!p.inStock).length;
+  $("#st3").textContent=products.length;$("#st4").textContent=products.filter(p=>!p.inStock).length;$("#st5").textContent=rv.length;
   const c=$("#cnt");c.hidden=!aw.length;c.textContent=aw.length;
-  $("#dash").innerHTML=aw.length?table(["Reference","Customer","Total",""],aw.slice(0,8).map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td class="act"><button class="btn ok sm" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button></td></tr>`)):'<div class="empty">✅<br>No payments are waiting for approval.</div>';
-  const l=orders.filter(FIL[ofilter]);
+  document.title=(aw.length?`(${aw.length}) `:"")+TITLE;
+
+  $("#revPanel").hidden=!rv.length;
+  $("#rev").innerHTML=rv.length?table(["Reference","Customer","Total","Problem",""],rv.map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td>${esc(o.reviewNote||"Check this payment in the IntaSend dashboard.")}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button></td></tr>`)):"";
+
+  $("#dash").innerHTML=aw.length?table(["Reference","Customer","Total",""],aw.slice(0,8).map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.paidAt||o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button><button class="btn ok sm" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button></td></tr>`))+(aw.length>8?`<div class="more">Showing 8 of ${aw.length}. See the rest under Orders → Awaiting approval.</div>`:""):'<div class="empty">✅<br>No payments are waiting for approval.</div>';
+
+  const l=orders.filter(FIL[ofilter]||FIL.all);
   $("#ord").innerHTML=l.length?table(["Reference","Customer","Items","Total","Payment","Approval",""],l.map(o=>{
     const n=(o.items||[]).reduce((s,i)=>s+(i.quantity||0),0);
     const ap=o.adminConfirmed?'<span class="pill ok">Released</span>':awaiting(o)?'<span class="pill wait">Awaiting approval</span>':"–";
+    const rvp=o.needsReview?' <span class="pill review">Review</span>':"";
     const del=canDelete(o)?`<button class="btn bad sm" data-a="delo" data-id="${esc(o.id)}" aria-label="Delete order ${esc(o.reference)}">Delete</button>`:"";
-    return `<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td>${n}</td><td><b>${KSH(o.total)}</b></td><td><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span></td><td>${ap}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button>${del}</td></tr>`}))
+    return `<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td>${n}</td><td><b>${KSH(o.total)}</b></td><td><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span>${rvp}</td><td>${ap}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button>${del}</td></tr>`}))
     :`<div class="empty">📦<br>${orders.length?"No orders match this filter.":"No orders yet. They will appear here when customers check out."}</div>`;
+
   $("#prod").innerHTML=products.length?table(["Product","Category","Price","Stock",""],products.map(p=>`<tr><td><div class="th"><span>${p.image?`<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.remove()">`:esc(p.emoji||"🌾")}</span><div><b>${esc(p.name)}</b><br><small class="mute">${esc(p.unit)}</small></div></div></td><td>${esc(p.category)}</td><td><b>${KSH(p.price)}</b></td><td><span class="pill ${p.inStock?"ok":"out"}">${p.inStock?"In stock":"Out of stock"}</span></td><td class="act"><button class="btn ghost sm" data-a="edit" data-id="${esc(p.id)}">Edit</button><button class="btn bad sm" data-a="del" data-id="${esc(p.id)}">Delete</button></td></tr>`))
     :'<div class="empty">🌾<br>No products yet. Choose “+ Add product” to add your first one.</div>';
   $("#cats").innerHTML=[...new Set(products.map(p=>p.category))].map(c=>`<option value="${esc(c)}">`).join("");
@@ -428,30 +454,40 @@ function render(){
 }
 
 /* ---------- orders ---------- */
-function openOrder(id){
-  const o=orders.find(x=>x.id===id);if(!o)return;
+function openOrder(id,refresh){
+  const o=orders.find(x=>x.id===id);
+  if(!o){if(refresh)$("#om").classList.remove("open");return}
   const payRef=o.intasendReceipt||o.providerRef||o.mpesaReceipt||"Not yet received";
+  $("#om").dataset.id=id;
   $("#omT").textContent="Order "+o.reference;
-  $("#omB").innerHTML=`<div class="meta"><div><small>Customer</small><b>${esc(o.customer.name)}</b></div><div><small>Phone</small><b>+${esc(o.customer.phone)}</b></div>
-  <div><small>Deliver to</small><b>${esc(o.customer.location)}</b></div><div><small>Placed</small><b>${when(o.createdAt)}</b></div>
-  <div><small>Payment</small><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span></div><div><small>IntaSend payment ref</small><b>${esc(payRef)}</b></div></div>
-  ${o.needsReview?`<p style="margin-bottom:12px;color:var(--bad);font-weight:700">⚠️ Needs review: ${esc(o.reviewNote||"check this payment in the IntaSend dashboard")}</p>`:""}
+  $("#omB").innerHTML=`<div class="meta"><div><small>Customer</small><b>${esc(o.customer?.name)}</b></div><div><small>Phone</small><b>+${esc(o.customer?.phone)}</b></div>
+  <div><small>Deliver to</small><b>${esc(o.customer?.location)}</b></div><div><small>Placed</small><b>${when(o.createdAt)}</b></div>
+  <div><small>Payment</small><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span></div><div><small>Paid at</small><b>${o.paidAt?when(o.paidAt):"–"}</b></div>
+  <div><small>IntaSend / M-Pesa ref</small><b>${esc(payRef)}</b></div><div><small>Released</small><b>${o.adminConfirmed?when(o.confirmedAt):"–"}</b></div></div>
+  ${o.needsReview?`<p class="note bad">⚠️ Needs review: ${esc(o.reviewNote||"check this payment in the IntaSend dashboard")}</p>`:""}
+  ${o.paymentStatus==="failed"&&o.paymentMessage?`<p class="note bad">Last payment attempt failed: ${esc(o.paymentMessage)}</p>`:""}
   ${table(["Item","Qty","Unit price","Line total"],(o.items||[]).map(i=>`<tr><td>${esc(i.name)}${i.options&&Object.keys(i.options).length?`<br><small class="mute">${esc(Object.values(i.options).join(", "))}</small>`:""}${i.note?`<br><small class="mute">📝 ${esc(i.note)}</small>`:""}</td><td>${i.quantity}</td><td>${KSH(i.unitPrice)}</td><td><b>${KSH(i.lineTotal)}</b></td></tr>`))}
   <div class="tot"><span>Total</span><span>${KSH(o.total)}</span></div>
-  ${o.adminConfirmed?'<p style="margin-top:12px;color:var(--ok);font-weight:700">✓ Released. The customer has been told their order is confirmed.</p>':""}`;
+  ${o.adminConfirmed?'<p class="note ok" style="margin-top:12px">✓ Released. The customer has been told their order is confirmed.</p>':""}`;
   labelize($("#omB"));
   const del=canDelete(o)?`<button class="btn bad" data-a="delo" data-id="${esc(o.id)}">Delete order</button>`:"";
-  $("#omF").innerHTML=awaiting(o)?`${del}<button class="btn bad" data-a="reject" data-id="${esc(o.id)}">Cancel order</button><button class="btn ok" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button>`:`${del}<button class="btn ghost" data-a="close">Close</button>`;
+  const cancel=canCancel(o)?`<button class="btn bad" data-a="reject" data-id="${esc(o.id)}">Cancel order</button>`:"";
+  const main=awaiting(o)?`<button class="btn ok" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button>`:`<button class="btn ghost" data-a="close">Close</button>`;
+  $("#omF").innerHTML=del+cancel+main;
   $("#om").classList.add("open");
 }
 async function confirmOrder(id){
   try{await api(`/api/admin/orders/${encodeURIComponent(id)}/confirm`,{method:"POST"});toast("success","Order released","The customer's order is now confirmed.");await loadAll(true);if($("#om").classList.contains("open"))openOrder(id)}
-  catch(e){toast("error","Couldn't release order",e.message)}
+  catch(e){toast("error","Couldn't release order",e.message);loadAll(true)}
 }
 async function rejectOrder(id){
-  if(!confirm("Cancel this order? If the customer already paid, you will need to refund them in the IntaSend dashboard yourself."))return;
-  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/reject`,{method:"POST"});toast("warning","Order cancelled");$("#om").classList.remove("open");await loadAll(true)}
-  catch(e){toast("error","Couldn't cancel order",e.message)}
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  const msg=o.paymentStatus==="paid"
+    ?`Cancel ${o.reference}? The customer has already paid, so you will need to refund them in the IntaSend dashboard yourself.`
+    :`Cancel ${o.reference}? The customer will no longer be able to pay for it.`;
+  if(!confirm(msg))return;
+  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/reject`,{method:"POST"});toast("warning","Order cancelled",o.reference);$("#om").classList.remove("open");await loadAll(true)}
+  catch(e){toast("error","Couldn't cancel order",e.message);loadAll(true)}
 }
 async function deleteOrder(id){
   const o=orders.find(x=>x.id===id);
@@ -466,7 +502,7 @@ async function deleteOrder(id){
     toast("success","Order deleted",o.reference);
     if($("#om").classList.contains("open"))$("#om").classList.remove("open");
     await loadAll(true);
-  }catch(e){toast("error","Couldn't delete order",e.message)}
+  }catch(e){toast("error","Couldn't delete order",e.message);loadAll(true)}
 }
 
 /* ---------- products ---------- */
@@ -489,6 +525,7 @@ function pickImage(f){
       c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext("2d");
       x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);setImg(c.toDataURL("image/jpeg",.85))};
     im.onerror=()=>toast("error","Couldn't read that image","Try a different photo.");im.src=r.result};
+  r.onerror=()=>toast("error","Couldn't read that file","Try a different photo.");
   r.readAsDataURL(f);
 }
 function drawGroups(){
@@ -530,7 +567,7 @@ const ACT={
   view:d=>openOrder(d.id),confirm:d=>confirmOrder(d.id),reject:d=>rejectOrder(d.id),
   delo:d=>deleteOrder(d.id),
   add:()=>openProduct(),edit:d=>openProduct(d.id),del:d=>delProduct(d.id),save:saveProduct,
-  close(){this.closest(".ov").classList.remove("open")},tab:d=>tab(d.t),
+  close(){const ov=this.closest(".ov");ov.classList.remove("open");if(ov.id==="om")delete ov.dataset.id},tab:d=>tab(d.t),
   pick:()=>$("#pf").click(),noimg:()=>{setImg("");$("#pf").value=""},
   ag:()=>{groups.push({key:"",choices:[{value:"",priceAdjust:0}]});drawGroups()},
   dg:d=>{groups.splice(+d.g,1);drawGroups()},ac:d=>{groups[+d.g].choices.push({value:"",priceAdjust:0});drawGroups()},
@@ -544,10 +581,11 @@ const ACT={
   },
   out:()=>logout()
 };
+const closeOv=ov=>{ov.classList.remove("open");if(ov.id==="om")delete ov.dataset.id};
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");
   if(b&&ACT[b.dataset.a])ACT[b.dataset.a].call(b,b.dataset);
-  else if(e.target.classList.contains("ov"))e.target.classList.remove("open");
+  else if(e.target.classList.contains("ov"))closeOv(e.target);
 });
 document.addEventListener("input",e=>{
   const t=e.target,d=t.dataset;
@@ -556,11 +594,11 @@ document.addEventListener("input",e=>{
   if(t.id==="lu"||t.id==="lp")$("#le").textContent="";
 });
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape")$$(".ov.open").forEach(o=>o.classList.remove("open"));
+  if(e.key==="Escape")$$(".ov.open").forEach(closeOv);
   /* keyboard / TV remote: Enter or Space activates the photo box */
   if((e.key==="Enter"||e.key===" ")&&e.target.id==="ip"){e.preventDefault();$("#pf").click()}
 });
-$("#pf").onchange=e=>pickImage(e.target.files[0]);
+$("#pf").onchange=e=>{pickImage(e.target.files[0]);e.target.value=""};
 $("#lb").onclick=login;
 $("#retest").onclick=()=>{if($("#la").value.trim())setApi($("#la").value);ping()};
 $("#lu").addEventListener("keydown",e=>{if(e.key==="Enter")$("#lp").focus()});
