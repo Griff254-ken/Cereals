@@ -329,7 +329,7 @@ footer b{color:#fff}
   <div class="tools"><input id="q" type="search" placeholder="🔍 Search cereals (e.g. maize, rice, millet)" aria-label="Search products" autocomplete="off" enterkeyhint="search"></div>
   <div class="notice" id="adminNotice">
     <em aria-hidden="true">🔒</em>
-    <div><b>Admin-managed store</b>Product availability, prices and images are set by the admin. Payments are processed securely by IntaSend and confirmed by the admin before goods are released. You will receive an order confirmation once your payment is authorised.</div>
+    <div><b>Admin-managed store</b>Product availability, prices and images are set by the admin. Payments are processed securely by IntaSend and recorded instantly. Our admin then confirms your order before goods are released.</div>
   </div>
   <div class="grid" id="grid" aria-live="polite"></div>
 </div></section>
@@ -369,7 +369,7 @@ footer b{color:#fff}
       <div class="err" id="err" role="alert"></div>
     </div>
     <button class="pay" id="payBtn"><span class="mp">INTASEND</span> Pay now (M-Pesa)</button>
-    <p class="fine">Payments are processed securely by IntaSend and confirmed by our admin before goods are released.<br><span style="opacity:.8">Card, Apple Pay, Google Pay &amp; PesaLink will be available soon.</span></p>
+    <p class="fine">Payments are processed securely by IntaSend and recorded instantly. Our admin confirms your order before goods are released.<br><span style="opacity:.8">Card, Apple Pay, Google Pay &amp; PesaLink will be available soon.</span></p>
   </div>
 </aside>
 <div class="overlay" id="dim" style="z-index:55"></div>
@@ -386,7 +386,7 @@ footer b{color:#fff}
      2. the address saved in this browser (also used by the admin page)
      3. the default below — change it to your real Render URL
 
-   Endpoints expected on the backend (same as the original store):
+   Endpoints expected on the backend:
      GET  /api/products               -> { products: [...] } or [...]
      POST /api/orders                 -> create order (idempotent)
      POST /api/intasend/stkpush       -> trigger M-Pesa STK push via IntaSend
@@ -405,8 +405,12 @@ const CONFIG = {
   STK:      "/api/intasend/stkpush",
   STATUS:   id => `/api/orders/${encodeURIComponent(id)}/status`,
   TIMEOUT:  70000,
+  POLL_FAST_MS: 2000,   // first polls: quick, so the payment shows up within seconds
   POLL_MS:  3000,
-  POLL_MAX: 60
+  POLL_FAST_COUNT: 10,
+  POLL_MAX: 60,
+  RELEASE_POLL_MS: 10000,
+  RELEASE_POLL_MAX: 180
 };
 
 /* ---------------- Helpers ---------------- */
@@ -440,6 +444,7 @@ let P = [], cart = [], cat = "All", Q = "", cur = null, sel = {}, note = "", ste
 let backendOk = null;
 let adminSyncOk = false;
 try { cart = JSON.parse(localStorage.getItem("gh_cart") || "[]"); } catch(e) { cart = []; }
+if (!Array.isArray(cart)) cart = [];
 const save = () => { try { localStorage.setItem("gh_cart", JSON.stringify(cart)); } catch(e) {} };
 const prod = id => P.find(p => p.id === String(id));
 const up = (p, s) => p.p + p.opts.reduce((t, o) => t + ((o.ch.find(c => c.v === s[o.k]) || {}).a || 0), 0);
@@ -532,7 +537,7 @@ async function api(path, opt = {}, n = 0) {
     try { d = await r.json(); } catch(e) {}
     setBackendAlert(true);
     if (!r.ok) {
-      throw Object.assign(new Error((d && (d.error || d.message)) || `The server had a problem (${r.status}).`), { http: true });
+      throw Object.assign(new Error((d && (d.error || d.message)) || `The server had a problem (${r.status}).`), { http: true, status: r.status });
     }
     return d;
   } catch(e) {
@@ -757,34 +762,27 @@ function friendlyFailure(code, fallback) {
   return fallback || "The payment was not completed. Please try again.";
 }
 
+/* Waits until the payment is RECORDED (paid). It does not wait for admin release:
+   that is shown afterwards on the success screen and updated in the background. */
 async function waitPaid(id) {
-  let told = false;
   for (let i = 0; i < CONFIG.POLL_MAX; i++) {
-    await sleep(CONFIG.POLL_MS);
+    await sleep(i < CONFIG.POLL_FAST_COUNT ? CONFIG.POLL_FAST_MS : CONFIG.POLL_MS);
     let s;
     try { s = await api(CONFIG.STATUS(id)); } catch(e) { continue; }
     const st = String(s.paymentStatus || s.status || "").toLowerCase();
     if (st === "paid") {
-      if (s.adminConfirmed === true) {
-        return {
-          receipt: s.mpesaReceipt || s.receipt || s.intasendReceipt || s.providerRef,
-          adminConfirmed: true
-        };
-      }
-      if (!told) {
-        told = true;
-        toast("info", "Payment received", "Waiting for admin confirmation before release.");
-        setAdminSync(false, "Awaiting admin approval");
-      }
-      continue;
+      return {
+        receipt: s.mpesaReceipt || s.receipt || s.intasendReceipt || s.providerRef,
+        adminConfirmed: s.adminConfirmed === true
+      };
     }
     if (st === "failed" || st === "cancelled") {
       const msg = s.message || "The payment was cancelled or failed.";
       const code = s.failed_code || s.failedCode;
-      throw Object.assign(new Error(friendlyFailure(code, msg)), { code });
+      throw Object.assign(new Error(friendlyFailure(code, msg)), { code, fatal: st === "cancelled" });
     }
   }
-  throw Object.assign(new Error("We haven't received admin confirmation yet."), {late:true});
+  throw Object.assign(new Error("We haven't received your payment confirmation yet."), { late: true });
 }
 
 $("#payBtn").onclick = async () => {
@@ -828,13 +826,18 @@ $("#payBtn").onclick = async () => {
     stk(`<div class="pulse" aria-hidden="true">📲</div>
       <h3 id="pTitle">Check your phone</h3>
       <p style="color:var(--mute);margin-top:6px">An M-Pesa prompt for <b>${KSH(ord.total)}</b> is being sent via <b>IntaSend</b> to <b>+${esc(ph)}</b>. Enter your PIN to complete payment.</p>
-      <p style="color:var(--mute);font-size:.8rem;margin-top:14px">After payment, IntaSend notifies our server and our admin will confirm your order before goods are released.</p>`);
+      <p style="color:var(--mute);font-size:.8rem;margin-top:14px">Your payment is recorded as soon as M-Pesa confirms it. Our admin then confirms your order before goods are released.</p>`);
 
-    await api(CONFIG.STK, { method:"POST", body: JSON.stringify({ orderId: ord.orderId, phone: ph }) });
-    toast("info", "IntaSend prompt sent", "Enter your M-Pesa PIN on your phone.");
+    try {
+      await api(CONFIG.STK, { method:"POST", body: JSON.stringify({ orderId: ord.orderId, phone: ph }) });
+      toast("info", "IntaSend prompt sent", "Enter your M-Pesa PIN on your phone.");
+    } catch(e) {
+      /* Already paid, or a prompt was just sent (double tap / page reopened): just keep watching the order */
+      if (!(e.http && (e.status === 409 || e.status === 429) && /already been paid|just sent/i.test(e.message))) throw e;
+    }
 
     const r = await waitPaid(ord.orderId);
-    success(ord, snap, { name, loc, ph }, r.receipt);
+    success(ord, snap, { name, loc, ph }, r.receipt, r.adminConfirmed);
   } catch(e) {
     fail(e, ord);
   } finally {
@@ -846,14 +849,16 @@ function fail(e, ord) {
   const late = !!e.late;
   const cancelled = e.code === 1032 || e.code === 1037;
   ord = ord || {};
+  /* If the store cancelled this order, start a fresh one next time */
+  if (e.fatal) pend = null;
   toast(cancelled || late ? "warning" : "error",
         cancelled ? (e.code === 1032 ? "Payment cancelled" : "Payment timed out") :
-        (late ? "Admin confirmation pending" : "Payment failed"),
+        (late ? "Payment confirmation pending" : "Payment failed"),
         e.message, 8000);
   const cls = cancelled || late ? "wait" : "bad";
   stk(`<div class="pulse ${cls}" aria-hidden="true">${cancelled ? "!" : (late ? "⏳" : "✕")}</div>
        <h3 id="pTitle">${cancelled ? (e.code === 1032 ? "You cancelled the prompt" : "Payment timed out") :
-        (late ? "Awaiting admin confirmation" : "Payment not completed")}</h3>
+        (late ? "Awaiting payment confirmation" : "Payment not completed")}</h3>
        <p style="color:var(--mute);margin:8px 0 18px">
          ${esc(e.message)}
          ${late ? `If M-Pesa already deducted the money, don't pay again. Quote reference <b>${esc(ord.reference || ord.orderId)}</b> and our team will confirm it.` : "Your cart is safe, so you can try again."}
@@ -867,31 +872,52 @@ function fail(e, ord) {
     $("#chk").onclick = async () => {
       try {
         const s = await api(CONFIG.STATUS(ord.orderId));
-        if (String(s.paymentStatus).toLowerCase() === "paid" && s.adminConfirmed === true) {
-          toast("success", "Admin confirmed");
-          success(ord, [], { name:"", loc:"", ph:"" }, s.mpesaReceipt || s.receipt || s.intasendReceipt);
+        if (String(s.paymentStatus).toLowerCase() === "paid") {
+          toast("success", "Payment received");
+          success(ord, [], { name:"", loc:"", ph:"" }, s.mpesaReceipt || s.receipt || s.intasendReceipt, s.adminConfirmed === true);
         } else {
-          toast("info", "Still pending", "Admin has not confirmed yet. Please wait a moment.");
+          toast("info", "Still pending", "We haven't received the payment yet. Please wait a moment.");
         }
       } catch(x) { toast("error", "Couldn't check status", x.message); }
     };
   }
 }
 
-function success(ord, snap, c, ref) {
+/* After payment is recorded, quietly watch for the admin to release the order */
+async function watchRelease(id) {
+  for (let i = 0; i < CONFIG.RELEASE_POLL_MAX; i++) {
+    await sleep(CONFIG.RELEASE_POLL_MS);
+    if (!$("#pm").classList.contains("open") || !$("#relMsg")) return;
+    try {
+      const s = await api(CONFIG.STATUS(id));
+      if (s.adminConfirmed === true) {
+        $("#relMsg").textContent = "✓ Admin has confirmed payment. Your goods will be dispatched.";
+        const t = $("#pTitle"); if (t) t.textContent = "Order confirmed!";
+        setAdminSync(true, "Admin confirmed");
+        toast("success", "Order confirmed", "Admin has released your order.", 6000);
+        return;
+      }
+    } catch(e) { /* keep trying */ }
+  }
+}
+
+function success(ord, snap, c, ref, released) {
   const d = new Date().toLocaleString("en-KE");
   const r = ref || ord.reference;
   pend = null;
-  setAdminSync(true, "Admin confirmed");
-  toast("success", "Order confirmed", "Admin has authorised your payment. Thank you!", 6000);
+  setAdminSync(true, released ? "Admin confirmed" : "Payment recorded");
+  toast("success", released ? "Order confirmed" : "Payment received",
+        released ? "Admin has authorised your payment. Thank you!" : "Your payment is recorded. Thank you!", 6000);
   stk(`<div class="pulse ok" aria-hidden="true">✓</div>
-    <h3 id="pTitle">Order confirmed!</h3>
+    <h3 id="pTitle">${released ? "Order confirmed!" : "Payment received!"}</h3>
     <p style="color:var(--mute);margin-top:4px">Order <b>${esc(ord.reference || ord.orderId)}</b> · Payment ref <b>${esc(r)}</b></p>
     <div class="rc">
       ${snap.map(i => `<div><span>${i.q} × ${esc(i.name)}</span><span>${KSH(i.q * i.price)}</span></div>`).join("")}
       <div style="border-top:1px dashed var(--line);margin-top:6px;padding-top:6px"><b>Total paid</b><b>${KSH(ord.total)}</b></div>
     </div>
-    <p style="font-size:.8rem;color:var(--mute);margin-bottom:12px">✓ Admin has confirmed payment. Your goods will be dispatched.</p>
+    <p id="relMsg" style="font-size:.8rem;color:var(--mute);margin-bottom:12px">${released
+      ? "✓ Admin has confirmed payment. Your goods will be dispatched."
+      : "✓ Your payment is recorded. Your goods will be released once our admin confirms it."}</p>
     <div class="row">
       <button class="btn light" id="prt">🖨️ Print</button>
       <button class="btn" id="done">Done</button>
@@ -904,17 +930,18 @@ function success(ord, snap, c, ref) {
        Payment ref: ${esc(r)}<br>
        Paid via: IntaSend (M-Pesa)<br>
        Customer: ${esc(c.name)}<br>
-       Phone: +${esc(c.ph)}<br>
+       Phone: ${c.ph ? "+" + esc(c.ph) : ""}<br>
        Deliver to: ${esc(c.loc)}</p>
     <hr>
     ${snap.map(i => `<p>${i.q} × ${esc(i.name)}${i.d ? " (" + esc(i.d) + ")" : ""} — ${KSH(i.q * i.price)}</p>`).join("")}
     <hr>
     <h3>TOTAL: ${KSH(ord.total)}</h3>
-    <p>Processed securely by IntaSend · Admin confirmed. Thank you!</p>`;
+    <p>Processed securely by IntaSend. Thank you!</p>`;
 
   $("#prt").onclick = () => window.print();
   $("#done").onclick = () => { $("#pm").classList.remove("open"); closeCart(); };
   cart = []; save(); updCart();
+  if (!released && ord.orderId) watchRelease(ord.orderId);
 }
 
 document.addEventListener("keydown", e => {
