@@ -395,12 +395,12 @@ const CONFIG = {
   ORDERS:   "/api/orders",
   STK:      "/api/intasend/stkpush",
   STATUS:   id => `/api/orders/${encodeURIComponent(id)}/status`,
-  TIMEOUT:  70000,
+  TIMEOUT:  120000,           // was 70000 — Render cold starts can take 90s+
   POLL_FAST_MS: 2000,
   POLL_MS: 3000,
   POLL_FAST_COUNT: 10,
   POLL_MAX: 60,
-  WAIT_HINT_MS: 5000,
+  WAIT_HINT_MS: 20000,        // was 5000 — keep "Check your phone" up while the prompt is ringing
   RELEASE_POLL_MS: 10000,
   RELEASE_POLL_MAX: 180
 };
@@ -416,8 +416,18 @@ const normOpts = o => (Array.isArray(o) ? o : []).map(x => ({
   k: x.key || x.k || (Array.isArray(x) ? x[0] : ""),
   ch: (x.choices || x.ch || (Array.isArray(x) ? x[1] : []) || []).map(c => typeof c === "string" ? {v:c, a:0} : {v:c.value ?? c.v, a:+(c.priceAdjust ?? c.a) || 0})
 })).filter(o => o.k && o.ch.length);
+
+/* Robust id coercion — handles string, ObjectId, and { $oid: "…" } shapes. */
+const coerceId = v => {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  if (typeof v === "object" && typeof v.$oid === "string") return v.$oid;
+  if (typeof v.toString === "function" && v.toString() !== "[object Object]") return v.toString();
+  return "";
+};
+
 const fromApi = a => ({
-  id: String(a.id ?? a._id),
+  id: coerceId(a.id ?? a._id),
   n: a.name || "Unnamed product",
   c: a.category || "Other",
   e: a.emoji || "🌾",
@@ -489,20 +499,21 @@ function toast(type, title, msg, ms) {
 /* ---------------- Connection diagnosis ---------------- */
 async function diagnose() {
   const base = CONFIG.API;
+  const pageOrigin = location.origin && location.origin !== "null" ? location.origin : "null (file://)";
   try {
-    const r = await fetch(base + "/health", { cache: "no-store", signal: AbortSignal.timeout(65000) });
+    const r = await fetch(base + "/health", { cache: "no-store", signal: AbortSignal.timeout(90000) });
     if (!r.ok) return { kind: "down", msg: `The server replied with an error (${r.status}). It may still be starting. Please try again in a minute.` };
     const h = await r.json().catch(() => ({}));
-    if (h.originAllowed === false) return { kind: "cors", msg: `The server is blocking this website. Add ${h.yourOrigin || location.origin} to ALLOWED_ORIGINS in Render (or leave it empty), then redeploy.` };
+    if (h.originAllowed === false) return { kind: "cors", msg: `The server is blocking this page (${pageOrigin}). Add that exact origin to ALLOWED_ORIGINS in Render (or leave ALLOWED_ORIGINS empty), then redeploy.` };
     if (h.db === false) return { kind: "db", msg: "The server is running but is not connected to its database. Check MONGODB_URI and Atlas Network Access." };
-    if (h.intasend === false) return { kind: "down", msg: "The server is up but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY / INTASEND_SECRET_KEY on Render." };
+    if (h.intasend === false) return { kind: "down", msg: "The server is up but IntaSend is not configured. Set INTASEND_PUBLISHABLE_KEY, INTASEND_SECRET_KEY, INTASEND_WEBHOOK_CHALLENGE and PUBLIC_URL on Render." };
     return { kind: "ok", msg: "Server ready" };
   } catch(e) {
     try {
-      await fetch(base + "/health", { mode: "no-cors", cache: "no-store", signal: AbortSignal.timeout(20000) });
-      return { kind: "cors", msg: `The server is reachable but blocking this website. Make sure server.js is the latest version and ALLOWED_ORIGINS includes ${location.origin} (or is empty).` };
+      await fetch(base + "/health", { mode: "no-cors", cache: "no-store", signal: AbortSignal.timeout(25000) });
+      return { kind: "cors", msg: `The server is reachable but blocking this page (${pageOrigin}). Make sure the latest server.js is deployed and ALLOWED_ORIGINS includes "${pageOrigin}" (or is empty).` };
     } catch(x) {
-      return { kind: "down", msg: `Can't reach ${base}. Check that this is your exact Render URL (open ${base}/health in a new tab). Free servers can take up to a minute to wake up.` };
+      return { kind: "down", msg: `Can't reach ${base}. Open ${base}/health in a new tab to confirm. Free Render servers can take up to a minute to wake.` };
     }
   }
 }
@@ -571,7 +582,7 @@ function renderGrid() {
   const g = $("#grid");
   if (!g) return;
   if (!P.length) {
-    g.innerHTML = '<div class="nores">No products available yet. Products appear here after the admin adds them.</div>';
+    g.innerHTML = '<div class="nores">The store has no products yet.<br><br>If this is a fresh deploy, set <b>SEED_SAMPLE_PRODUCTS=true</b> in Render and restart, or add products from the admin console.</div>';
     return;
   }
   const list = shown();
@@ -757,7 +768,7 @@ function friendlyFailure(code, fallback) {
 }
 
 /* Two-stage waiting flow:
-   stage "phone" — prompt is ringing on the customer's phone (first 5s)
+   stage "phone" — prompt is ringing on the customer's phone (first 20s)
    stage "admin" — we've sent everything; now wait for M-Pesa + admin confirmation
    The moment M-Pesa confirms (paymentStatus === "paid") we show success. */
 async function waitPaid(id) {
@@ -851,13 +862,27 @@ $("#payBtn").onclick = async () => {
       await api(CONFIG.STK, { method:"POST", body: JSON.stringify({ orderId: ord.orderId, phone: ph }) });
       toast("info", "IntaSend prompt sent", "Enter your M-Pesa PIN on your phone.");
     } catch(e) {
-      /* Tolerate "already paid" / "prompt just sent" so a page reload doesn't block the user */
+      /* 503 = IntaSend not configured. Show an actionable message instead of a raw toast. */
+      if (e.http && e.status === 503) {
+        stk(`<div class="pulse bad" aria-hidden="true">!</div>
+          <h3 id="pTitle">Payments temporarily unavailable</h3>
+          <p style="color:var(--mute);margin:8px 0 18px">
+            The store hasn't finished setting up IntaSend yet.
+            Please try again later, or contact the store to complete your order.
+          </p>
+          <div class="row"><button class="btn" id="cls">Close</button></div>`);
+        $("#cls").onclick = () => $("#pm").classList.remove("open");
+        return;
+      }
+      /* 409/429 with "already been paid" / "prompt just sent" is harmless — continue to polling. */
       if (!(e.http && (e.status === 409 || e.status === 429) && /already been paid|just sent/i.test(e.message))) throw e;
     }
 
     const r = await waitPaid(ord.orderId);
     success(ord, snap, { name, loc, ph }, r.receipt, r.adminConfirmed);
   } catch(e) {
+    /* 422 = idempotency key reused with different cart data. Clear pend so the next attempt starts fresh. */
+    if (e.http && e.status === 422) pend = null;
     fail(e, ord);
   } finally {
     btn.disabled = false;
