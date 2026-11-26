@@ -57,7 +57,7 @@ input,select,textarea{font:inherit;font-size:max(16px,1em)}
 .help{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--bg);font-size:.82em;color:var(--mute)}code{background:var(--card);padding:1px 6px;border-radius:5px;font-size:.9em;word-break:break-all}
 details{margin-top:12px;font-size:.82em;color:var(--mute)}summary{cursor:pointer;font-weight:600;min-height:32px}details input{margin:8px 0 4px}
 
-/* ---- App shell: dark green sidebar + light top bar ---- */
+/* ---- App shell ---- */
 .lay{display:grid;grid-template-columns:clamp(210px,19vw,270px) minmax(0,1fr);min-height:100vh;min-height:100dvh}
 .side{background:linear-gradient(180deg,var(--dark),#172817);color:#e8eee1;padding:20px 14px;position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:22px;border-right:3px solid var(--acc)}
 .side .logo{color:#fff;padding:2px 6px}
@@ -110,7 +110,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 .tot{display:flex;justify-content:space-between;font-weight:800;font-size:1.1em;padding-top:12px}
 .note{margin-bottom:12px;font-weight:700}.note.bad{color:var(--bad)}.note.ok{color:var(--ok)}
 
-/* ---- Toasts: floating glass cards, top-centre (matches storefront) ---- */
+/* ---- Toasts ---- */
 #toasts{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(440px,calc(100vw - 24px));pointer-events:none}
 .tt{--c:var(--info);pointer-events:auto;position:relative;overflow:hidden;width:100%;display:grid;grid-template-columns:40px 1fr 30px;gap:12px;align-items:center;padding:11px 10px 14px 11px;border-radius:20px;color:#f6f4ea;background:rgba(27,36,24,.93);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 45px rgba(10,16,8,.35),0 0 0 1px color-mix(in srgb,var(--c) 28%,transparent);animation:tin .45s cubic-bezier(.2,1.3,.4,1);transition:transform .25s,opacity .25s;word-break:break-word}
 .tt.out{opacity:0;transform:translateY(-18px) scale(.96)}
@@ -208,7 +208,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 </section>
 
 <section class="sec" id="s-orders">
-  <div class="ph"><div><h1>Orders</h1><p>Check payments and release goods. Delete clears the row permanently from your list — the IntaSend dashboard keeps the transaction.</p></div><button class="btn ghost sm" data-a="refresh">↻ Refresh</button></div>
+  <div class="ph"><div><h1>Orders</h1><p>Check payments and release goods. Delete is only offered for cancelled or failed orders — IntaSend keeps the transaction record.</p></div><button class="btn ghost sm" data-a="refresh">↻ Refresh</button></div>
   <div class="chips" id="chips">
     <button class="chip on" data-a="filter" data-f="all">All</button><button class="chip" data-a="filter" data-f="paid">Awaiting approval</button>
     <button class="chip" data-a="filter" data-f="released">Released</button>
@@ -273,15 +273,18 @@ const DEFAULT_API="https://cereals-back.onrender.com";
 const TITLE="Admin · Golden Harvest Cereals";
 const REFRESH_MS=15000;
 const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
-/* Accepts "my-server.onrender.com", "https://my-server.onrender.com/", or a URL with a path; returns the clean origin */
 const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
-const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:70000};
+/* Bumped both timeouts: cold Render starts can exceed 70 s. */
+const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:90000,DIAG_TIMEOUT:85000};
 let auth="",me="",products=[],orders=[],ofilter="all",editing=null,img="",groups=[],specs=[],timer=null,lastAw=0,loading=false;
+let quietFails=0;              /* consecutive silent-refresh failures */
+let lastOrderSnap="";         /* signature of the order currently in the modal */
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const KSH=n=>"KSh "+Math.round(Number(n)||0).toLocaleString("en-KE");
 const when=i=>{try{return new Date(i).toLocaleString("en-KE",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}catch{return i}};
+const orderSig=o=>o?[o.id,o.paymentStatus,o.adminConfirmed,o.needsReview,o.paidAt,o.confirmedAt].join("|"):"";
 
 const ICONS={success:"✓",error:"✕",warning:"!",info:"i"};
 function toast(type,title,msg,ms=type==="error"?7000:4000){
@@ -292,19 +295,17 @@ function toast(type,title,msg,ms=type==="error"?7000:4000){
   d.querySelector(".cl").onclick=kill;
   let t=setTimeout(kill,ms),sy=null;
   d.onmouseenter=()=>clearTimeout(t);d.onmouseleave=()=>{t=setTimeout(kill,1500)};
-  /* swipe up (or sideways) to dismiss on touch screens */
   d.addEventListener("touchstart",e=>{sy=[e.touches[0].clientX,e.touches[0].clientY];clearTimeout(t)},{passive:true});
   d.addEventListener("touchend",e=>{if(!sy)return;const dx=e.changedTouches[0].clientX-sy[0],dy=e.changedTouches[0].clientY-sy[1];if(Math.abs(dx)>60||dy<-30)kill();else t=setTimeout(kill,1500)});
   b.appendChild(d);
 }
-/* (named setStatus, not "status", so it never clashes with the browser's built-in window.status) */
 function setStatus(ok,t){const e=$("#bs");e.className="bs "+(ok?"ok":"bad");$("#bst").textContent=t||(ok?"Connected":"Disconnected")}
 
 /* ---------- connection diagnosis ---------- */
 async function diagnose(){
   const base=CFG.API;
   try{
-    const r=await fetch(base+"/health",{cache:"no-store",signal:AbortSignal.timeout(65000)});
+    const r=await fetch(base+"/health",{cache:"no-store",signal:AbortSignal.timeout(CFG.DIAG_TIMEOUT)});
     if(!r.ok)return{kind:"down",msg:`The server replied with an error (${r.status}). It may still be starting. Check the Logs tab on Render.`};
     const h=await r.json().catch(()=>({}));
     if(h.originAllowed===false)return{kind:"cors",msg:`The server is running but blocks this website. In Render, set ALLOWED_ORIGINS to include ${h.yourOrigin||location.origin} (or leave it empty), then redeploy.`};
@@ -327,7 +328,7 @@ async function api(p,o={},n=0){
   const c=new AbortController(),t=setTimeout(()=>c.abort(),CFG.TIMEOUT);
   try{
     const r=await fetch(CFG.API+p,{...o,signal:c.signal,headers:{"Content-Type":"application/json",...(auth?{Authorization:auth}:{})}});
-    /* only retry safe (GET) requests while the server wakes up: never re-send a confirm/cancel/delete */
+    /* single retry path: only GETs, only on gateway/wake-up codes */
     if(isGet&&[502,503,504].includes(r.status)&&n<3){setStatus(false,"Waking up…");await sleep(4000);return api(p,o,n+1)}
     let d=null;try{d=await r.json()}catch{}
     if(!r.ok&&!d&&r.status>=500)throw Object.assign(new Error("The server had a problem ("+r.status+"). Check the Logs tab on Render."),{http:1});
@@ -340,7 +341,7 @@ async function api(p,o={},n=0){
     if(e.name==="AbortError"||e instanceof TypeError){
       setStatus(false,"Checking…");
       const g=await diagnose();
-      if(g.kind==="down"&&isGet&&n<1){setStatus(false,"Waking up…");await sleep(5000);return api(p,o,n+1)}
+      /* do NOT retry again here — api() already retried above. Diagnose only informs. */
       setStatus(false,g.kind==="cors"?"Blocked":"Offline");
       throw new Error(g.msg);
     }
@@ -369,7 +370,8 @@ async function login(){
   if(!pw){e.textContent="Please enter your password.";$("#lp").focus();return}
   const typed=$("#la").value.trim();
   if(typed&&!normApi(typed)){e.textContent="That server address doesn't look right. It should look like https://your-server.onrender.com";$("#adv").open=true;return}
-  if(setApi(typed))ping();
+  /* no fire-and-forget ping() here: login already validates the server via /api/admin/orders */
+  setApi(typed);
   if(!CFG.API){e.textContent="Please enter your server address under “Server address”.";$("#adv").open=true;return}
   b.disabled=true;b.textContent="Signing in…";
   const slow=setTimeout(()=>{e.style.color="var(--mute)";e.textContent="The server is waking up. This can take up to a minute the first time. Please wait…"},4000);
@@ -385,12 +387,11 @@ async function login(){
   clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&auth)loadAll(true)},REFRESH_MS);
 }
 function logout(msg){
-  auth="";me="";clearInterval(timer);products=[];orders=[];lastAw=0;
+  auth="";me="";clearInterval(timer);products=[];orders=[];lastAw=0;ofilter="all";quietFails=0;lastOrderSnap="";
   document.title=TITLE;
   $("#app").hidden=true;$("#login").hidden=false;$$(".ov").forEach(o=>o.classList.remove("open"));
   const e=$("#le");e.style.color="";e.textContent=msg||"";$("#lp").focus();
 }
-/* refresh straight away when the admin comes back to this tab */
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&auth)loadAll(true)});
 
 /* ---------- data ---------- */
@@ -399,26 +400,40 @@ async function loadAll(quiet){
   loading=true;
   try{
     const [p,o]=await Promise.all([api("/api/admin/products"),api("/api/admin/orders?status=all")]);
-    products=p.products||[];orders=o.orders||[];
+    products=p.products||[];orders=o.orders||[];quietFails=0;
     const aw=orders.filter(awaiting).length;
     if(quiet&&aw>lastAw)toast("info","New payment",(aw-lastAw>1?(aw-lastAw)+" payments are":"A payment is")+" waiting for your approval.");
     lastAw=aw;render();
-    /* keep an open order window in step with fresh data */
-    if($("#om").classList.contains("open")&&$("#om").dataset.id)openOrder($("#om").dataset.id,true);
+    /* keep an open order window in step — but only redraw if something actually changed */
+    const ov=$("#om");
+    if(ov.classList.contains("open")&&ov.dataset.id){
+      const fresh=orders.find(x=>x.id===ov.dataset.id);
+      if(!fresh){closeOv(ov);return true}
+      const sig=orderSig(fresh);
+      if(sig!==lastOrderSnap){lastOrderSnap=sig;openOrder(fresh.id,true)}
+    }
     return true;
   }catch(e){
-    if(e.auth)logout("Your session ended. Please sign in again.");
-    else if(!quiet)toast("error","Couldn't refresh",e.message);
+    if(e.auth){
+      toast("error","Session ended","Please sign in again.");
+      logout("Your session ended. Please sign in again.");
+    }else if(!quiet){
+      toast("error","Couldn't refresh",e.message);
+    }else{
+      /* silent refresh: after 2 consecutive failures, speak up once */
+      quietFails++;
+      if(quietFails===2)toast("error","Background refresh failing",e.message+ " Orders shown may be out of date.");
+    }
     return false;
   }finally{loading=false}
 }
 const awaiting=o=>o.paymentStatus==="paid"&&!o.adminConfirmed;
 const canCancel=o=>!o.adminConfirmed&&o.paymentStatus!=="cancelled";
-const canDelete=o=>!o.adminConfirmed;
+/* only cancelled/failed rows may be deleted; paid-but-unreleased must go through Cancel */
+const canDelete=o=>!o.adminConfirmed&&(o.paymentStatus==="cancelled"||o.paymentStatus==="failed");
 const FIL={all:()=>true,paid:awaiting,released:o=>o.adminConfirmed,pending:o=>o.paymentStatus==="pending"||o.paymentStatus==="failed",cancelled:o=>o.paymentStatus==="cancelled",review:o=>o.needsReview};
 const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${r.join("")}</tbody></table></div>`;
 const cust=o=>`${esc(o.customer?.name)}<br><small class="mute">+${esc(o.customer?.phone)}</small>`;
-/* display only: copies column headings onto cells so tables can become cards on phones */
 function labelize(root){
   root.querySelectorAll("table").forEach(t=>{
     const h=[...t.querySelectorAll("th")].map(x=>x.textContent.trim());
@@ -456,7 +471,7 @@ function render(){
 /* ---------- orders ---------- */
 function openOrder(id,refresh){
   const o=orders.find(x=>x.id===id);
-  if(!o){if(refresh)$("#om").classList.remove("open");return}
+  if(!o){if(refresh){const ov=$("#om");ov.classList.remove("open");delete ov.dataset.id;lastOrderSnap=""}return}
   const payRef=o.intasendReceipt||o.providerRef||o.mpesaReceipt||"Not yet received";
   $("#om").dataset.id=id;
   $("#omT").textContent="Order "+o.reference;
@@ -475,6 +490,7 @@ function openOrder(id,refresh){
   const main=awaiting(o)?`<button class="btn ok" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button>`:`<button class="btn ghost" data-a="close">Close</button>`;
   $("#omF").innerHTML=del+cancel+main;
   $("#om").classList.add("open");
+  lastOrderSnap=orderSig(o);
 }
 async function confirmOrder(id){
   try{await api(`/api/admin/orders/${encodeURIComponent(id)}/confirm`,{method:"POST"});toast("success","Order released","The customer's order is now confirmed.");await loadAll(true);if($("#om").classList.contains("open"))openOrder(id)}
@@ -486,21 +502,21 @@ async function rejectOrder(id){
     ?`Cancel ${o.reference}? The customer has already paid, so you will need to refund them in the IntaSend dashboard yourself.`
     :`Cancel ${o.reference}? The customer will no longer be able to pay for it.`;
   if(!confirm(msg))return;
-  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/reject`,{method:"POST"});toast("warning","Order cancelled",o.reference);$("#om").classList.remove("open");await loadAll(true)}
+  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/reject`,{method:"POST"});toast("warning","Order cancelled",o.reference);closeOv($("#om"));await loadAll(true)}
   catch(e){toast("error","Couldn't cancel order",e.message);loadAll(true)}
 }
 async function deleteOrder(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
-  if(o.adminConfirmed)return toast("warning","Can't delete a released order","Released orders are kept as a record. Cancel is no longer possible.");
+  if(!canDelete(o))return toast("warning","Can't delete this order","Only cancelled or failed orders can be deleted. Use Cancel for paid-but-unreleased orders.");
   const msg=o.paymentStatus==="paid"
-    ?`Delete ${o.reference}? This order was PAID via IntaSend but has not been released yet.\n\nThe order will disappear from your list. Refund the customer in the IntaSend dashboard if needed — IntaSend keeps the transaction record.`
+    ?`Delete ${o.reference}? This order was PAID via IntaSend.\n\nThe order will disappear from your list. Refund the customer in the IntaSend dashboard if needed — IntaSend keeps the transaction record.`
     :`Delete ${o.reference}? This removes the order from your list permanently.\n\nIntaSend still keeps any transaction record.`;
   if(!confirm(msg))return;
   try{
     await api(`/api/admin/orders/${encodeURIComponent(id)}`,{method:"DELETE"});
     toast("success","Order deleted",o.reference);
-    if($("#om").classList.contains("open"))$("#om").classList.remove("open");
+    if($("#om").classList.contains("open"))closeOv($("#om"));
     await loadAll(true);
   }catch(e){toast("error","Couldn't delete order",e.message);loadAll(true)}
 }
@@ -537,9 +553,12 @@ function drawSpecs(){
   $("#sp").innerHTML=specs.map((s,i)=>`<div class="r3"><input data-s="${i}" data-k="0" placeholder="Label, e.g. Origin" value="${esc(s[0])}"><input data-s="${i}" data-k="1" placeholder="Value, e.g. Mwea" value="${esc(s[1])}"><button class="x" data-a="ds" data-s="${i}" aria-label="Remove spec">✕</button></div>`).join("")||'<p class="mute" style="font-size:.85em">No specifications.</p>';
 }
 async function saveProduct(){
-  const name=$("#pN").value.trim(),unit=$("#pU").value.trim(),price=Number($("#pP").value);
+  const name=$("#pN").value.trim(),unit=$("#pU").value.trim();
+  const priceRaw=String($("#pP").value).trim();
+  const price=Number(priceRaw);
   if(!name){tab("t1");$("#pN").focus();return toast("warning","Product name needed","Enter a name for this product.")}
-  if(!$("#pP").value||!Number.isFinite(price)||price<0){tab("t2");$("#pP").focus();return toast("warning","Price needed","Enter a price of 0 or more.")}
+  /* blank/whitespace must be rejected, not silently coerced to 0 */
+  if(!priceRaw||!Number.isFinite(price)||price<0){tab("t2");$("#pP").focus();return toast("warning","Price needed","Enter a price of 0 or more.")}
   if(!unit){tab("t2");$("#pU").focus();return toast("warning","Unit needed","Add a unit, for example “per kg”.")}
   const body={name,unit,price,category:$("#pC").value.trim()||"Other",description:$("#pD").value.trim(),image:img||"",
     inStock:$("#pS").value==="true",emoji:$("#pE").value.trim()||"🌾",gradient:editing?.gradient||["#c9a24a","#7a5c1a"],
@@ -567,7 +586,8 @@ const ACT={
   view:d=>openOrder(d.id),confirm:d=>confirmOrder(d.id),reject:d=>rejectOrder(d.id),
   delo:d=>deleteOrder(d.id),
   add:()=>openProduct(),edit:d=>openProduct(d.id),del:d=>delProduct(d.id),save:saveProduct,
-  close(){const ov=this.closest(".ov");ov.classList.remove("open");if(ov.id==="om")delete ov.dataset.id},tab:d=>tab(d.t),
+  close(){const ov=this.closest(".ov");closeOv(ov)},
+  tab:d=>tab(d.t),
   pick:()=>$("#pf").click(),noimg:()=>{setImg("");$("#pf").value=""},
   ag:()=>{groups.push({key:"",choices:[{value:"",priceAdjust:0}]});drawGroups()},
   dg:d=>{groups.splice(+d.g,1);drawGroups()},ac:d=>{groups[+d.g].choices.push({value:"",priceAdjust:0});drawGroups()},
@@ -581,7 +601,7 @@ const ACT={
   },
   out:()=>logout()
 };
-const closeOv=ov=>{ov.classList.remove("open");if(ov.id==="om")delete ov.dataset.id};
+const closeOv=ov=>{ov.classList.remove("open");if(ov.id==="om"){delete ov.dataset.id;lastOrderSnap=""}};
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");
   if(b&&ACT[b.dataset.a])ACT[b.dataset.a].call(b,b.dataset);
@@ -595,7 +615,6 @@ document.addEventListener("input",e=>{
 });
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape")$$(".ov.open").forEach(closeOv);
-  /* keyboard / TV remote: Enter or Space activates the photo box */
   if((e.key==="Enter"||e.key===" ")&&e.target.id==="ip"){e.preventDefault();$("#pf").click()}
 });
 $("#pf").onchange=e=>{pickImage(e.target.files[0]);e.target.value=""};
