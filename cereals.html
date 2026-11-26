@@ -21,9 +21,6 @@
   --dark:#1f3320;--dark2:#2c4a2d;
   --ok:#2f8f4e;--danger:#c8452f;--info:#2b6cb0;--warn:#e8a317;
   --shadow:0 10px 30px rgba(54,44,20,.09);
-  /* ---- HERO BACKGROUND PHOTO (optional) ----
-     Put an image URL here, e.g. url("hero.jpg"). Leave as "none" for the
-     built-in green gradient. A dark overlay keeps text readable. */
   --hero-image:none;
   --hero-overlay:linear-gradient(135deg,rgba(24,40,25,.90) 0%,rgba(31,51,32,.70) 55%,rgba(24,40,25,.88) 100%);
   box-sizing:border-box;
@@ -218,7 +215,7 @@ footer b{color:#fff}
 .backend-alert button{background:rgba(255,255,255,.2);color:#fff;padding:4px 12px;border-radius:6px;font-weight:600;font-size:.8rem}
 .backend-alert button:hover{background:rgba(255,255,255,.3)}
 
-/* ---- Toasts: floating glass pills, top-centre ---- */
+/* ---- Toasts ---- */
 #toasts{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(440px,calc(100vw - 24px));pointer-events:none}
 .tt{--c:var(--info);pointer-events:auto;position:relative;overflow:hidden;width:100%;display:grid;grid-template-columns:40px 1fr 28px;gap:12px;align-items:center;padding:11px 10px 14px 11px;border-radius:20px;color:#f6f4ea;background:rgba(27,36,24,.92);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 45px rgba(10,16,8,.35),0 0 0 1px color-mix(in srgb,var(--c) 28%,transparent);animation:tin .45s cubic-bezier(.2,1.3,.4,1);word-break:break-word}
 .tt.success{--c:#43c06b}
@@ -380,17 +377,11 @@ footer b{color:#fff}
 <script>
 'use strict';
 /* =====================================================================
-   CONFIGURATION — IntaSend edition
-   The server address is, in order of priority:
-     1. ?api=https://your-server.onrender.com in the page address (saved for next time)
-     2. the address saved in this browser (also used by the admin page)
-     3. the default below — change it to your real Render URL
-
-   Endpoints expected on the backend:
-     GET  /api/products               -> { products: [...] } or [...]
-     POST /api/orders                 -> create order (idempotent)
-     POST /api/intasend/stkpush       -> trigger M-Pesa STK push via IntaSend
-     GET  /api/orders/:id/status      -> { paymentStatus, adminConfirmed, mpesaReceipt }
+   CONFIGURATION — IntaSend edition (Golden Harvest Cereals)
+   Server address resolution order:
+     1. ?api=https://your-server.onrender.com in the URL (saved for next time)
+     2. the address saved in this browser
+     3. the default below
    ===================================================================== */
 const DEFAULT_API = "https://cereals-back.onrender.com";
 const normApi = v => { v = String(v || "").trim(); if (!v) return ""; if (!/^https?:\/\//i.test(v)) v = "https://" + v; try { return new URL(v).origin; } catch(e) { return ""; } };
@@ -405,10 +396,11 @@ const CONFIG = {
   STK:      "/api/intasend/stkpush",
   STATUS:   id => `/api/orders/${encodeURIComponent(id)}/status`,
   TIMEOUT:  70000,
-  POLL_FAST_MS: 2000,   // first polls: quick, so the payment shows up within seconds
-  POLL_MS:  3000,
+  POLL_FAST_MS: 2000,
+  POLL_MS: 3000,
   POLL_FAST_COUNT: 10,
   POLL_MAX: 60,
+  WAIT_HINT_MS: 5000,
   RELEASE_POLL_MS: 10000,
   RELEASE_POLL_MAX: 180
 };
@@ -459,7 +451,8 @@ function setAdminSync(ok, text) {
   if (!el) return;
   el.classList.remove("ok", "warn", "bad");
   el.classList.add(ok ? "ok" : (backendOk === false ? "bad" : "warn"));
-  $("#adminSyncText").textContent = text;
+  const t = $("#adminSyncText");
+  if (t) t.textContent = text;
 }
 
 /* ---------------- Backend connection alert ---------------- */
@@ -468,7 +461,8 @@ function setBackendAlert(ok, msg) {
   const el = $("#backendAlert");
   if (!el) return;
   if (ok) { el.classList.remove("show"); setAdminSync(true, "Synced with admin"); return; }
-  el.querySelector("span").textContent = "⚠️ " + (msg || "Backend connection failed. Orders cannot be processed.");
+  const s = el.querySelector("span");
+  if (s) s.textContent = "⚠️ " + (msg || "Backend connection failed. Orders cannot be processed.");
   el.classList.add("show");
   setAdminSync(false, "Admin offline");
 }
@@ -521,6 +515,7 @@ async function api(path, opt = {}, n = 0) {
     throw new Error(msg);
   }
   const isGet = (opt.method || "GET").toUpperCase() === "GET";
+  const retriable = isGet || path === CONFIG.ORDERS;
   const c = new AbortController(), t = setTimeout(() => c.abort(), CONFIG.TIMEOUT);
   try {
     const r = await fetch(CONFIG.API + path, {
@@ -528,7 +523,7 @@ async function api(path, opt = {}, n = 0) {
       signal: c.signal,
       headers: { "Content-Type": "application/json", ...(opt.headers || {}) }
     });
-    if (isGet && [502, 503, 504].includes(r.status) && n < 3) {
+    if (retriable && [502, 503, 504].includes(r.status) && n < 3) {
       setAdminSync(false, "Server waking up…");
       await sleep(4000);
       return api(path, opt, n + 1);
@@ -752,7 +747,6 @@ function normPhone(v) {
 const stk = h => { $("#pBody").innerHTML = h; $("#pm").classList.add("open"); };
 const busy = m => `<div class="pulse wait" aria-hidden="true">⏳</div><h3 id="pTitle">${esc(m)}</h3>`;
 
-/* Friendly IntaSend failure messages. Codes: 1032 cancelled, 1037 timeout/unreachable */
 function friendlyFailure(code, fallback) {
   const n = Number(code);
   if (n === 1032) return "You cancelled the M-Pesa prompt. You can try again whenever you're ready.";
@@ -762,14 +756,39 @@ function friendlyFailure(code, fallback) {
   return fallback || "The payment was not completed. Please try again.";
 }
 
-/* Waits until the payment is RECORDED (paid). It does not wait for admin release:
-   that is shown afterwards on the success screen and updated in the background. */
+/* Two-stage waiting flow:
+   stage "phone" — prompt is ringing on the customer's phone (first 5s)
+   stage "admin" — we've sent everything; now wait for M-Pesa + admin confirmation
+   The moment M-Pesa confirms (paymentStatus === "paid") we show success. */
 async function waitPaid(id) {
+  const start = Date.now();
+  let stage = "phone";
+
   for (let i = 0; i < CONFIG.POLL_MAX; i++) {
     await sleep(i < CONFIG.POLL_FAST_COUNT ? CONFIG.POLL_FAST_MS : CONFIG.POLL_MS);
+
+    if (stage === "phone" && Date.now() - start >= CONFIG.WAIT_HINT_MS) {
+      stage = "admin";
+      const body = $("#pBody");
+      if (body && $("#pm").classList.contains("open")) {
+        body.innerHTML = `
+          <div class="pulse wait" aria-hidden="true">⏳</div>
+          <h3 id="pTitle">Waiting for confirmation…</h3>
+          <p style="color:var(--mute);margin-top:6px">
+            M-Pesa is confirming your payment. Once it's recorded, our admin
+            will confirm your order before goods are released.
+          </p>
+          <p style="color:var(--mute);font-size:.8rem;margin-top:14px">
+            Please keep this page open — it updates automatically.
+          </p>`;
+        setAdminSync(false, "Awaiting admin approval");
+      }
+    }
+
     let s;
     try { s = await api(CONFIG.STATUS(id)); } catch(e) { continue; }
     const st = String(s.paymentStatus || s.status || "").toLowerCase();
+
     if (st === "paid") {
       return {
         receipt: s.mpesaReceipt || s.receipt || s.intasendReceipt || s.providerRef,
@@ -832,7 +851,7 @@ $("#payBtn").onclick = async () => {
       await api(CONFIG.STK, { method:"POST", body: JSON.stringify({ orderId: ord.orderId, phone: ph }) });
       toast("info", "IntaSend prompt sent", "Enter your M-Pesa PIN on your phone.");
     } catch(e) {
-      /* Already paid, or a prompt was just sent (double tap / page reopened): just keep watching the order */
+      /* Tolerate "already paid" / "prompt just sent" so a page reload doesn't block the user */
       if (!(e.http && (e.status === 409 || e.status === 429) && /already been paid|just sent/i.test(e.message))) throw e;
     }
 
@@ -849,7 +868,6 @@ function fail(e, ord) {
   const late = !!e.late;
   const cancelled = e.code === 1032 || e.code === 1037;
   ord = ord || {};
-  /* If the store cancelled this order, start a fresh one next time */
   if (e.fatal) pend = null;
   toast(cancelled || late ? "warning" : "error",
         cancelled ? (e.code === 1032 ? "Payment cancelled" : "Payment timed out") :
@@ -883,7 +901,7 @@ function fail(e, ord) {
   }
 }
 
-/* After payment is recorded, quietly watch for the admin to release the order */
+/* Quietly watch for the admin to release the order after payment is recorded */
 async function watchRelease(id) {
   for (let i = 0; i < CONFIG.RELEASE_POLL_MAX; i++) {
     await sleep(CONFIG.RELEASE_POLL_MS);
@@ -891,13 +909,20 @@ async function watchRelease(id) {
     try {
       const s = await api(CONFIG.STATUS(id));
       if (s.adminConfirmed === true) {
-        $("#relMsg").textContent = "✓ Admin has confirmed payment. Your goods will be dispatched.";
+        const msg = $("#relMsg");
+        if (msg) msg.textContent = "✓ Admin has confirmed payment. Your goods will be dispatched.";
         const t = $("#pTitle"); if (t) t.textContent = "Order confirmed!";
+        const pulse = document.querySelector("#pBody .pulse");
+        if (pulse) {
+          pulse.classList.remove("wait");
+          pulse.classList.add("ok");
+          pulse.textContent = "✓";
+        }
         setAdminSync(true, "Admin confirmed");
         toast("success", "Order confirmed", "Admin has released your order.", 6000);
         return;
       }
-    } catch(e) { /* keep trying */ }
+    } catch(e) { /* keep trying silently */ }
   }
 }
 
