@@ -14,7 +14,6 @@
   --acc:#e8a317;--acc2:#a86e00;--dark:#1f3320;--dark2:#2c4a2d;--ok:#2f8f4e;--bad:#c8452f;--info:#2b6cb0;
   --r:16px;--sh:0 1px 2px rgba(54,44,20,.05),0 8px 24px rgba(54,44,20,.07);
   --fs:clamp(14px,.35vw + 13px,17px);
- 
 }
 @media(prefers-color-scheme:dark){:root{--bg:#10140d;--card:#192015;--ink:#f3f0e6;--mute:#a4a692;--line:#2b3425;--soft:rgba(255,255,255,.06);--acc2:#f3b942;--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3)}}
 *,*::before,*::after{box-sizing:border-box;margin:0}[hidden]{display:none!important}
@@ -190,7 +189,7 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
   <div class="logo"><i>🌾</i><div>GOLDEN HARVEST<small>ADMIN</small></div></div>
   <span class="tl">Admin console</span>
   <div class="nr"><span class="bs" id="bs" role="status"><span class="d"></span><span id="bst">Checking…</span></span>
-  <a class="nl sf" href="cereals.html" target="_blank" rel="noopener">🛍️ Storefront</a><button class="nl" data-a="out">Sign out</button></div>
+  <a class="nl sf" href="cereals.html" target="_blank" rel="noopener" title="Open the customer storefront">🛍️ Storefront</a><button class="nl" data-a="out">Sign out</button></div>
 </div></header>
 <main><div class="wrap">
 
@@ -274,8 +273,9 @@ const TITLE="Admin · Golden Harvest Cereals";
 const REFRESH_MS=15000;
 const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
-/* Bumped both timeouts: cold Render starts can exceed 70 s. */
-const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:90000,DIAG_TIMEOUT:85000};
+/* Cold Render starts can exceed 90 s. TIMEOUT must be GREATER than DIAG_TIMEOUT
+   so a real timeout is diagnosed as a timeout, not as "server down". */
+const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:120000,DIAG_TIMEOUT:90000};
 let auth="",me="",products=[],orders=[],ofilter="all",editing=null,img="",groups=[],specs=[],timer=null,lastAw=0,loading=false;
 let quietFails=0;              /* consecutive silent-refresh failures */
 let lastOrderSnap="";         /* signature of the order currently in the modal */
@@ -285,6 +285,8 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const KSH=n=>"KSh "+Math.round(Number(n)||0).toLocaleString("en-KE");
 const when=i=>{try{return new Date(i).toLocaleString("en-KE",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}catch{return i}};
 const orderSig=o=>o?[o.id,o.paymentStatus,o.adminConfirmed,o.needsReview,o.paidAt,o.confirmedAt].join("|"):"";
+/* Data-URL or https URL only — matches the server's cleanProduct(). */
+const isImageOk=s=>!s||/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(s)||/^https:\/\/\S+$/i.test(s);
 
 const ICONS={success:"✓",error:"✕",warning:"!",info:"i"};
 function toast(type,title,msg,ms=type==="error"?7000:4000){
@@ -304,18 +306,22 @@ function setStatus(ok,t){const e=$("#bs");e.className="bs "+(ok?"ok":"bad");$("#
 /* ---------- connection diagnosis ---------- */
 async function diagnose(){
   const base=CFG.API;
+  const pageOrigin=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
   try{
     const r=await fetch(base+"/health",{cache:"no-store",signal:AbortSignal.timeout(CFG.DIAG_TIMEOUT)});
     if(!r.ok)return{kind:"down",msg:`The server replied with an error (${r.status}). It may still be starting. Check the Logs tab on Render.`};
     const h=await r.json().catch(()=>({}));
-    if(h.originAllowed===false)return{kind:"cors",msg:`The server is running but blocks this website. In Render, set ALLOWED_ORIGINS to include ${h.yourOrigin||location.origin} (or leave it empty), then redeploy.`};
+    if(h.originAllowed===false){
+      const list=h.allowedOrigins==="ANY"?null:(Array.isArray(h.allowedOrigins)?h.allowedOrigins.join(", "):h.allowedOrigins);
+      return{kind:"cors",msg:`The server is running but blocks this website (${pageOrigin}). On Render, set ALLOWED_ORIGINS to include "${pageOrigin}" (or leave it empty), then redeploy.`+(list?`  Currently allowed: ${list}`:"")};
+    }
     if(h.db===false)return{kind:"db",msg:"The server is running but is not connected to MongoDB. Check MONGODB_URI and Atlas Network Access in the Render logs."};
     if(h.intasend===false)return{kind:"down",msg:"The server is running but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY, INTASEND_SECRET_KEY, INTASEND_WEBHOOK_CHALLENGE and PUBLIC_URL on Render."};
     return{kind:"ok",msg:"Server ready",h};
   }catch(e){
     try{
-      await fetch(base+"/health",{mode:"no-cors",cache:"no-store",signal:AbortSignal.timeout(20000)});
-      return{kind:"cors",msg:`The server is reachable but is blocking this website. Make sure server.js is the latest version, and that ALLOWED_ORIGINS includes ${location.origin} (or is empty).`};
+      await fetch(base+"/health",{mode:"no-cors",cache:"no-store",signal:AbortSignal.timeout(25000)});
+      return{kind:"cors",msg:`The server is reachable but is blocking this website (${pageOrigin}). Make sure server.js is the latest version, and that ALLOWED_ORIGINS includes "${pageOrigin}" (or is empty).`};
     }catch{
       return{kind:"down",msg:`Can't reach ${base}. Check this is exactly your Render URL (open ${base}/health in a new tab to test). Free servers can take up to a minute to wake up.`};
     }
@@ -334,6 +340,10 @@ async function api(p,o={},n=0){
     if(!r.ok&&!d&&r.status>=500)throw Object.assign(new Error("The server had a problem ("+r.status+"). Check the Logs tab on Render."),{http:1});
     setStatus(true);
     if(r.status===401)throw Object.assign(new Error("Wrong username or password."),{auth:1});
+    /* 503 with "Admin login is not configured" means ADMIN_USERNAME / ADMIN_PASSWORD are missing on the server. */
+    if(r.status===503&&/admin login is not configured/i.test(d?.error||"")){
+      throw Object.assign(new Error("Admin login is disabled on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD in Render, then redeploy."),{http:1,config:1});
+    }
     if(!r.ok)throw Object.assign(new Error(d?.error||d?.message||"Request failed ("+r.status+")"),{http:1});
     return d;
   }catch(e){
@@ -352,7 +362,8 @@ async function api(p,o={},n=0){
 /* ---------- sign in ---------- */
 async function ping(){
   const b=$("#srv"),t=$("#srvT");
-  $("#orig").textContent="This website's address: "+location.origin+"  ·  Server: "+(CFG.API||"not set");
+  const pageOrigin=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
+  $("#orig").textContent="This website's address: "+pageOrigin+"  ·  Server: "+(CFG.API||"not set");
   if(!CFG.API){b.className="srv";t.textContent="No server address set. Open “Server address” below.";$("#adv").open=true;return}
   b.className="srv wait";t.textContent="Contacting the server… (can take up to a minute if it was asleep)";
   const g=await diagnose();
@@ -377,7 +388,15 @@ async function login(){
   const slow=setTimeout(()=>{e.style.color="var(--mute)";e.textContent="The server is waking up. This can take up to a minute the first time. Please wait…"},4000);
   auth="Basic "+btoa(unescape(encodeURIComponent(u+":"+pw)));
   try{await api("/api/admin/orders?status=all")}
-  catch(x){auth="";e.style.color="";e.textContent=x.auth?"That username or password isn't right. Check for typos (passwords are case-sensitive) and try again.":x.message;if(!x.auth)ping();return}
+  catch(x){
+    auth="";
+    e.style.color="";
+    if(x.auth)e.textContent="That username or password isn't right. Check for typos (passwords are case-sensitive) and try again.";
+    else if(x.config)e.textContent=x.message;
+    else e.textContent=x.message;
+    if(!x.auth&&!x.config)ping();
+    return;
+  }
   finally{clearTimeout(slow);b.disabled=false;b.textContent="Sign in"}
   me=u;store.set("gh_user",u);$("#lp").value="";$("#who").textContent=u;
   $("#login").hidden=true;$("#app").hidden=false;
@@ -509,10 +528,7 @@ async function deleteOrder(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
   if(!canDelete(o))return toast("warning","Can't delete this order","Only cancelled or failed orders can be deleted. Use Cancel for paid-but-unreleased orders.");
-  const msg=o.paymentStatus==="paid"
-    ?`Delete ${o.reference}? This order was PAID via IntaSend.\n\nThe order will disappear from your list. Refund the customer in the IntaSend dashboard if needed — IntaSend keeps the transaction record.`
-    :`Delete ${o.reference}? This removes the order from your list permanently.\n\nIntaSend still keeps any transaction record.`;
-  if(!confirm(msg))return;
+  if(!confirm(`Delete ${o.reference}? This removes the order from your list permanently.\n\nIntaSend still keeps any transaction record.`))return;
   try{
     await api(`/api/admin/orders/${encodeURIComponent(id)}`,{method:"DELETE"});
     toast("success","Order deleted",o.reference);
@@ -560,6 +576,11 @@ async function saveProduct(){
   /* blank/whitespace must be rejected, not silently coerced to 0 */
   if(!priceRaw||!Number.isFinite(price)||price<0){tab("t2");$("#pP").focus();return toast("warning","Price needed","Enter a price of 0 or more.")}
   if(!unit){tab("t2");$("#pU").focus();return toast("warning","Unit needed","Add a unit, for example “per kg”.")}
+  /* The server rejects images that are neither a data-URL nor an https URL. Catch it here. */
+  if(!isImageOk(img)){
+    tab("t1");
+    return toast("warning","Photo link not allowed","Use the “Choose photo” button to upload a picture, or paste an https:// link. Relative paths and http:// links aren't accepted.");
+  }
   const body={name,unit,price,category:$("#pC").value.trim()||"Other",description:$("#pD").value.trim(),image:img||"",
     inStock:$("#pS").value==="true",emoji:$("#pE").value.trim()||"🌾",gradient:editing?.gradient||["#c9a24a","#7a5c1a"],
     specs:specs.filter(s=>s[0].trim()&&s[1].trim()).map(s=>[s[0].trim(),s[1].trim()]),
