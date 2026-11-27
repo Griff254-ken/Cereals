@@ -8,176 +8,131 @@
 <meta name="theme-color" content="#1f3320">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
 <style>
-:root{
-  --bg:#f6f2e8;--card:#fff;--ink:#222a1f;--mute:#6f725f;--line:#e8e0cd;--soft:rgba(34,42,31,.05);
-  --acc:#e8a317;--acc2:#a86e00;--dark:#1f3320;--dark2:#2c4a2d;--ok:#2f8f4e;--bad:#c8452f;--info:#2b6cb0;
-  --r:16px;--sh:0 1px 2px rgba(54,44,20,.05),0 8px 24px rgba(54,44,20,.07);
-  --fs:clamp(14px,.35vw + 13px,17px);
-}
-@media(prefers-color-scheme:dark){:root{--bg:#10140d;--card:#192015;--ink:#f3f0e6;--mute:#a4a692;--line:#2b3425;--soft:rgba(255,255,255,.06);--acc2:#f3b942;--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3)}}
+:root{color-scheme:light dark;--bg:#f6f2e8;--card:#fff;--ink:#222a1f;--mute:#6b6e5b;--line:#e4dcc8;--soft:rgba(34,42,31,.05);--acc:#e8a317;--acc2:#8f5c00;--dark:#1f3320;--ok:#2f8f4e;--bad:#c8452f;--info:#2b6cb0;--r:16px;--sh:0 1px 2px rgba(54,44,20,.05),0 8px 24px rgba(54,44,20,.07);--fs:clamp(14px,.35vw + 13px,17px)}
+@media(prefers-color-scheme:dark){:root{--bg:#10140d;--card:#192015;--ink:#f3f0e6;--mute:#a4a692;--line:#2b3425;--soft:rgba(255,255,255,.06);--acc2:#f3b942;--ok:#4cb36c;--bad:#ef6b55;--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3)}}
 *,*::before,*::after{box-sizing:border-box;margin:0}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:80px}
-body{background:var(--bg);color:var(--ink);font:var(--fs)/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overflow-x:hidden}
-button{font:inherit;cursor:pointer;border:0;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:var(--bg);color:var(--ink);font:var(--fs)/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;color:inherit;background:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font:inherit;font-size:max(16px,1em)}
 :focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
-::selection{background:var(--acc);color:#1b1b12}
 .wrap{max-width:1180px;margin:auto;padding:0 clamp(12px,3vw,28px)}.mute{color:var(--mute)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;min-width:0;white-space:nowrap}
-.logo i{position:relative;width:38px;height:38px;background:var(--acc);color:var(--dark);display:grid;place-items:center;font-style:normal;border-radius:12px;transform:rotate(-6deg);overflow:hidden;flex:none;font-size:1.2rem;box-shadow:0 4px 12px rgba(232,163,23,.4)}
-.logo i::before{content:"";position:absolute;inset:0;background:var(--brand-image) center/cover;z-index:1}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+.logo i{width:38px;height:38px;background:var(--acc);color:var(--dark);display:grid;place-items:center;font-style:normal;border-radius:12px;transform:rotate(-6deg);flex:none;font-size:1.2rem}
 .logo small{display:block;font-weight:500;font-size:.62em;color:#a9b8a0;letter-spacing:2px;margin-top:-2px}
 .btn{background:var(--dark);color:#fff;font-weight:700;padding:11px 18px;min-height:44px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,filter .15s;font-size:.92em;text-decoration:none;white-space:nowrap}
 .btn:hover{filter:brightness(1.18)}.btn:active{transform:scale(.97)}
-.btn.acc{background:linear-gradient(135deg,#f5b937,var(--acc));color:var(--dark);box-shadow:0 4px 14px rgba(232,163,23,.32)}
-.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}
+.btn.acc{background:linear-gradient(135deg,#f5b937,var(--acc));color:#1f3320}.btn.ok{background:var(--ok);color:#fff}.btn.bad{background:var(--bad);color:#fff}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{background:var(--soft);filter:none}
 .btn.sm{padding:6px 12px;min-height:36px;font-size:.82em;border-radius:10px}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-
-/* ---- Login ---- */
-.lw{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:clamp(10px,3vw,24px);background:radial-gradient(circle at 85% 10%,rgba(232,163,23,.3),transparent 50%),radial-gradient(circle at 10% 95%,rgba(95,168,240,.12),transparent 45%),linear-gradient(150deg,#16261a,#2c4a2d)}
-.lc{background:var(--card);border-radius:26px;padding:clamp(20px,5vw,36px);width:100%;max-width:430px;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:up .5s cubic-bezier(.2,.8,.2,1)}
-@keyframes up{from{opacity:0;transform:translateY(14px)}}
-.lc .logo{justify-content:center;color:var(--ink)}.lc .logo small{color:var(--mute)}
-.brand-hero{width:100%;height:clamp(80px,18vw,120px);border-radius:16px;margin:16px 0 6px;background:var(--dark) var(--brand-image) center/cover no-repeat;box-shadow:0 6px 22px rgba(0,0,0,.18);position:relative;display:grid;place-items:center;font-size:2.6rem}
-.brand-hero::before{content:"🌾🌽🍚";letter-spacing:6px;opacity:.9;position:relative;z-index:1}
-.brand-hero::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.3))}
+/* login */
+.lw{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px 16px;background:radial-gradient(circle at 85% 10%,rgba(232,163,23,.3),transparent 50%),linear-gradient(150deg,#16261a,#2c4a2d)}
+.lc{background:var(--card);border-radius:26px;padding:clamp(20px,5vw,36px);width:100%;max-width:430px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.lc .logo{justify-content:center}.lc .logo small{color:var(--mute)}
 .lc h1{text-align:center;font-size:1.4em;margin:14px 0 2px}.sub{text-align:center;color:var(--mute);font-size:.9em;margin-bottom:14px}
-.srv,.bs{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.8em;color:var(--mute)}.srv{margin-bottom:10px;align-items:flex-start;line-height:1.4}.srv .d{flex:none;margin-top:5px}
-.d{width:8px;height:8px;border-radius:50%;background:var(--bad);flex:none}.wait .d{background:var(--acc);animation:p 1.2s infinite}.ok .d{background:var(--ok)}@keyframes p{50%{opacity:.35}}
-.f{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.f.full{grid-column:1/-1}
-.f label{font-size:.82em;font-weight:700;color:var(--mute)}.f small{color:var(--mute);font-size:.78em}
-.f input,.f select,.f textarea,details input{padding:12px 14px;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%;transition:border-color .15s,box-shadow .15s}
-.f input:focus,.f select:focus,.f textarea:focus,details input:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px rgba(232,163,23,.22)}
+.srv{display:flex;gap:8px;font-size:.8em;color:var(--mute);margin-bottom:10px;line-height:1.4;align-items:flex-start;justify-content:center;text-align:left}
+.d{width:8px;height:8px;border-radius:50%;background:var(--bad);flex:none;margin-top:6px}.wait .d{background:var(--acc);animation:p 1.2s infinite}.ok .d{background:var(--ok)}@keyframes p{50%{opacity:.35}}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.f.full{grid-column:1/-1}.f label{font-size:.82em;font-weight:700;color:var(--mute)}.f small{color:var(--mute);font-size:.78em}
+.f input,.f select,.f textarea,details input{padding:12px 14px;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus,details input:focus,.sb input:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px rgba(232,163,23,.22)}
 .f textarea{min-height:80px;resize:vertical}
-.pw{position:relative}.pw input{padding-right:50px}.pw button{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;width:44px;height:44px}
-.lc .btn{width:100%;padding:13px}.err{color:var(--bad);font-size:.86em;text-align:center;min-height:1.3em;margin-top:8px}
-.help{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--bg);font-size:.82em;color:var(--mute)}code{background:var(--card);padding:1px 6px;border-radius:5px;font-size:.9em;word-break:break-all}
+.pw{position:relative}.pw input{padding-right:50px}.pw button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px}
+.lc .btn.full{width:100%;padding:13px}.err{color:var(--bad);font-size:.86em;text-align:center;min-height:1.3em;margin-top:8px}
+.help{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--bg);font-size:.82em;color:var(--mute)}code{background:var(--card);padding:1px 6px;border-radius:5px;font-size:.9em}
 details{margin-top:12px;font-size:.82em;color:var(--mute)}summary{cursor:pointer;font-weight:600;min-height:32px}details input{margin:8px 0 4px}
-
-/* ---- App shell ---- */
-.lay{display:grid;grid-template-columns:clamp(210px,19vw,270px) minmax(0,1fr);min-height:100vh;min-height:100dvh}
-.side{background:linear-gradient(180deg,var(--dark),#172817);color:#e8eee1;padding:20px 14px;position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:22px;border-right:3px solid var(--acc)}
-.side .logo{color:#fff;padding:2px 6px}
-.side nav{display:flex;flex-direction:column;gap:4px}
-.side nav button{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:12px;background:none;color:#cfd9c6;font-weight:600;text-align:left;transition:background .15s,color .15s}
-.side nav button:hover{background:rgba(255,255,255,.08);color:#fff}
-.side nav button.on{background:var(--acc);color:var(--dark);box-shadow:0 6px 16px rgba(232,163,23,.3)}
-.cnt{margin-left:auto;background:var(--bad);color:#fff;font-size:.72em;padding:1px 8px;border-radius:999px;font-weight:800}
-.side nav button.on .cnt{background:var(--dark)}
+/* shell */
+.lay{display:grid;grid-template-columns:clamp(210px,19vw,270px) minmax(0,1fr);min-height:100dvh}
+.side{background:linear-gradient(180deg,var(--dark),#172817);color:#e8eee1;padding:20px 14px;position:sticky;top:0;height:100dvh;display:flex;flex-direction:column;gap:22px;border-right:3px solid var(--acc)}
+.side .logo{color:#fff;padding:2px 6px}.side nav{display:flex;flex-direction:column;gap:4px}
+.side nav button{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:48px;border-radius:12px;color:#cfd9c6;font-weight:600;text-align:left}
+.side nav button:hover{background:rgba(255,255,255,.08);color:#fff}.side nav button.on{background:var(--acc);color:var(--dark)}
+.cnt{margin-left:auto;background:var(--bad);color:#fff;font-size:.72em;padding:1px 8px;border-radius:999px;font-weight:800}.side nav button.on .cnt{background:var(--dark)}
 .sidefoot{margin-top:auto;font-size:.78em;color:#9fb094;padding:0 8px}
-.shell{min-width:0}
-.top{position:sticky;top:env(safe-area-inset-top,0);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.topin{display:flex;align-items:center;justify-content:space-between;height:62px;gap:10px;padding:0 clamp(12px,3vw,28px)}
-.top .logo{display:none;color:var(--ink)}.top .logo small{color:var(--mute)}
-.tl{font-weight:700;color:var(--mute);font-size:.9em}
-.nr{display:flex;align-items:center;gap:8px;margin-left:auto}
-.bs{padding:6px 13px;border-radius:999px;background:var(--card);border:1px solid var(--line);white-space:nowrap}.bs.bad .d{animation:p 1.2s infinite}
-.nl{color:var(--ink);text-decoration:none;font-size:.88em;font-weight:600;padding:9px 14px;min-height:40px;border-radius:999px;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;white-space:nowrap}.nl:hover{border-color:var(--acc)}
-.nl.sf{background:var(--dark);color:#fff;border-color:var(--dark)}
-main{padding:clamp(16px,3vw,32px) 0 60px;min-width:0}.sec{display:none}.sec.on{display:block;animation:fi .3s ease}@keyframes fi{from{opacity:0;transform:translateY(6px)}}
+.shell{min-width:0}.top{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;gap:10px;height:62px;padding:0 clamp(12px,3vw,28px)}.top .logo{display:none}
+.tl{font-weight:700;color:var(--mute);font-size:.9em}.nr{display:flex;align-items:center;gap:8px;margin-left:auto}
+.bs{display:flex;align-items:center;gap:8px;font-size:.8em;color:var(--mute);padding:6px 13px;border-radius:999px;background:var(--card);border:1px solid var(--line);white-space:nowrap}.bs .d{margin:0}.bs.bad .d{animation:p 1.2s infinite}
+.nl{font-size:.88em;font-weight:600;padding:9px 14px;min-height:40px;border-radius:999px;background:var(--card);border:1px solid var(--line);display:inline-flex;align-items:center;white-space:nowrap;text-decoration:none;color:var(--ink)}.nl:hover{border-color:var(--acc)}
+main{padding:clamp(16px,3vw,32px) 0 60px}.sec{display:none}.sec.on{display:block}
 .ph{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:20px}.ph h1{font-size:clamp(1.35rem,2.4vw,1.9rem);letter-spacing:-.02em}.ph p{color:var(--mute);font-size:.9em;max-width:62ch}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px;margin-bottom:20px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden}
-.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--acc))}
-.stat b{font-size:clamp(1.6rem,3vw,2.2rem);display:block;line-height:1.2;color:var(--c,var(--ink))}.stat span{font-size:.84em;color:var(--mute)}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px;overflow:hidden;box-shadow:var(--sh)}.pb{padding:18px 20px}.pt{padding:16px 20px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--soft),transparent)}.pt h2{font-size:1.08em}.pt p{font-size:.85em;color:var(--mute)}
-.panel.warn{border-color:var(--bad)}.panel.warn .pt{background:rgba(200,69,47,.08)}
-.more{padding:12px 20px;border-top:1px solid var(--line);font-size:.85em;color:var(--mute)}
-.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:600px}
-th{background:var(--bg);color:var(--mute);font-size:.76em;font-weight:700;padding:11px 14px;text-align:left;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle}
-tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
-.act{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.empty{text-align:center;color:var(--mute);padding:40px 12px;font-size:1.05em}
-.th{display:flex;align-items:center;gap:10px;min-width:0}.th span{width:46px;height:46px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem;overflow:hidden;flex:none}.th img{width:100%;height:100%;object-fit:cover}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c,var(--acc))}.stat b{font-size:clamp(1.6rem,3vw,2.2rem);display:block;line-height:1.2;color:var(--c,var(--ink))}.stat span{font-size:.84em;color:var(--mute)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px;overflow:hidden;box-shadow:var(--sh)}.pb{padding:18px 20px}.pt{padding:16px 20px;border-bottom:1px solid var(--line)}.pt h2{font-size:1.08em}.pt p{font-size:.85em;color:var(--mute)}
+.panel.warn{border-color:var(--bad)}.more{padding:12px 20px;border-top:1px solid var(--line);font-size:.85em;color:var(--mute);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:600px}
+th{background:var(--bg);color:var(--mute);font-size:.76em;font-weight:700;padding:11px 14px;text-align:left;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:middle}tbody tr:hover{background:var(--soft)}
+.act{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.empty{text-align:center;color:var(--mute);padding:40px 12px}
+.th{display:flex;align-items:center;gap:10px}.th span{width:46px;height:46px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem;overflow:hidden;flex:none}.th img{width:100%;height:100%;object-fit:cover}
 .pill{display:inline-block;font-size:.76em;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(111,114,95,.16);color:var(--mute);white-space:nowrap}
 .pill.paid,.pill.ok{background:rgba(47,143,78,.16);color:var(--ok)}.pill.pending,.pill.wait{background:rgba(232,163,23,.2);color:var(--acc2)}.pill.failed,.pill.out,.pill.review{background:rgba(200,69,47,.16);color:var(--bad)}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.chip{background:var(--card);border:1px solid var(--line);padding:8px 15px;min-height:40px;border-radius:999px;font-weight:600;font-size:.86em}.chip.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--card);border:1px solid var(--line);padding:8px 15px;min-height:40px;border-radius:999px;font-weight:600;font-size:.86em}.chip.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.sb{flex:1;min-width:200px}.sb input{width:100%;padding:10px 16px;min-height:42px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-
-/* ---- Modal ---- */
-.ov{position:fixed;inset:0;background:rgba(14,22,12,.62);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:50;display:none;align-items:center;justify-content:center;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.ov.open{display:flex}
-.md{background:var(--card);border-radius:22px;width:100%;max-width:660px;max-height:100%;overflow:auto;overscroll-behavior:contain;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:pop .25s cubic-bezier(.2,.8,.2,1)}@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(14,22,12,.62);backdrop-filter:blur(4px);z-index:50;display:none;align-items:center;justify-content:center;padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom))}.ov.open{display:flex}#cm{z-index:70}
+.md{background:var(--card);border-radius:22px;width:100%;max-width:660px;max-height:100%;overflow:auto;overscroll-behavior:contain;box-shadow:0 30px 80px rgba(0,0,0,.5)}.md.sm{max-width:440px}
 .mh,.mf{padding:14px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;background:var(--card);z-index:1}.mh{top:0;border-bottom:1px solid var(--line)}.mf{bottom:0;border-top:1px solid var(--line);justify-content:flex-end;flex-wrap:wrap}
-.x{background:var(--bg);width:40px;height:40px;border-radius:50%;flex:none}.mbd{padding:20px 22px}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}.tabs button{background:none;color:var(--mute);padding:10px 13px;min-height:44px;font-weight:700;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}.tabs button.on{color:var(--ink);border-color:var(--acc)}
+.x{background:var(--bg);width:40px;height:40px;border-radius:50%;flex:none}.mbd{padding:20px 22px}#cmM{white-space:pre-line;color:var(--mute)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}.tabs button{color:var(--mute);padding:10px 13px;min-height:44px;font-weight:700;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}.tabs button.on{color:var(--ink);border-color:var(--acc)}
 .tab{display:none}.tab.on{display:block}
-.im{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.ip{width:104px;height:104px;border-radius:16px;border:2px dashed var(--line);background:var(--bg);display:grid;place-items:center;font-size:2rem;overflow:hidden;cursor:pointer}.ip img{width:100%;height:100%;object-fit:cover}
+.im{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.ip{width:104px;height:104px;border-radius:16px;border:2px dashed var(--line);background:var(--bg);display:grid;place-items:center;font-size:2rem;overflow:hidden}.ip img{width:100%;height:100%;object-fit:cover}
 .og{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;background:var(--bg)}.r2,.r3{display:grid;gap:8px;margin-bottom:8px;align-items:center}.r2{grid-template-columns:1fr auto}.r3{grid-template-columns:1fr 1fr auto}
 .og input,.r3 input{padding:10px 12px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}.og .x{border-radius:10px;width:auto;padding:0 12px;height:44px;color:var(--bad)}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.meta>div{min-width:0;overflow-wrap:anywhere}.meta small{color:var(--mute);display:block;font-size:.78em}.meta b{font-weight:600}
-.tot{display:flex;justify-content:space-between;font-weight:800;font-size:1.1em;padding-top:12px}
-.note{margin-bottom:12px;font-weight:700}.note.bad{color:var(--bad)}.note.ok{color:var(--ok)}
-
-/* ---- Toasts ---- */
-#toasts{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(440px,calc(100vw - 24px));pointer-events:none}
-.tt{--c:var(--info);pointer-events:auto;position:relative;overflow:hidden;width:100%;display:grid;grid-template-columns:40px 1fr 30px;gap:12px;align-items:center;padding:11px 10px 14px 11px;border-radius:20px;color:#f6f4ea;background:rgba(27,36,24,.93);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 45px rgba(10,16,8,.35),0 0 0 1px color-mix(in srgb,var(--c) 28%,transparent);animation:tin .45s cubic-bezier(.2,1.3,.4,1);transition:transform .25s,opacity .25s;word-break:break-word}
-.tt.out{opacity:0;transform:translateY(-18px) scale(.96)}
-@keyframes tin{from{opacity:0;transform:translateY(-26px) scale(.94)}}
+.tot{display:flex;justify-content:space-between;font-weight:800;font-size:1.1em;padding-top:12px}.note{margin-bottom:12px;font-weight:700}.note.bad{color:var(--bad)}.note.ok{color:var(--ok)}
+/* toasts */
+#toasts{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:10px;width:min(440px,calc(100vw - 24px));pointer-events:none}
+.tt{--c:var(--info);pointer-events:auto;position:relative;overflow:hidden;display:grid;grid-template-columns:40px 1fr 30px;gap:12px;align-items:center;padding:11px 10px 14px 11px;border-radius:20px;color:#f6f4ea;background:rgba(27,36,24,.95);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 45px rgba(10,16,8,.35);animation:tin .35s ease;transition:transform .25s,opacity .25s;overflow-wrap:anywhere}
+.tt.out{opacity:0;transform:translateY(-18px)}@keyframes tin{from{opacity:0;transform:translateY(-20px)}}
 .tt.success{--c:#43c06b}.tt.error{--c:#f0664d}.tt.warning{--c:#f2b63a}.tt.info{--c:#5fa8f0}
-.tt .ic{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-weight:900;font-size:1.05rem;color:#14200f;background:var(--c);box-shadow:0 6px 16px color-mix(in srgb,var(--c) 45%,transparent)}
-.tt .tx{min-width:0}.tt b{display:block;font-size:.94em;line-height:1.25}.tt p{font-size:.82em;color:#c9d0bd;margin-top:2px;line-height:1.4;overflow-wrap:anywhere}
-.tt .cl{background:rgba(255,255,255,.08);color:#d3d9c7;width:30px;height:30px;border-radius:50%;font-size:.75rem}.tt .cl:hover{background:rgba(255,255,255,.18);color:#fff}
-.tt::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:3px;border-radius:3px;background:var(--c);opacity:.85;transform-origin:left;animation:tb var(--d) linear forwards}
-.tt:hover::after{animation-play-state:paused}@keyframes tb{to{transform:scaleX(0)}}
-
-/* ---- Responsive ---- */
-@media(max-width:1024px){.lay{grid-template-columns:clamp(180px,24vw,220px) minmax(0,1fr)}}
+.tt .ic{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-weight:900;color:#14200f;background:var(--c)}
+.tt b{display:block;font-size:.94em;line-height:1.25}.tt p{font-size:.82em;color:#c9d0bd;margin-top:2px}.tt .cl{background:rgba(255,255,255,.08);width:30px;height:30px;border-radius:50%;font-size:.75rem}
+.tt::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:3px;border-radius:3px;background:var(--c);opacity:.85;transform-origin:left;animation:tb var(--d) linear forwards}@keyframes tb{to{transform:scaleX(0)}}
+/* responsive */
 @media(max-width:820px){
-  .lay{grid-template-columns:1fr}
-  .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;border:0;border-top:3px solid var(--acc);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));gap:0;box-shadow:0 -8px 30px rgba(0,0,0,.2)}
-  .side .logo,.sidefoot{display:none}
-  .side nav{flex-direction:row;justify-content:space-around;gap:2px}
-  .side nav button{flex:1;flex-direction:column;gap:2px;padding:6px 4px;font-size:.7em;text-align:center;justify-content:center;position:relative;min-width:0;min-height:50px}
-  .cnt{position:absolute;top:2px;right:18%;margin:0}
-  .top .logo{display:flex}.tl{display:none}
-  main{padding-bottom:100px}
-}
+.lay{grid-template-columns:1fr}
+.side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;border:0;border-top:3px solid var(--acc);padding:6px 6px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,.2)}
+.side .logo,.sidefoot{display:none}.side nav{flex-direction:row;justify-content:space-around;gap:2px}
+.side nav button{flex:1;flex-direction:column;gap:2px;padding:6px 4px;font-size:.7em;text-align:center;justify-content:center;position:relative;min-height:50px}
+.cnt{position:absolute;top:2px;right:18%;margin:0}.top .logo{display:flex}.tl{display:none}main{padding-bottom:110px}}
 @media(max-width:640px){
-  .nl.sf,.bs{display:none}.grid2,.meta{grid-template-columns:1fr}
-  .tw{overflow:visible}table{min-width:0}thead{display:none}table,tbody,tr,td{display:block;width:100%}
-  tr{padding:12px 14px;border-top:1px solid var(--line)}tr:first-child{border-top:0}
-  td{border:0;padding:5px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:right}
-  td[data-l]::before{content:attr(data-l);color:var(--mute);font-size:.78em;font-weight:700;text-transform:uppercase;letter-spacing:.04em;text-align:left;flex:none}
-  td.act{justify-content:stretch;padding-top:10px}td.act .btn{flex:1}
-  .th{text-align:left}.r3{grid-template-columns:1fr 1fr}.r3 .x{grid-column:1/-1;width:100%}
-  .mf .btn{flex:1}.md{border-radius:20px}.mh,.mf{padding:12px 16px}.mbd{padding:16px}
-}
-@media(max-width:360px){:root{--fs:14px}.wrap{padding:0 10px}.logo small{display:none}.pb,.pt{padding:12px}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:10px 12px}.btn{padding:10px 12px}.tt{grid-template-columns:34px 1fr 30px;gap:8px}.tt .ic{width:34px;height:34px}}
-@media(max-width:240px){:root{--fs:12px}.logo div,.side nav button{font-size:0}.side nav button::first-letter{font-size:14px}.ph p,.sub,.help,.srv,#retest,.stat span{display:none}.stats{grid-template-columns:1fr}.lc{padding:12px;border-radius:14px}.brand-hero{display:none}.lc h1{font-size:1.1em}.btn{min-height:40px}.tt p{display:none}}
-@media(horizontal-viewport-segments:2){.lay{grid-template-columns:env(viewport-segment-width 0 0) minmax(0,1fr)}}
-@media(max-height:480px) and (orientation:landscape){.lw{align-items:flex-start}.topin{height:50px}}
-@media(min-width:1600px){:root{--fs:clamp(17px,.5vw + 10px,24px)}.wrap{max-width:1720px}}
-@media(min-width:2400px){.wrap{max-width:2200px}}
-@media(pointer:coarse) and (min-width:1280px),(hover:none) and (min-width:1280px){:focus-visible{outline-width:4px;outline-offset:3px}.btn,.chip,.side nav button{min-height:56px}}
-@media(hover:none){.btn:hover,.nl:hover,.side nav button:hover,tbody tr:hover{filter:none;background:revert}.btn.ghost:hover{background:transparent}.side nav button.on:hover{background:var(--acc)}}
+.nl.sf,.bs{display:none}.grid2,.meta{grid-template-columns:1fr}
+.tw{overflow:visible}table{min-width:0}thead{display:none}table,tbody,tr,td{display:block;width:100%}
+tr{padding:12px 14px;border-top:1px solid var(--line)}tr:first-child{border-top:0}
+td{border:0;padding:5px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:right}
+td[data-l]::before{content:attr(data-l);color:var(--mute);font-size:.78em;font-weight:700;text-transform:uppercase;text-align:left;flex:none}
+td.act{padding-top:10px}td.act .btn{flex:1}.th{text-align:left}.r3{grid-template-columns:1fr 1fr}.r3 .x{grid-column:1/-1;width:100%}
+.mf .btn{flex:1}.mh,.mf{padding:12px 16px}.mbd{padding:16px}}
+@media(max-width:360px){:root{--fs:14px}.stats{grid-template-columns:1fr 1fr;gap:8px}.logo small{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition:none!important}}
 @media(forced-colors:active){.btn,.chip,.pill,.tt{border:1px solid CanvasText}}
-@media print{.side,.top,#toasts,.ov{display:none!important}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 </style>
 </head>
 <body>
+<noscript><p style="padding:20px;text-align:center">Please enable JavaScript to use the admin console.</p></noscript>
 
-<div id="login" class="lw"><div class="lc">
-  <div class="logo"><i>🌾</i><div>GOLDEN HARVEST<small>CEREALS &amp; GRAINS</small></div></div>
-  <div class="brand-hero" role="img" aria-label="Golden Harvest Cereals"></div>
+<div id="login" class="lw"><form class="lc" id="lf" novalidate>
+  <div class="logo"><i aria-hidden="true">🌾</i><div>GOLDEN HARVEST<small>CEREALS &amp; GRAINS</small></div></div>
   <h1>Welcome 👋</h1><p class="sub">Sign in to manage products and approve orders.</p>
   <div class="srv wait" id="srv" role="status"><span class="d"></span><span id="srvT">Checking server…</span></div>
-  <button type="button" class="btn ghost sm" id="retest" style="width:auto;margin:0 auto 14px;display:flex">↻ Test connection</button>
+  <button type="button" class="btn ghost sm" id="retest" style="margin:0 auto 14px">↻ Test connection</button>
   <div class="f"><label for="lu">Username</label><input id="lu" autocomplete="username" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="e.g. admin"></div>
   <div class="f"><label for="lp">Password</label><div class="pw"><input id="lp" type="password" autocomplete="current-password" enterkeyhint="go" placeholder="Your password"><button type="button" data-a="pw" aria-label="Show password">👁</button></div><small id="caps" hidden>⚠️ Caps Lock is on</small></div>
-  <button class="btn acc" id="lb">Sign in</button><div class="err" id="le" role="alert"></div>
-  <div class="help" id="fileNote" hidden><b>Heads up:</b> this page was opened as a file from your computer. Some servers block that. Upload it to your website (or any static host) and open it from there.</div>
-  <div class="help"><b>First time here?</b> Use the admin username and password you set in your server settings (<code>ADMIN_USERNAME</code> and <code>ADMIN_PASSWORD</code> on Render). Passwords are case-sensitive.</div>
-  <details id="adv"><summary>Server address</summary><input id="la" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://your-server.onrender.com"><small>Must be exactly the URL shown at the top of your service in Render.</small><br><small id="orig" class="mute"></small></details>
-</div></div>
+  <button class="btn acc full" id="lb" type="submit">Sign in</button><div class="err" id="le" role="alert"></div>
+  <div class="help" id="fileNote" hidden><b>Heads up:</b> this page was opened as a file from your computer. Some servers block that. Upload it to your website and open it from there.</div>
+  <div class="help"><b>First time here?</b> Use the <code>ADMIN_USERNAME</code> and <code>ADMIN_PASSWORD</code> you set on Render. Passwords are case-sensitive.</div>
+  <details id="adv"><summary>Server address</summary><input id="la" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://your-server.onrender.com" aria-label="Server address"><small>Exactly the URL shown at the top of your service in Render.</small><br><small id="orig"></small></details>
+</form></div>
 
-<div id="app" hidden>
-<div class="lay">
+<div id="app" hidden><div class="lay">
 <aside class="side">
-  <div class="logo"><i>🌾</i><div>GOLDEN HARVEST<small>ADMIN CONSOLE</small></div></div>
+  <div class="logo"><i aria-hidden="true">🌾</i><div>GOLDEN HARVEST<small>ADMIN CONSOLE</small></div></div>
   <nav aria-label="Main">
-    <button data-a="nav" data-s="dash" class="on">📊 <span>Dashboard</span></button>
+    <button data-a="nav" data-s="dash" class="on" aria-current="page">📊 <span>Dashboard</span></button>
     <button data-a="nav" data-s="orders">📦 <span>Orders</span> <b class="cnt" id="cnt" hidden>0</b></button>
     <button data-a="nav" data-s="products">🌾 <span>Products</span></button>
     <button data-a="nav" data-s="settings">⚙️ <span>Settings</span></button>
@@ -186,10 +141,10 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 </aside>
 <div class="shell">
 <header class="top"><div class="topin">
-  <div class="logo"><i>🌾</i><div>GOLDEN HARVEST<small>ADMIN</small></div></div>
+  <div class="logo"><i aria-hidden="true">🌾</i><div>GOLDEN HARVEST<small>ADMIN</small></div></div>
   <span class="tl">Admin console</span>
   <div class="nr"><span class="bs" id="bs" role="status"><span class="d"></span><span id="bst">Checking…</span></span>
-  <a class="nl sf" href="cereals.html" target="_blank" rel="noopener" title="Open the customer storefront">🛍️ Storefront</a><button class="nl" data-a="out">Sign out</button></div>
+  <a class="nl sf" id="sf" href="cereals.html" target="_blank" rel="noopener">🛍️ Storefront</a><button class="nl" data-a="out">Sign out</button></div>
 </div></header>
 <main><div class="wrap">
 
@@ -202,18 +157,16 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
     <div class="stat" style="--c:var(--bad)"><b id="st4">–</b><span>Out of stock</span></div>
     <div class="stat" style="--c:var(--bad)"><b id="st5">–</b><span>Payments needing review</span></div>
   </div>
-  <div class="panel warn" id="revPanel" hidden><div class="pt"><h2>⚠️ Payments needing review</h2><p>Something about these payments doesn't add up (for example an underpayment, or money received after the order was cancelled). Check each one in the IntaSend dashboard.</p></div><div id="rev"></div></div>
+  <div class="panel warn" id="revPanel" hidden><div class="pt"><h2>⚠️ Payments needing review</h2><p>Something about these payments does not add up (for example an underpayment, a double payment, or money received after cancellation). Check each one in the IntaSend dashboard, then mark it reviewed.</p></div><div id="rev"></div></div>
   <div class="panel"><div class="pt"><h2>Orders to approve</h2><p>Customers have paid via IntaSend. Confirm to release their goods. New payments appear here automatically.</p></div><div id="dash"></div></div>
 </section>
 
 <section class="sec" id="s-orders">
-  <div class="ph"><div><h1>Orders</h1><p>Check payments and release goods. Delete is only offered for cancelled or failed orders — IntaSend keeps the transaction record.</p></div><button class="btn ghost sm" data-a="refresh">↻ Refresh</button></div>
-  <div class="chips" id="chips">
-    <button class="chip on" data-a="filter" data-f="all">All</button><button class="chip" data-a="filter" data-f="paid">Awaiting approval</button>
-    <button class="chip" data-a="filter" data-f="released">Released</button>
-    <button class="chip" data-a="filter" data-f="pending">Unpaid</button><button class="chip" data-a="filter" data-f="cancelled">Cancelled</button>
-    <button class="chip" data-a="filter" data-f="review">Needs review</button>
-  </div>
+  <div class="ph"><div><h1>Orders</h1><p>Check payments and release goods. Delete is only offered for cancelled or failed orders with no money received.</p></div><button class="btn ghost sm" data-a="refresh">↻ Refresh</button></div>
+  <div class="bar"><div class="chips" id="chips" role="group" aria-label="Filter orders">
+    <button class="chip on" data-a="filter" data-f="all">All</button><button class="chip" data-a="filter" data-f="paid">Awaiting approval</button><button class="chip" data-a="filter" data-f="released">Released</button>
+    <button class="chip" data-a="filter" data-f="pending">Unpaid / failed</button><button class="chip" data-a="filter" data-f="cancelled">Cancelled</button><button class="chip" data-a="filter" data-f="review">Needs review</button></div>
+    <div class="sb"><input id="oq" type="search" placeholder="Search reference, name or phone" aria-label="Search orders" autocomplete="off"></div></div>
   <div class="panel" id="ord"></div>
 </section>
 
@@ -225,10 +178,11 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 <section class="sec" id="s-settings">
   <div class="ph"><div><h1>Settings</h1><p>Server connection and your session.</p></div></div>
   <div class="panel"><div class="pt"><h2>Server address</h2></div><div class="pb">
-    <div class="f"><label for="api">Address of your backend</label><input id="api" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://your-server.onrender.com"><small>The storefront and this page must use the same server. It is saved in this browser.</small></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn acc" data-a="saveApi">Save and test</button></div>
+    <div class="f"><label for="api">Address of your backend</label><input id="api" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://your-server.onrender.com"><small>The storefront and this page must use the same server. Saved in this browser.</small></div>
+    <div class="bar" style="margin:0"><button class="btn acc" data-a="saveApi">Save and test</button><button class="btn ghost" data-a="health">Check server health</button></div>
+    <p class="mute" id="hl" style="margin-top:12px;font-size:.9em" role="status"></p>
   </div></div>
-  <div class="panel"><div class="pt"><h2>Session</h2></div><div class="pb"><p class="mute" style="margin-bottom:12px">Signed in as <b id="who" style="color:var(--ink)"></b>. Orders refresh every 15 seconds.</p><button class="btn bad" data-a="out">Sign out</button></div></div>
+  <div class="panel"><div class="pt"><h2>Session</h2></div><div class="pb"><p class="mute" style="margin-bottom:12px">Signed in as <b id="who" style="color:var(--ink)"></b>. You stay signed in until you close this tab or sign out.</p><button class="btn bad" data-a="out">Sign out</button></div></div>
 </section>
 
 </div></main></div></div></div>
@@ -236,25 +190,25 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
 <div class="ov" id="pm" role="dialog" aria-modal="true" aria-labelledby="pmT"><div class="md">
   <div class="mh"><h2 id="pmT">Add product</h2><button class="x" data-a="close" aria-label="Close">✕</button></div>
   <div class="mbd">
-    <div class="tabs"><button class="on" data-a="tab" data-t="t1">Details</button><button data-a="tab" data-t="t2">Price and stock</button><button data-a="tab" data-t="t3">Options and specs</button></div>
-    <div class="tab on" id="t1"><div class="grid2">
-      <div class="f full"><label for="pN">Product name *</label><input id="pN" placeholder="e.g. Pishori Rice"></div>
-      <div class="f"><label for="pC">Category</label><input id="pC" list="cats" placeholder="e.g. Rice"><datalist id="cats"></datalist></div>
+    <div class="tabs" role="tablist"><button class="on" role="tab" aria-selected="true" data-a="tab" data-t="t1">Details</button><button role="tab" aria-selected="false" data-a="tab" data-t="t2">Price and stock</button><button role="tab" aria-selected="false" data-a="tab" data-t="t3">Options and specs</button></div>
+    <div class="tab on" id="t1" role="tabpanel"><div class="grid2">
+      <div class="f full"><label for="pN">Product name *</label><input id="pN" maxlength="120" placeholder="e.g. Pishori Rice"></div>
+      <div class="f"><label for="pC">Category</label><input id="pC" list="cats" maxlength="60" placeholder="e.g. Rice"><datalist id="cats"></datalist></div>
       <div class="f"><label for="pE">Emoji (shown if no photo)</label><input id="pE" maxlength="4" placeholder="🌾"></div>
-      <div class="f full"><label for="pD">Description</label><textarea id="pD" placeholder="A short description customers will see"></textarea></div>
-      <div class="f full"><label>Photo</label><div class="im"><div class="ip" id="ip" data-a="pick" title="Choose a photo" role="button" tabindex="0">📷</div>
-        <div style="display:grid;gap:8px"><button class="btn ghost sm" data-a="pick">Choose photo</button><button class="btn ghost sm" data-a="noimg">Remove photo</button><small class="mute">Photos are resized automatically.</small></div>
+      <div class="f full"><label for="pD">Description</label><textarea id="pD" maxlength="600" placeholder="A short description customers will see"></textarea></div>
+      <div class="f full"><label>Photo</label><div class="im"><button type="button" class="ip" id="ip" data-a="pick" aria-label="Choose a photo">📷</button>
+        <div style="display:grid;gap:8px"><button type="button" class="btn ghost sm" data-a="pick">Choose photo</button><button type="button" class="btn ghost sm" data-a="noimg">Remove photo</button><small class="mute">Photos are resized automatically.</small></div>
         <input type="file" id="pf" accept="image/*" hidden></div></div>
     </div></div>
-    <div class="tab" id="t2"><div class="grid2">
+    <div class="tab" id="t2" role="tabpanel"><div class="grid2">
       <div class="f"><label for="pP">Price (KSh) *</label><input id="pP" type="number" inputmode="decimal" min="0" step="any" placeholder="0"></div>
-      <div class="f"><label for="pU">Unit *</label><input id="pU" placeholder="e.g. per kg, per 2 kg pack"></div>
+      <div class="f"><label for="pU">Unit *</label><input id="pU" maxlength="60" placeholder="e.g. per kg, per 2 kg pack"></div>
       <div class="f"><label for="pS">Availability</label><select id="pS"><option value="true">In stock</option><option value="false">Out of stock</option></select></div>
     </div></div>
-    <div class="tab" id="t3">
-      <div class="ph" style="margin-bottom:10px"><div><b>Options</b><p>Choices customers pick, like pack size. Price +/− is added to the base price.</p></div><button class="btn ghost sm" data-a="ag">+ Add option</button></div>
+    <div class="tab" id="t3" role="tabpanel">
+      <div class="ph" style="margin-bottom:10px"><div><b>Options</b><p>Choices customers pick, like pack size. The price +/− is added to the base price.</p></div><button type="button" class="btn ghost sm" data-a="ag">+ Add option</button></div>
       <div id="og"></div>
-      <div class="ph" style="margin:16px 0 10px"><div><b>Specifications</b><p>Facts shown on the product page, like origin or grade.</p></div><button class="btn ghost sm" data-a="as">+ Add spec</button></div>
+      <div class="ph" style="margin:16px 0 10px"><div><b>Specifications</b><p>Facts shown on the product page, like origin or grade.</p></div><button type="button" class="btn ghost sm" data-a="as">+ Add spec</button></div>
       <div id="sp"></div>
     </div>
   </div>
@@ -265,222 +219,174 @@ tbody tr{transition:background .12s}tbody tr:hover{background:var(--soft)}
   <div class="mh"><h2 id="omT">Order</h2><button class="x" data-a="close" aria-label="Close">✕</button></div>
   <div class="mbd" id="omB"></div><div class="mf" id="omF"></div>
 </div></div>
+
+<div class="ov" id="cm" role="alertdialog" aria-modal="true" aria-labelledby="cmT" aria-describedby="cmM"><div class="md sm">
+  <div class="mh"><h2 id="cmT">Are you sure?</h2></div><div class="mbd"><p id="cmM"></p></div>
+  <div class="mf"><button class="btn ghost" id="cmN">Go back</button><button class="btn" id="cmY">Confirm</button></div>
+</div></div>
 <div id="toasts" aria-live="polite"></div>
 
 <script>
-const DEFAULT_API="https://cereals-back.onrender.com";
-const TITLE="Admin · Golden Harvest Cereals";
-const REFRESH_MS=15000;
-const store={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
-const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
-/* Cold Render starts can exceed 90 s. TIMEOUT must be GREATER than DIAG_TIMEOUT
-   so a real timeout is diagnosed as a timeout, not as "server down". */
-const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:120000,DIAG_TIMEOUT:90000};
-let auth="",me="",products=[],orders=[],ofilter="all",editing=null,img="",groups=[],specs=[],timer=null,lastAw=0,loading=false;
-let quietFails=0;              /* consecutive silent-refresh failures */
-let lastOrderSnap="";         /* signature of the order currently in the modal */
+'use strict';
+const DEFAULT_API="https://cereals-back.onrender.com", STOREFRONT="cereals.html", TITLE="Admin · Golden Harvest Cereals", REFRESH_MS=15000, PAGE=50;
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const mk=st=>({get:k=>{try{return st.getItem(k)}catch{return null}},set:(k,v)=>{try{st.setItem(k,v)}catch{}},del:k=>{try{st.removeItem(k)}catch{}}});
+const store=mk(localStorage),ses=mk(sessionStorage);
+const normApi=v=>{v=String(v||"").trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v="https://"+v;try{return new URL(v).origin}catch{return""}};
+const b64=s=>{let r="";new TextEncoder().encode(s).forEach(x=>r+=String.fromCharCode(x));return btoa(r)};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const KSH=n=>"KSh "+Math.round(Number(n)||0).toLocaleString("en-KE");
+const KSH=n=>{n=Number(n)||0;return"KSh "+n.toLocaleString("en-KE",{minimumFractionDigits:Number.isInteger(n)?0:2,maximumFractionDigits:2})};
 const when=i=>{try{return new Date(i).toLocaleString("en-KE",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}catch{return i}};
-const orderSig=o=>o?[o.id,o.paymentStatus,o.adminConfirmed,o.needsReview,o.paidAt,o.confirmedAt].join("|"):"";
-/* Data-URL or https URL only — matches the server's cleanProduct(). */
 const isImageOk=s=>!s||/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(s)||/^https:\/\/\S+$/i.test(s);
+const CFG={API:normApi(store.get("mca_api")||DEFAULT_API),TIMEOUT:120000,DIAG_TIMEOUT:90000};
+let auth="",products=[],orders=[],ofilter="all",oq="",olimit=PAGE,editing=null,img="",groups=[],specs=[],timer=null,lastAw=0,inflight=null,quietFails=0,lastSnap="",lock=false,saving=false;
 
+/* ---------- toasts ---------- */
 const ICONS={success:"✓",error:"✕",warning:"!",info:"i"};
 function toast(type,title,msg,ms=type==="error"?7000:4000){
   const b=$("#toasts");while(b.children.length>=3)b.firstChild.remove();
   const d=document.createElement("div");d.className="tt "+type;d.setAttribute("role",type==="error"?"alert":"status");d.style.setProperty("--d",ms+"ms");
-  d.innerHTML=`<span class="ic" aria-hidden="true">${ICONS[type]||"i"}</span><div class="tx"><b>${esc(title)}</b>${msg?`<p>${esc(msg)}</p>`:""}</div><button class="cl" aria-label="Dismiss">✕</button>`;
+  d.innerHTML=`<span class="ic" aria-hidden="true">${ICONS[type]||"i"}</span><div><b>${esc(title)}</b>${msg?`<p>${esc(msg)}</p>`:""}</div><button class="cl" aria-label="Dismiss">✕</button>`;
   const kill=()=>{if(d.dataset.k)return;d.dataset.k=1;d.classList.add("out");setTimeout(()=>d.remove(),260)};
-  d.querySelector(".cl").onclick=kill;
-  let t=setTimeout(kill,ms),sy=null;
+  d.querySelector(".cl").onclick=kill;let t=setTimeout(kill,ms);
   d.onmouseenter=()=>clearTimeout(t);d.onmouseleave=()=>{t=setTimeout(kill,1500)};
-  d.addEventListener("touchstart",e=>{sy=[e.touches[0].clientX,e.touches[0].clientY];clearTimeout(t)},{passive:true});
-  d.addEventListener("touchend",e=>{if(!sy)return;const dx=e.changedTouches[0].clientX-sy[0],dy=e.changedTouches[0].clientY-sy[1];if(Math.abs(dx)>60||dy<-30)kill();else t=setTimeout(kill,1500)});
   b.appendChild(d);
 }
-function setStatus(ok,t){const e=$("#bs");e.className="bs "+(ok?"ok":"bad");$("#bst").textContent=t||(ok?"Connected":"Disconnected")}
+function setStatus(ok,t){$("#bs").className="bs "+(ok?"ok":"bad");$("#bst").textContent=t||(ok?"Connected":"Disconnected")}
 
-/* ---------- connection diagnosis ---------- */
+/* ---------- overlays: focus management, trap, restore ---------- */
+const openers=new Map();let cmDone=null;
+function openOv(ov){openers.set(ov.id,document.activeElement);ov.classList.add("open");setTimeout(()=>{const f=ov.querySelector("input:not([hidden]),textarea,select")||ov.querySelector("button");f&&f.focus()},30)}
+function closeOv(ov){if(!ov||!ov.classList.contains("open"))return;ov.classList.remove("open");if(ov.id==="om"){delete ov.dataset.id;lastSnap=""}
+  if(ov.id==="cm"&&cmDone){const d=cmDone;cmDone=null;d(false)}
+  const o=openers.get(ov.id);openers.delete(ov.id);if(o&&o.isConnected&&o.focus)o.focus()}
+const topOv=()=>[...$$(".ov.open")].pop();
+function ask(title,msg,okLabel,danger){
+  return new Promise(res=>{cmDone=res;$("#cmT").textContent=title;$("#cmM").textContent=msg;
+    const y=$("#cmY");y.textContent=okLabel||"Confirm";y.className="btn "+(danger?"bad":"ok");openOv($("#cm"));$("#cmN").focus()})}
+function answer(v){const d=cmDone;cmDone=null;closeOv($("#cm"));d&&d(v)}
+
+/* ---------- connection ---------- */
 async function diagnose(){
-  const base=CFG.API;
-  const pageOrigin=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
+  const base=CFG.API,po=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
   try{
     const r=await fetch(base+"/health",{cache:"no-store",signal:AbortSignal.timeout(CFG.DIAG_TIMEOUT)});
     if(!r.ok)return{kind:"down",msg:`The server replied with an error (${r.status}). It may still be starting. Check the Logs tab on Render.`};
     const h=await r.json().catch(()=>({}));
-    if(h.originAllowed===false){
-      const list=h.allowedOrigins==="ANY"?null:(Array.isArray(h.allowedOrigins)?h.allowedOrigins.join(", "):h.allowedOrigins);
-      return{kind:"cors",msg:`The server is running but blocks this website (${pageOrigin}). On Render, set ALLOWED_ORIGINS to include "${pageOrigin}" (or leave it empty), then redeploy.`+(list?`  Currently allowed: ${list}`:"")};
-    }
+    if(h.originAllowed===false){const l=h.allowedOrigins==="ANY"?null:[].concat(h.allowedOrigins||[]).join(", ");
+      return{kind:"cors",msg:`The server blocks this website (${po}). On Render, set ALLOWED_ORIGINS to include "${po}" (or leave it empty), then redeploy.`+(l?` Currently allowed: ${l}`:"")}}
     if(h.db===false)return{kind:"db",msg:"The server is running but is not connected to MongoDB. Check MONGODB_URI and Atlas Network Access in the Render logs."};
-    if(h.intasend===false)return{kind:"down",msg:"The server is running but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY, INTASEND_SECRET_KEY, INTASEND_WEBHOOK_CHALLENGE and PUBLIC_URL on Render."};
-    return{kind:"ok",msg:"Server ready",h};
-  }catch(e){
-    try{
-      await fetch(base+"/health",{mode:"no-cors",cache:"no-store",signal:AbortSignal.timeout(25000)});
-      return{kind:"cors",msg:`The server is reachable but is blocking this website (${pageOrigin}). Make sure server.js is the latest version, and that ALLOWED_ORIGINS includes "${pageOrigin}" (or is empty).`};
-    }catch{
-      return{kind:"down",msg:`Can't reach ${base}. Check this is exactly your Render URL (open ${base}/health in a new tab to test). Free servers can take up to a minute to wake up.`};
-    }
-  }
+    if(h.adminConfigured===false)return{kind:"down",msg:"Admin login is disabled on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD on Render, then redeploy."};
+    if(h.intasend===false)return{kind:"warn",msg:"The server is up, but IntaSend is not configured. Check INTASEND_PUBLISHABLE_KEY, INTASEND_SECRET_KEY, INTASEND_WEBHOOK_CHALLENGE and PUBLIC_URL on Render. You can still sign in.",h};
+    return{kind:"ok",msg:"Server ready"+(h.sandbox?" (IntaSend sandbox mode)":""),h};
+  }catch{
+    try{await fetch(base+"/health",{mode:"no-cors",cache:"no-store",signal:AbortSignal.timeout(25000)});
+      return{kind:"cors",msg:`The server is reachable but blocks this website (${po}). Make sure the latest server.js is deployed and ALLOWED_ORIGINS includes "${po}" (or is empty).`}}
+    catch{return{kind:"down",msg:`Can't reach ${base}. Open ${base}/health in a new tab to test. Free servers can take up to a minute to wake up.`}}}
 }
-
 async function api(p,o={},n=0){
   if(!CFG.API){setStatus(false,"No server");throw new Error("Server address not set. Open Settings to add it.")}
-  const isGet=(o.method||"GET").toUpperCase()==="GET";
-  const c=new AbortController(),t=setTimeout(()=>c.abort(),CFG.TIMEOUT);
+  const isGet=(o.method||"GET").toUpperCase()==="GET",c=new AbortController(),t=setTimeout(()=>c.abort(),CFG.TIMEOUT);
   try{
     const r=await fetch(CFG.API+p,{...o,signal:c.signal,headers:{"Content-Type":"application/json",...(auth?{Authorization:auth}:{})}});
-    /* single retry path: only GETs, only on gateway/wake-up codes */
     if(isGet&&[502,503,504].includes(r.status)&&n<3){setStatus(false,"Waking up…");await sleep(4000);return api(p,o,n+1)}
     let d=null;try{d=await r.json()}catch{}
-    if(!r.ok&&!d&&r.status>=500)throw Object.assign(new Error("The server had a problem ("+r.status+"). Check the Logs tab on Render."),{http:1});
+    if(!r.ok&&!d&&r.status>=500)throw Object.assign(new Error(`The server had a problem (${r.status}). Check the Logs tab on Render.`),{http:1});
     setStatus(true);
     if(r.status===401)throw Object.assign(new Error("Wrong username or password."),{auth:1});
-    /* 503 with "Admin login is not configured" means ADMIN_USERNAME / ADMIN_PASSWORD are missing on the server. */
-    if(r.status===503&&/admin login is not configured/i.test(d?.error||"")){
-      throw Object.assign(new Error("Admin login is disabled on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD in Render, then redeploy."),{http:1,config:1});
-    }
-    if(!r.ok)throw Object.assign(new Error(d?.error||d?.message||"Request failed ("+r.status+")"),{http:1});
+    if(r.status===503&&/admin login is not configured/i.test(d?.error||""))throw Object.assign(new Error("Admin login is disabled on the server. Set ADMIN_USERNAME and ADMIN_PASSWORD on Render, then redeploy."),{http:1,config:1});
+    if(!r.ok)throw Object.assign(new Error(d?.error||d?.message||`Request failed (${r.status})`),{http:1});
     return d;
   }catch(e){
     if(e.auth||e.http)throw e;
-    if(e.name==="AbortError"||e instanceof TypeError){
-      setStatus(false,"Checking…");
-      const g=await diagnose();
-      /* do NOT retry again here — api() already retried above. Diagnose only informs. */
-      setStatus(false,g.kind==="cors"?"Blocked":"Offline");
-      throw new Error(g.msg);
-    }
+    if(e.name==="AbortError"||e instanceof TypeError){setStatus(false,"Checking…");const g=await diagnose();setStatus(false,g.kind==="cors"?"Blocked":"Offline");throw new Error(g.msg)}
     setStatus(false,"Error");throw e;
   }finally{clearTimeout(t)}
 }
 
-/* ---------- sign in ---------- */
+/* ---------- sign in / out ---------- */
 async function ping(){
-  const b=$("#srv"),t=$("#srvT");
-  const pageOrigin=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
-  $("#orig").textContent="This website's address: "+pageOrigin+"  ·  Server: "+(CFG.API||"not set");
+  const b=$("#srv"),t=$("#srvT"),po=location.origin&&location.origin!=="null"?location.origin:"null (file://)";
+  $("#orig").textContent=`This website: ${po} · Server: ${CFG.API||"not set"}`;
   if(!CFG.API){b.className="srv";t.textContent="No server address set. Open “Server address” below.";$("#adv").open=true;return}
-  b.className="srv wait";t.textContent="Contacting the server… (can take up to a minute if it was asleep)";
-  const g=await diagnose();
-  b.className="srv"+(g.kind==="ok"?" ok":"");t.textContent=g.msg;
-  if(g.kind!=="ok")$("#adv").open=true;
+  b.className="srv wait";t.textContent="Contacting the server… (up to a minute if it was asleep)";
+  const g=await diagnose();b.className="srv"+(g.kind==="ok"?" ok":"");t.textContent=g.msg;
+  if(g.kind!=="ok"&&g.kind!=="warn")$("#adv").open=true;
 }
-function setApi(v){
-  v=normApi(v);if(!v||v===CFG.API)return false;
-  CFG.API=v;store.set("mca_api",v);$("#la").value=v;$("#api").value=v;return true;
-}
-async function login(){
-  const u=$("#lu").value.trim(),pw=$("#lp").value,e=$("#le"),b=$("#lb");
-  e.style.color="";e.textContent="";
+function setApi(v){v=normApi(v);if(!v||v===CFG.API)return false;CFG.API=v;store.set("mca_api",v);$("#la").value=v;$("#api").value=v;return true}
+function showApp(u){$("#who").textContent=u;$("#login").hidden=true;$("#app").hidden=false;clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&auth)loadAll(true)},REFRESH_MS)}
+async function login(ev){
+  ev.preventDefault();
+  const u=$("#lu").value.trim(),pw=$("#lp").value,e=$("#le"),b=$("#lb");e.style.color="";e.textContent="";
   if(!u){e.textContent="Please enter your username.";$("#lu").focus();return}
   if(!pw){e.textContent="Please enter your password.";$("#lp").focus();return}
   const typed=$("#la").value.trim();
   if(typed&&!normApi(typed)){e.textContent="That server address doesn't look right. It should look like https://your-server.onrender.com";$("#adv").open=true;return}
-  /* no fire-and-forget ping() here: login already validates the server via /api/admin/orders */
   setApi(typed);
   if(!CFG.API){e.textContent="Please enter your server address under “Server address”.";$("#adv").open=true;return}
   b.disabled=true;b.textContent="Signing in…";
   const slow=setTimeout(()=>{e.style.color="var(--mute)";e.textContent="The server is waking up. This can take up to a minute the first time. Please wait…"},4000);
-  auth="Basic "+btoa(unescape(encodeURIComponent(u+":"+pw)));
+  auth="Basic "+b64(u+":"+pw);
   try{await api("/api/admin/orders?status=all")}
-  catch(x){
-    auth="";
-    e.style.color="";
-    if(x.auth)e.textContent="That username or password isn't right. Check for typos (passwords are case-sensitive) and try again.";
-    else if(x.config)e.textContent=x.message;
-    else e.textContent=x.message;
-    if(!x.auth&&!x.config)ping();
-    return;
-  }
+  catch(x){auth="";e.style.color="";e.textContent=x.auth?"That username or password isn't right. Check for typos (passwords are case-sensitive) and try again.":x.message;if(!x.auth&&!x.config)ping();return}
   finally{clearTimeout(slow);b.disabled=false;b.textContent="Sign in"}
-  me=u;store.set("gh_user",u);$("#lp").value="";$("#who").textContent=u;
-  $("#login").hidden=true;$("#app").hidden=false;
-  toast("success","Signed in","Welcome, "+u+".");
-  await loadAll();
-  if(!products.length)toast("info","Let's get started","Open Products and choose “+ Add product” to add your first cereal.",9000);
-  clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&auth)loadAll(true)},REFRESH_MS);
+  store.set("gh_user",u);ses.set("gh_auth",auth);ses.set("gh_me",u);$("#lp").value="";
+  showApp(u);toast("success","Signed in","Welcome, "+u+".");
+  await loadAll();if(!products.length)toast("info","Let's get started","Open Products and choose “+ Add product” to add your first cereal.",9000);
 }
 function logout(msg){
-  auth="";me="";clearInterval(timer);products=[];orders=[];lastAw=0;ofilter="all";quietFails=0;lastOrderSnap="";
-  document.title=TITLE;
-  $("#app").hidden=true;$("#login").hidden=false;$$(".ov").forEach(o=>o.classList.remove("open"));
-  const e=$("#le");e.style.color="";e.textContent=msg||"";$("#lp").focus();
+  auth="";clearInterval(timer);products=[];orders=[];lastAw=0;ofilter="all";oq="";olimit=PAGE;quietFails=0;lastSnap="";ses.del("gh_auth");ses.del("gh_me");document.title=TITLE;
+  $$(".ov.open").forEach(o=>o.classList.remove("open"));cmDone=null;$("#app").hidden=true;$("#login").hidden=false;
+  const e=$("#le");e.style.color="";e.textContent=msg||"";$("#lp").focus();ping();
 }
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&auth)loadAll(true)});
 
 /* ---------- data ---------- */
-async function loadAll(quiet){
-  if(loading)return false;
-  loading=true;
-  try{
-    const [p,o]=await Promise.all([api("/api/admin/products"),api("/api/admin/orders?status=all")]);
-    products=p.products||[];orders=o.orders||[];quietFails=0;
-    const aw=orders.filter(awaiting).length;
-    if(quiet&&aw>lastAw)toast("info","New payment",(aw-lastAw>1?(aw-lastAw)+" payments are":"A payment is")+" waiting for your approval.");
-    lastAw=aw;render();
-    /* keep an open order window in step — but only redraw if something actually changed */
-    const ov=$("#om");
-    if(ov.classList.contains("open")&&ov.dataset.id){
-      const fresh=orders.find(x=>x.id===ov.dataset.id);
-      if(!fresh){closeOv(ov);return true}
-      const sig=orderSig(fresh);
-      if(sig!==lastOrderSnap){lastOrderSnap=sig;openOrder(fresh.id,true)}
-    }
-    return true;
-  }catch(e){
-    if(e.auth){
-      toast("error","Session ended","Please sign in again.");
-      logout("Your session ended. Please sign in again.");
-    }else if(!quiet){
-      toast("error","Couldn't refresh",e.message);
-    }else{
-      /* silent refresh: after 2 consecutive failures, speak up once */
-      quietFails++;
-      if(quietFails===2)toast("error","Background refresh failing",e.message+ " Orders shown may be out of date.");
-    }
-    return false;
-  }finally{loading=false}
-}
 const awaiting=o=>o.paymentStatus==="paid"&&!o.adminConfirmed;
 const canCancel=o=>!o.adminConfirmed&&o.paymentStatus!=="cancelled";
-/* only cancelled/failed rows may be deleted; paid-but-unreleased must go through Cancel */
-const canDelete=o=>!o.adminConfirmed&&(o.paymentStatus==="cancelled"||o.paymentStatus==="failed");
+const canDelete=o=>!o.adminConfirmed&&(o.paymentStatus==="cancelled"||o.paymentStatus==="failed")&&!o.needsReview&&!o.paidAt;
 const FIL={all:()=>true,paid:awaiting,released:o=>o.adminConfirmed,pending:o=>o.paymentStatus==="pending"||o.paymentStatus==="failed",cancelled:o=>o.paymentStatus==="cancelled",review:o=>o.needsReview};
+const orderSig=o=>o?[o.id,o.paymentStatus,o.adminConfirmed,o.needsReview,o.paidAt,o.confirmedAt].join("|"):"";
+function loadAll(quiet){
+  if(inflight)return inflight;
+  inflight=(async()=>{
+    try{
+      const [p,o]=await Promise.all([api("/api/admin/products"),api("/api/admin/orders?status=all")]);
+      products=p.products||[];orders=o.orders||[];quietFails=0;
+      const aw=orders.filter(awaiting).length;
+      if(quiet&&aw>lastAw)toast("info","New payment",(aw-lastAw>1?(aw-lastAw)+" payments are":"A payment is")+" waiting for your approval.");
+      lastAw=aw;render();
+      const ov=$("#om");
+      if(ov.classList.contains("open")&&ov.dataset.id){const f=orders.find(x=>x.id===ov.dataset.id);
+        if(!f){closeOv(ov)}else if(orderSig(f)!==lastSnap)openOrder(f.id,true)}
+      return true;
+    }catch(e){
+      if(e.auth){toast("error","Session ended","Please sign in again.");logout("Your session ended. Please sign in again.")}
+      else if(!quiet)toast("error","Couldn't refresh",e.message);
+      else if(++quietFails===2)toast("error","Background refresh failing",e.message+" Orders shown may be out of date.");
+      return false;
+    }finally{inflight=null}
+  })();
+  return inflight;
+}
 const table=(h,r)=>`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${r.join("")}</tbody></table></div>`;
 const cust=o=>`${esc(o.customer?.name)}<br><small class="mute">+${esc(o.customer?.phone)}</small>`;
-function labelize(root){
-  root.querySelectorAll("table").forEach(t=>{
-    const h=[...t.querySelectorAll("th")].map(x=>x.textContent.trim());
-    t.querySelectorAll("tbody tr").forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.dataset.l=h[i]}));
-  });
-}
+const labelize=root=>root.querySelectorAll("table").forEach(t=>{const h=[...t.querySelectorAll("th")].map(x=>x.textContent.trim());t.querySelectorAll("tbody tr").forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.dataset.l=h[i]}))});
 
 function render(){
   const aw=orders.filter(awaiting),rv=orders.filter(o=>o.needsReview);
-  $("#st1").textContent=aw.length;$("#st2").textContent=orders.filter(o=>o.adminConfirmed).length;
-  $("#st3").textContent=products.length;$("#st4").textContent=products.filter(p=>!p.inStock).length;$("#st5").textContent=rv.length;
-  const c=$("#cnt");c.hidden=!aw.length;c.textContent=aw.length;
-  document.title=(aw.length?`(${aw.length}) `:"")+TITLE;
-
+  $("#st1").textContent=aw.length;$("#st2").textContent=orders.filter(o=>o.adminConfirmed).length;$("#st3").textContent=products.length;$("#st4").textContent=products.filter(p=>!p.inStock).length;$("#st5").textContent=rv.length;
+  const c=$("#cnt");c.hidden=!aw.length;c.textContent=aw.length;document.title=(aw.length?`(${aw.length}) `:"")+TITLE;
   $("#revPanel").hidden=!rv.length;
-  $("#rev").innerHTML=rv.length?table(["Reference","Customer","Total","Problem",""],rv.map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td>${esc(o.reviewNote||"Check this payment in the IntaSend dashboard.")}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button></td></tr>`)):"";
-
+  $("#rev").innerHTML=rv.length?table(["Reference","Customer","Total","Problem",""],rv.map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td>${esc(o.reviewNote||"Check this payment in the IntaSend dashboard.")}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button><button class="btn ok sm" data-a="resolve" data-id="${esc(o.id)}">Mark reviewed</button></td></tr>`)):"";
   $("#dash").innerHTML=aw.length?table(["Reference","Customer","Total",""],aw.slice(0,8).map(o=>`<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.paidAt||o.createdAt)}</small></td><td>${cust(o)}</td><td><b>${KSH(o.total)}</b></td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button><button class="btn ok sm" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button></td></tr>`))+(aw.length>8?`<div class="more">Showing 8 of ${aw.length}. See the rest under Orders → Awaiting approval.</div>`:""):'<div class="empty">✅<br>No payments are waiting for approval.</div>';
-
-  const l=orders.filter(FIL[ofilter]||FIL.all);
+  const q=oq.toLowerCase(),all=orders.filter(FIL[ofilter]||FIL.all).filter(o=>!q||[o.reference,o.customer?.name,o.customer?.phone,o.intasendReceipt].some(v=>String(v||"").toLowerCase().includes(q))),l=all.slice(0,olimit);
   $("#ord").innerHTML=l.length?table(["Reference","Customer","Items","Total","Payment","Approval",""],l.map(o=>{
-    const n=(o.items||[]).reduce((s,i)=>s+(i.quantity||0),0);
-    const ap=o.adminConfirmed?'<span class="pill ok">Released</span>':awaiting(o)?'<span class="pill wait">Awaiting approval</span>':"–";
-    const rvp=o.needsReview?' <span class="pill review">Review</span>':"";
+    const n=(o.items||[]).reduce((s,i)=>s+(i.quantity||0),0),ap=o.adminConfirmed?'<span class="pill ok">Released</span>':awaiting(o)?'<span class="pill wait">Awaiting approval</span>':"–";
     const del=canDelete(o)?`<button class="btn bad sm" data-a="delo" data-id="${esc(o.id)}" aria-label="Delete order ${esc(o.reference)}">Delete</button>`:"";
-    return `<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td>${n}</td><td><b>${KSH(o.total)}</b></td><td><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span>${rvp}</td><td>${ap}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button>${del}</td></tr>`}))
-    :`<div class="empty">📦<br>${orders.length?"No orders match this filter.":"No orders yet. They will appear here when customers check out."}</div>`;
-
+    return `<tr><td><b>${esc(o.reference)}</b><br><small class="mute">${when(o.createdAt)}</small></td><td>${cust(o)}</td><td>${n}</td><td><b>${KSH(o.total)}</b></td><td><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span>${o.needsReview?' <span class="pill review">Review</span>':""}</td><td>${ap}</td><td class="act"><button class="btn ghost sm" data-a="view" data-id="${esc(o.id)}">View</button>${del}</td></tr>`}))
+    +(all.length>l.length?`<div class="more"><span>Showing ${l.length} of ${all.length}</span><button class="btn ghost sm" data-a="more">Show more</button></div>`:"")
+    :`<div class="empty">📦<br>${orders.length?"No orders match your filter or search.":"No orders yet. They will appear here when customers check out."}</div>`;
   $("#prod").innerHTML=products.length?table(["Product","Category","Price","Stock",""],products.map(p=>`<tr><td><div class="th"><span>${p.image?`<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.remove()">`:esc(p.emoji||"🌾")}</span><div><b>${esc(p.name)}</b><br><small class="mute">${esc(p.unit)}</small></div></div></td><td>${esc(p.category)}</td><td><b>${KSH(p.price)}</b></td><td><span class="pill ${p.inStock?"ok":"out"}">${p.inStock?"In stock":"Out of stock"}</span></td><td class="act"><button class="btn ghost sm" data-a="edit" data-id="${esc(p.id)}">Edit</button><button class="btn bad sm" data-a="del" data-id="${esc(p.id)}">Delete</button></td></tr>`))
     :'<div class="empty">🌾<br>No products yet. Choose “+ Add product” to add your first one.</div>';
   $("#cats").innerHTML=[...new Set(products.map(p=>p.category))].map(c=>`<option value="${esc(c)}">`).join("");
@@ -488,167 +394,155 @@ function render(){
 }
 
 /* ---------- orders ---------- */
+const guard=async fn=>{if(lock)return;lock=true;try{await fn()}finally{lock=false}};
+const post=(id,a,m="POST")=>api(`/api/admin/orders/${encodeURIComponent(id)}${a}`,{method:m});
 function openOrder(id,refresh){
   const o=orders.find(x=>x.id===id);
-  if(!o){if(refresh){const ov=$("#om");ov.classList.remove("open");delete ov.dataset.id;lastOrderSnap=""}return}
-  const payRef=o.intasendReceipt||o.providerRef||o.mpesaReceipt||"Not yet received";
-  $("#om").dataset.id=id;
-  $("#omT").textContent="Order "+o.reference;
+  if(!o){if(refresh)closeOv($("#om"));return}
+  const ref=o.intasendReceipt||o.providerRef||o.mpesaReceipt||"Not yet received";
+  $("#om").dataset.id=id;$("#omT").textContent="Order "+o.reference;
   $("#omB").innerHTML=`<div class="meta"><div><small>Customer</small><b>${esc(o.customer?.name)}</b></div><div><small>Phone</small><b>+${esc(o.customer?.phone)}</b></div>
   <div><small>Deliver to</small><b>${esc(o.customer?.location)}</b></div><div><small>Placed</small><b>${when(o.createdAt)}</b></div>
   <div><small>Payment</small><span class="pill ${esc(o.paymentStatus)}">${esc(o.paymentStatus)}</span></div><div><small>Paid at</small><b>${o.paidAt?when(o.paidAt):"–"}</b></div>
-  <div><small>IntaSend / M-Pesa ref</small><b>${esc(payRef)}</b></div><div><small>Released</small><b>${o.adminConfirmed?when(o.confirmedAt):"–"}</b></div></div>
+  <div><small>IntaSend / M-Pesa ref</small><b>${esc(ref)}</b></div><div><small>Released</small><b>${o.adminConfirmed?when(o.confirmedAt):"–"}</b></div></div>
   ${o.needsReview?`<p class="note bad">⚠️ Needs review: ${esc(o.reviewNote||"check this payment in the IntaSend dashboard")}</p>`:""}
   ${o.paymentStatus==="failed"&&o.paymentMessage?`<p class="note bad">Last payment attempt failed: ${esc(o.paymentMessage)}</p>`:""}
   ${table(["Item","Qty","Unit price","Line total"],(o.items||[]).map(i=>`<tr><td>${esc(i.name)}${i.options&&Object.keys(i.options).length?`<br><small class="mute">${esc(Object.values(i.options).join(", "))}</small>`:""}${i.note?`<br><small class="mute">📝 ${esc(i.note)}</small>`:""}</td><td>${i.quantity}</td><td>${KSH(i.unitPrice)}</td><td><b>${KSH(i.lineTotal)}</b></td></tr>`))}
   <div class="tot"><span>Total</span><span>${KSH(o.total)}</span></div>
   ${o.adminConfirmed?'<p class="note ok" style="margin-top:12px">✓ Released. The customer has been told their order is confirmed.</p>':""}`;
   labelize($("#omB"));
-  const del=canDelete(o)?`<button class="btn bad" data-a="delo" data-id="${esc(o.id)}">Delete order</button>`:"";
-  const cancel=canCancel(o)?`<button class="btn bad" data-a="reject" data-id="${esc(o.id)}">Cancel order</button>`:"";
-  const main=awaiting(o)?`<button class="btn ok" data-a="confirm" data-id="${esc(o.id)}">Confirm and release</button>`:`<button class="btn ghost" data-a="close">Close</button>`;
-  $("#omF").innerHTML=del+cancel+main;
-  $("#om").classList.add("open");
-  lastOrderSnap=orderSig(o);
+  const b=(c,a,t)=>`<button class="btn ${c}" data-a="${a}" data-id="${esc(id)}">${t}</button>`;
+  $("#omF").innerHTML=(canDelete(o)?b("bad","delo","Delete order"):"")+(canCancel(o)?b("bad","reject","Cancel order"):"")+(o.needsReview?b("ghost","resolve","Mark reviewed"):"")+(awaiting(o)?b("ok","confirm","Confirm and release"):'<button class="btn ghost" data-a="close">Close</button>');
+  lastSnap=orderSig(o);if(!$("#om").classList.contains("open"))openOv($("#om"));
 }
-async function confirmOrder(id){
-  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/confirm`,{method:"POST"});toast("success","Order released","The customer's order is now confirmed.");await loadAll(true);if($("#om").classList.contains("open"))openOrder(id)}
-  catch(e){toast("error","Couldn't release order",e.message);loadAll(true)}
-}
-async function rejectOrder(id){
+const confirmOrder=id=>guard(async()=>{
   const o=orders.find(x=>x.id===id);if(!o)return;
-  const msg=o.paymentStatus==="paid"
-    ?`Cancel ${o.reference}? The customer has already paid, so you will need to refund them in the IntaSend dashboard yourself.`
-    :`Cancel ${o.reference}? The customer will no longer be able to pay for it.`;
-  if(!confirm(msg))return;
-  try{await api(`/api/admin/orders/${encodeURIComponent(id)}/reject`,{method:"POST"});toast("warning","Order cancelled",o.reference);closeOv($("#om"));await loadAll(true)}
-  catch(e){toast("error","Couldn't cancel order",e.message);loadAll(true)}
-}
-async function deleteOrder(id){
-  const o=orders.find(x=>x.id===id);
-  if(!o)return;
-  if(!canDelete(o))return toast("warning","Can't delete this order","Only cancelled or failed orders can be deleted. Use Cancel for paid-but-unreleased orders.");
-  if(!confirm(`Delete ${o.reference}? This removes the order from your list permanently.\n\nIntaSend still keeps any transaction record.`))return;
-  try{
-    await api(`/api/admin/orders/${encodeURIComponent(id)}`,{method:"DELETE"});
-    toast("success","Order deleted",o.reference);
-    if($("#om").classList.contains("open"))closeOv($("#om"));
-    await loadAll(true);
-  }catch(e){toast("error","Couldn't delete order",e.message);loadAll(true)}
-}
+  if(!await ask("Release this order?",`${o.reference} · ${KSH(o.total)}\n${o.customer?.name}, +${o.customer?.phone}\n\n`+(o.needsReview?`⚠️ Flagged for review: ${o.reviewNote||"check IntaSend"}\n\nRelease anyway?`:"Only release goods once you have checked the payment."),"Confirm and release"))return;
+  try{await post(id,"/confirm");toast("success","Order released","The customer's order is now confirmed.");await loadAll(true)}
+  catch(e){toast("error","Couldn't release order",e.message);loadAll(true)}});
+const rejectOrder=id=>guard(async()=>{
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  if(!await ask("Cancel this order?",o.paymentStatus==="paid"?`${o.reference}: the customer has already paid, so you must refund them in the IntaSend dashboard yourself.`:`${o.reference}: the customer will no longer be able to pay for it.`,"Cancel order",true))return;
+  try{await post(id,"/reject");toast("warning","Order cancelled",o.reference);closeOv($("#om"));await loadAll(true)}
+  catch(e){toast("error","Couldn't cancel order",e.message);loadAll(true)}});
+const deleteOrder=id=>guard(async()=>{
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  if(!canDelete(o))return toast("warning","Can't delete this order","Only cancelled or failed orders with no money received can be deleted.");
+  if(!await ask("Delete this order?",`${o.reference} will be removed from your list permanently. IntaSend still keeps any transaction record.`,"Delete",true))return;
+  try{await post(id,"","DELETE");toast("success","Order deleted",o.reference);closeOv($("#om"));await loadAll(true)}
+  catch(e){toast("error","Couldn't delete order",e.message);loadAll(true)}});
+const resolveOrder=id=>guard(async()=>{
+  const o=orders.find(x=>x.id===id);if(!o)return;
+  if(!await ask("Mark as reviewed?",`${o.reference}: only do this after you have checked the payment in the IntaSend dashboard and refunded anything that needed it.`,"Mark reviewed"))return;
+  try{await post(id,"/resolve-review");toast("success","Marked as reviewed",o.reference);await loadAll(true)}
+  catch(e){toast("error","Couldn't update order",e.message)}});
 
 /* ---------- products ---------- */
 function setImg(s){img=s;$("#ip").innerHTML=s?`<img src="${esc(s)}" alt="">`:"📷"}
+function tab(t){$$(".tabs button").forEach(b=>{const on=b.dataset.t===t;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});$$(".tab").forEach(e=>e.classList.toggle("on",e.id===t))}
 function openProduct(id){
   editing=id?products.find(p=>p.id===id):null;
   groups=JSON.parse(JSON.stringify(editing?.options||[]));specs=JSON.parse(JSON.stringify(editing?.specs||[]));
   $("#pmT").textContent=editing?"Edit product":"Add product";
-  $("#pN").value=editing?.name||"";$("#pC").value=editing?.category||"";$("#pE").value=editing?.emoji||"";
-  $("#pD").value=editing?.description||"";$("#pP").value=editing?.price??"";$("#pU").value=editing?.unit||"";
-  $("#pS").value=String(editing?.inStock??true);setImg(editing?.image||"");
-  drawGroups();drawSpecs();tab("t1");$("#pm").classList.add("open");$("#pN").focus();
+  $("#pN").value=editing?.name||"";$("#pC").value=editing?.category||"";$("#pE").value=editing?.emoji||"";$("#pD").value=editing?.description||"";
+  $("#pP").value=editing?.price??"";$("#pU").value=editing?.unit||"";$("#pS").value=String(editing?.inStock??true);setImg(editing?.image||"");
+  drawGroups();drawSpecs();tab("t1");openOv($("#pm"));
 }
-function tab(t){$$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$$(".tab").forEach(e=>e.classList.toggle("on",e.id===t))}
 function pickImage(f){
   if(!f||!f.type.startsWith("image/"))return toast("warning","Choose an image file","Use a JPG, PNG or WebP photo.");
+  if(f.size>20*1024*1024)return toast("warning","Photo too large","Choose a photo under 20 MB.");
   const r=new FileReader();
   r.onload=()=>{const im=new Image();
-    im.onload=()=>{const s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");
-      c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext("2d");
-      x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);setImg(c.toDataURL("image/jpeg",.85))};
+    im.onload=()=>{const s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+      const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);setImg(c.toDataURL("image/jpeg",.85))};
     im.onerror=()=>toast("error","Couldn't read that image","Try a different photo.");im.src=r.result};
-  r.onerror=()=>toast("error","Couldn't read that file","Try a different photo.");
-  r.readAsDataURL(f);
+  r.onerror=()=>toast("error","Couldn't read that file","Try a different photo.");r.readAsDataURL(f);
 }
 function drawGroups(){
-  $("#og").innerHTML=groups.map((g,i)=>`<div class="og"><div class="r2"><input data-g="${i}" data-f="key" placeholder="Option name, e.g. Pack size" value="${esc(g.key)}"><button class="x" data-a="dg" data-g="${i}">Remove</button></div>
-  ${g.choices.map((c,j)=>`<div class="r3"><input data-g="${i}" data-c="${j}" data-f="value" placeholder="Choice, e.g. 2 kg pack" value="${esc(c.value)}"><input type="number" inputmode="decimal" data-g="${i}" data-c="${j}" data-f="priceAdjust" placeholder="Price +/−" value="${c.priceAdjust||""}"><button class="x" data-a="dc" data-g="${i}" data-c="${j}" aria-label="Remove choice">✕</button></div>`).join("")}
-  <button class="btn ghost sm" data-a="ac" data-g="${i}">+ Add choice</button></div>`).join("")||'<p class="mute" style="font-size:.85em">No options. Customers will only choose a quantity.</p>';
+  $("#og").innerHTML=groups.map((g,i)=>`<div class="og"><div class="r2"><input data-g="${i}" data-f="key" maxlength="40" aria-label="Option name" placeholder="Option name, e.g. Pack size" value="${esc(g.key)}"><button type="button" class="x" data-a="dg" data-g="${i}">Remove</button></div>
+  ${g.choices.map((c,j)=>`<div class="r3"><input data-g="${i}" data-c="${j}" data-f="value" maxlength="60" aria-label="Choice" placeholder="Choice, e.g. 2 kg pack" value="${esc(c.value)}"><input type="number" inputmode="decimal" data-g="${i}" data-c="${j}" data-f="priceAdjust" aria-label="Price change" placeholder="Price +/−" value="${c.priceAdjust||""}"><button type="button" class="x" data-a="dc" data-g="${i}" data-c="${j}" aria-label="Remove choice">✕</button></div>`).join("")}
+  <button type="button" class="btn ghost sm" data-a="ac" data-g="${i}">+ Add choice</button></div>`).join("")||'<p class="mute" style="font-size:.85em">No options. Customers will only choose a quantity.</p>';
 }
 function drawSpecs(){
-  $("#sp").innerHTML=specs.map((s,i)=>`<div class="r3"><input data-s="${i}" data-k="0" placeholder="Label, e.g. Origin" value="${esc(s[0])}"><input data-s="${i}" data-k="1" placeholder="Value, e.g. Mwea" value="${esc(s[1])}"><button class="x" data-a="ds" data-s="${i}" aria-label="Remove spec">✕</button></div>`).join("")||'<p class="mute" style="font-size:.85em">No specifications.</p>';
+  $("#sp").innerHTML=specs.map((s,i)=>`<div class="r3"><input data-s="${i}" data-k="0" maxlength="60" aria-label="Spec label" placeholder="Label, e.g. Origin" value="${esc(s[0])}"><input data-s="${i}" data-k="1" maxlength="200" aria-label="Spec value" placeholder="Value, e.g. Mwea" value="${esc(s[1])}"><button type="button" class="x" data-a="ds" data-s="${i}" aria-label="Remove spec">✕</button></div>`).join("")||'<p class="mute" style="font-size:.85em">No specifications.</p>';
 }
 async function saveProduct(){
-  const name=$("#pN").value.trim(),unit=$("#pU").value.trim();
-  const priceRaw=String($("#pP").value).trim();
-  const price=Number(priceRaw);
+  if(saving)return;
+  const name=$("#pN").value.trim(),unit=$("#pU").value.trim(),pr=String($("#pP").value).trim(),price=Number(pr);
   if(!name){tab("t1");$("#pN").focus();return toast("warning","Product name needed","Enter a name for this product.")}
-  /* blank/whitespace must be rejected, not silently coerced to 0 */
-  if(!priceRaw||!Number.isFinite(price)||price<0){tab("t2");$("#pP").focus();return toast("warning","Price needed","Enter a price of 0 or more.")}
+  if(!pr||!Number.isFinite(price)||price<0){tab("t2");$("#pP").focus();return toast("warning","Price needed","Enter a price of 0 or more.")}
   if(!unit){tab("t2");$("#pU").focus();return toast("warning","Unit needed","Add a unit, for example “per kg”.")}
-  /* The server rejects images that are neither a data-URL nor an https URL. Catch it here. */
-  if(!isImageOk(img)){
-    tab("t1");
-    return toast("warning","Photo link not allowed","Use the “Choose photo” button to upload a picture, or paste an https:// link. Relative paths and http:// links aren't accepted.");
-  }
-  const body={name,unit,price,category:$("#pC").value.trim()||"Other",description:$("#pD").value.trim(),image:img||"",
-    inStock:$("#pS").value==="true",emoji:$("#pE").value.trim()||"🌾",gradient:editing?.gradient||["#c9a24a","#7a5c1a"],
+  if(!isImageOk(img)){tab("t1");return toast("warning","Photo not allowed","Use “Choose photo” to upload a picture, or an https:// link.")}
+  const body={name,unit,price,category:$("#pC").value.trim()||"Other",description:$("#pD").value.trim(),image:img||"",inStock:$("#pS").value==="true",emoji:$("#pE").value.trim()||"🌾",gradient:editing?.gradient||["#c9a24a","#7a5c1a"],
     specs:specs.filter(s=>s[0].trim()&&s[1].trim()).map(s=>[s[0].trim(),s[1].trim()]),
     options:groups.filter(g=>g.key.trim()&&g.choices.some(c=>c.value.trim())).map(g=>({key:g.key.trim(),choices:g.choices.filter(c=>c.value.trim()).map(c=>({value:c.value.trim(),priceAdjust:Number(c.priceAdjust)||0}))}))};
-  const b=$("#ps");b.disabled=true;b.textContent="Saving…";
-  try{
-    await api(editing?`/api/admin/products/${encodeURIComponent(editing.id)}`:"/api/admin/products",{method:editing?"PUT":"POST",body:JSON.stringify(body)});
-    toast("success",editing?"Product saved":"Product added",name);$("#pm").classList.remove("open");await loadAll(true);
-  }catch(e){toast("error","Couldn't save product",e.message)}
-  finally{b.disabled=false;b.textContent="Save product"}
+  const b=$("#ps");saving=true;b.disabled=true;b.textContent="Saving…";
+  try{await api(editing?`/api/admin/products/${encodeURIComponent(editing.id)}`:"/api/admin/products",{method:editing?"PUT":"POST",body:JSON.stringify(body)});
+    toast("success",editing?"Product saved":"Product added",name);closeOv($("#pm"));await loadAll(true)}
+  catch(e){toast("error","Couldn't save product",e.message)}
+  finally{saving=false;b.disabled=false;b.textContent="Save product"}
 }
-async function delProduct(id){
-  const p=products.find(x=>x.id===id);if(!p||!confirm(`Delete “${p.name}”? This can't be undone. Past orders keep their details.`))return;
+const delProduct=id=>guard(async()=>{
+  const p=products.find(x=>x.id===id);if(!p)return;
+  if(!await ask("Delete this product?",`“${p.name}” will be removed from the store. This can't be undone. Past orders keep their details.`,"Delete",true))return;
   try{await api(`/api/admin/products/${encodeURIComponent(id)}`,{method:"DELETE"});toast("success","Product deleted",p.name);await loadAll(true)}
-  catch(e){toast("error","Couldn't delete product",e.message)}
-}
+  catch(e){toast("error","Couldn't delete product",e.message)}});
 
 /* ---------- events ---------- */
 const ACT={
   pw(){const p=$("#lp"),s=p.type==="password";p.type=s?"text":"password";this.textContent=s?"🙈":"👁";this.setAttribute("aria-label",s?"Hide password":"Show password")},
-  nav(d){$$(".sec").forEach(s=>s.classList.toggle("on",s.id==="s-"+d.s));$$(".side nav button").forEach(b=>b.classList.toggle("on",b.dataset.s===d.s));scrollTo({top:0});if(d.s!=="settings")loadAll(true)},
+  nav(d){$$(".sec").forEach(s=>s.classList.toggle("on",s.id==="s-"+d.s));$$(".side nav button").forEach(b=>{const on=b.dataset.s===d.s;b.classList.toggle("on",on);on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")});scrollTo({top:0});if(d.s!=="settings")loadAll(true)},
   refresh(){loadAll().then(ok=>ok&&toast("info","Refreshed"))},
-  filter(d){ofilter=d.f;$$("#chips .chip").forEach(c=>c.classList.toggle("on",c.dataset.f===d.f));render()},
-  view:d=>openOrder(d.id),confirm:d=>confirmOrder(d.id),reject:d=>rejectOrder(d.id),
-  delo:d=>deleteOrder(d.id),
+  filter(d){ofilter=d.f;olimit=PAGE;$$("#chips .chip").forEach(c=>c.classList.toggle("on",c.dataset.f===d.f));render()},
+  more(){olimit+=PAGE;render()},
+  view:d=>openOrder(d.id),confirm:d=>confirmOrder(d.id),reject:d=>rejectOrder(d.id),delo:d=>deleteOrder(d.id),resolve:d=>resolveOrder(d.id),
   add:()=>openProduct(),edit:d=>openProduct(d.id),del:d=>delProduct(d.id),save:saveProduct,
-  close(){const ov=this.closest(".ov");closeOv(ov)},
-  tab:d=>tab(d.t),
+  close(){closeOv(this.closest(".ov"))},tab:d=>tab(d.t),
   pick:()=>$("#pf").click(),noimg:()=>{setImg("");$("#pf").value=""},
   ag:()=>{groups.push({key:"",choices:[{value:"",priceAdjust:0}]});drawGroups()},
   dg:d=>{groups.splice(+d.g,1);drawGroups()},ac:d=>{groups[+d.g].choices.push({value:"",priceAdjust:0});drawGroups()},
   dc:d=>{const g=groups[+d.g];if(g.choices.length===1)groups.splice(+d.g,1);else g.choices.splice(+d.c,1);drawGroups()},
   as:()=>{specs.push(["",""]);drawSpecs()},ds:d=>{specs.splice(+d.s,1);drawSpecs()},
-  async saveApi(){
-    const v=$("#api").value.trim();
-    if(v&&!normApi(v))return toast("error","Address doesn't look right","It should look like https://your-server.onrender.com");
-    setApi(v);
-    try{await api("/api/admin/orders?status=all");toast("success","Connected","The server is responding.");loadAll(true)}catch(e){toast("error","Connection failed",e.message)}
-  },
+  async saveApi(){const v=$("#api").value.trim();if(v&&!normApi(v))return toast("error","Address doesn't look right","It should look like https://your-server.onrender.com");
+    setApi(v);try{await api("/api/admin/orders?status=all");toast("success","Connected","The server is responding.");loadAll(true)}catch(e){toast("error","Connection failed",e.message)}},
+  async health(){const h=$("#hl");h.textContent="Checking…";const g=await diagnose();h.textContent=(g.kind==="ok"?"✓ ":"⚠️ ")+g.msg},
   out:()=>logout()
 };
-const closeOv=ov=>{ov.classList.remove("open");if(ov.id==="om"){delete ov.dataset.id;lastOrderSnap=""}};
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-a]");
   if(b&&ACT[b.dataset.a])ACT[b.dataset.a].call(b,b.dataset);
-  else if(e.target.classList.contains("ov"))closeOv(e.target);
+  else if(e.target.classList.contains("ov"))e.target.id==="cm"?answer(false):closeOv(e.target);
 });
 document.addEventListener("input",e=>{
   const t=e.target,d=t.dataset;
   if(d.g!==undefined){const g=groups[+d.g];if(d.c===undefined)g.key=t.value;else g.choices[+d.c][d.f]=d.f==="priceAdjust"?Number(t.value)||0:t.value}
   else if(d.s!==undefined)specs[+d.s][+d.k]=t.value;
   if(t.id==="lu"||t.id==="lp")$("#le").textContent="";
+  if(t.id==="oq"){oq=t.value.trim();olimit=PAGE;render()}
 });
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape")$$(".ov.open").forEach(closeOv);
-  if((e.key==="Enter"||e.key===" ")&&e.target.id==="ip"){e.preventDefault();$("#pf").click()}
+  const ov=topOv();
+  if(e.key==="Escape"&&ov){e.preventDefault();ov.id==="cm"?answer(false):closeOv(ov)}
+  if(e.key==="Tab"&&ov){const f=[...ov.querySelectorAll("button,input,select,textarea,[href]")].filter(x=>!x.disabled&&!x.hidden&&x.offsetParent!==null);
+    if(f.length){const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}}
 });
+$("#cmY").onclick=()=>answer(true);$("#cmN").onclick=()=>answer(false);
 $("#pf").onchange=e=>{pickImage(e.target.files[0]);e.target.value=""};
-$("#lb").onclick=login;
+$("#lf").addEventListener("submit",login);
 $("#retest").onclick=()=>{if($("#la").value.trim())setApi($("#la").value);ping()};
-$("#lu").addEventListener("keydown",e=>{if(e.key==="Enter")$("#lp").focus()});
-$("#lp").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
 $("#lp").addEventListener("keyup",e=>{$("#caps").hidden=!(e.getModifierState&&e.getModifierState("CapsLock"))});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&auth)loadAll(true)});
+window.addEventListener("online",()=>{if(auth)loadAll(true)});
+window.addEventListener("offline",()=>setStatus(false,"Offline"));
 
-$("#la").value=CFG.API;$("#api").value=CFG.API;$("#lu").value=store.get("gh_user")||"";
+/* ---------- boot ---------- */
+$("#sf").href=STOREFRONT;$("#la").value=CFG.API;$("#api").value=CFG.API;$("#lu").value=store.get("gh_user")||"";
 $("#fileNote").hidden=location.protocol!=="file:";
-($("#lu").value?$("#lp"):$("#lu")).focus();
-ping();
+(async()=>{
+  const a=ses.get("gh_auth");
+  if(a&&CFG.API){auth=a;showApp(ses.get("gh_me")||"admin");if(!await loadAll()&&!auth)return}  /* resume this tab's session */
+  else{($("#lu").value?$("#lp"):$("#lu")).focus();ping()}
+})();
 </script>
 </body>
 </html>
